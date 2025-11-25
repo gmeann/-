@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나만의 쿠키 펫 키우기</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'negative-lg': '0 -10px 15px -3px rgba(0, 0, 0, 0.1), 0 -4px 6px -2px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+        }
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(-5%); }
+            50% { transform: translateY(5%); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 콘텐츠가 여기에 렌더링됩니다 -->
+    </div>
+
+    <!-- Lucide Icons -->
+    <script type="module">
+        import { createIcons, Settings, Sparkles, RefreshCw, Lock, User, Key, Save, Smile, MessageSquare, Edit3 } from 'https://unpkg.com/lucide@latest/dist/esm/lucide.js';
+        // 아이콘 함수들을 globalState에 저장
+        // 이 모듈은 비동기적으로 로드되므로, 아이콘 사용 시점에 함수가 할당되었는지 확인해야 합니다.
+        window.lucide = { Settings, Sparkles, RefreshCw, Lock, User, Key, Save, Smile, MessageSquare, Edit3 };
+        window.createLucideIcons = () => createIcons({ icons: window.lucide, attrs: { class: 'lucide' } });
+    </script>
+
+    <!-- Firebase SDK Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firestore 로그 레벨 설정 (디버깅용)
+        setLogLevel('Debug');
+        
+        // 전역 변수 설정 (Canvas 환경 변수 사용)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let appInstance, auth, db;
+        let globalState = {
+            user: null,
+            view: 'intro', // intro, test, naming, main
+            loading: false,
+            studentCode: '',
+            cookies: 0,
+            globalSettings: { apiKey: '', thresholds: [0, 10, 30, 60, 100] },
+            myPet: null,
+            petName: '',
+            petLevel: 0,
+            message: '',
+            showMoodCheck: false,
+            showAdminLogin: false,
+            showAdminSettings: false,
+            adminPasswordInput: '',
+            adminApiKeyInput: '',
+            adminThresholdsInput: [0, 10, 30, 60, 100],
+            testStep: 0,
+            testScores: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+            inputName: '',
+            imageError: false,
+            syncIntervalId: null, // 동기화 인터벌 ID
+            unsubscribes: [],
+        };
+
+        const ANIMAL_TYPES = [
+            { 
+                id: 'rabbit', 
+                name: '솜사탕 토끼', 
+                emoji: '🐰', 
+                color: 'bg-pink-100', 
+                text: 'text-pink-600', 
+                desc: '다정하고 사랑스러운 친구',
+                stages: [
+                    { level: 0, emoji: '🥚', image: null, message: "포근한 이불 속 같아요... (Zzz)" },
+                    { 
+                        level: 1, 
+                        emoji: '🐰', 
+                        image: "https://i.imgur.com/F4zPjl6.png", 
+                        message: "깡총! 세상은 반짝반짝하네요! 반가워요!" 
+                    }, 
+                    { level: 2, emoji: '🐇', image: null, message: "당근 컵케이크 주세요! 오늘도 힘낼게요!" }, 
+                    { level: 3, emoji: '💖', image: null, message: "귀를 쫑긋 세우고 네 이야기를 듣고 있어." }, 
+                    { 
+                        level: 4, 
+                        emoji: '👑', 
+                        image: "https://cdn-icons-png.flaticon.com/512/3069/3069172.png", 
+                        message: "우리는 환상의 짝꿍이야! 무엇이든 할 수 있어!" 
+                    }, 
+                ]
+            },
+            { 
+                id: 'bear', name: '포근한 곰돌이', emoji: '🐻', color: 'bg-amber-100', text: 'text-amber-700', desc: '듬직하고 따뜻한 친구',
+                stages: [
+                    { level: 0, emoji: '🥚', image: null, message: "쿨... 쿨... 따뜻해서 나가기 싫어..." },
+                    { level: 1, emoji: '🧸', image: null, message: "하암~ 일어났어. 근데 좀 배고프다..." },
+                    { level: 2, emoji: '🐻', image: null, message: "천천히 가도 괜찮아. 내가 곁에 있잖아." },
+                    { level: 3, emoji: '🍯', image: null, message: "네가 열심히 하는 모습, 내가 묵묵히 지켜보고 있어." },
+                    { level: 4, emoji: '🏔️', image: null, message: "산처럼 든든하게 평생 너의 편이 되어줄게." },
+                ]
+            },
+            { 
+                id: 'cat', name: '말랑 냥이', emoji: '🐱', color: 'bg-blue-100', text: 'text-blue-600', desc: '깔끔하고 똑똑한 친구', 
+                stages: [
+                    { level: 0, emoji: '🥚', image: null, message: "건드리지 마. 아직 자는 중이야." },
+                    { level: 1, emoji: '🐈', image: null, message: "야옹. 밥은 챙겨 먹고 다니는 거니?" },
+                    { level: 2, emoji: '😺', image: null, message: "그루밍할 시간이야. 공부도 주변 정리부터 시작해." },
+                    { level: 3, emoji: '💎', image: null, message: "흥, 딱히 널 기다린 건 아니야. (꼬리를 살랑이며)" },
+                    { level: 4, emoji: '👑', image: null, message: "너의 노력, 꽤나 우아하고 멋진걸? 인정해 줄게." },
+                ]
+            },
+            { 
+                id: 'dog', name: '발랄 강아지', emoji: '🐶', color: 'bg-orange-100', text: 'text-orange-600', desc: '활기차고 명랑한 친구', 
+                stages: [
+                    { level: 0, emoji: '🥚', image: null, message: "킁킁! 밖에서 맛있는 냄새가 나요!" },
+                    { level: 1, emoji: '🐕', image: null, message: "멍멍! 꼬리가 멈추질 않아요! 진짜 반가워요!" },
+                    { level: 2, emoji: '🦴', image: null, message: "산책 갈까요? 공놀이 할까요? 공부도 같이 해요!" },
+                    { level: 3, emoji: '🎾', image: null, message: "네가 웃으면 나도 행복해! 왈왈! 힘내자!" },
+                    { level: 4, emoji: '🏆', image: null, message: "언제나 네 편이야! 우린 최고의 파트너가 될 거야!" },
+                ]
+            },
+            { 
+                id: 'hamster', name: '볼빵빵 햄찌', emoji: '🐹', color: 'bg-yellow-100', text: 'text-yellow-700', desc: '부지런하고 귀여운 친구',
+                stages: [
+                    { level: 0, emoji: '🥚', image: null, message: "바스락... 바스락... (뭔가 갉아먹는 소리)" },
+                    { level: 1, emoji: '🐁', image: null, message: "찍! 해바라기 씨 하나만 주면 안 잡아먹지!" },
+                    { level: 2, emoji: '🌰', image: null, message: "볼주머니가 빵빵해야 마음이 편해. 너도 간식 먹고 해." },
+                    { level: 3, emoji: '🏃‍♂️', image: null, message: "오늘도 쳇바퀴처럼 부지런히! 영차영차! 멈추지 마!" },
+                    { level: 4, emoji: '🏅', image: null, message: "작지만 강한 나를 봐! 꾸준함이 너의 무기가 될 거야!" },
+                ]
+            },
+            // 호기심 너구리로 변경됨
+            { 
+                id: 'raccoon', name: '호기심 너구리', emoji: '🦝', color: 'bg-teal-100', text: 'text-teal-700', desc: '궁금한 게 많은 장난꾸러기',
+                stages: [
+                    { level: 0, emoji: '🥚', image: null, message: "콜록콜록... 왜 이렇게 킁킁거리지?" },
+                    { level: 1, emoji: '🦝', image: null, message: "안녕! 네 주머니에 뭐가 들어있는지 궁금해!" },
+                    { level: 2, emoji: '🐾', image: null, message: "여기저기 다 탐험해 볼 거야! 너도 같이 가자!" },
+                    { level: 3, emoji: '🔍', image: null, message: "세상은 퍼즐 같아! 같이 맞춰볼까?" },
+                    { level: 4, emoji: '🗺️', image: null, message: "나의 큰 계획은 세계 정복... 아니, 세상을 배우는 거야!" },
+                ]
+            },
+        ];
+
+        const STAGES = [
+            { level: 0, name: '신비한 알' }, 
+            { level: 1, name: '아기 동물' },
+            { level: 2, name: '어린이 동물' },
+            { level: 3, name: '청소년 동물' },
+            { level: 4, name: '어른 동물' },
+        ];
+
+        const MOODS = [
+            { mood: 'happy', emoji: '😊', label: '신나요!', color: 'bg-green-500', response: (name) => `${name}이가 행복하다니 나도 너무 기뻐! 이 기분 그대로 하루를 즐겨보자!`, icon: '🎉' },
+            { mood: 'tired', emoji: '😴', label: '피곤해요', color: 'bg-indigo-500', response: (name) => `${name}아, 많이 피곤했구나. 잠깐 눈을 감고 심호흡해보자. 조금 쉬어도 괜찮아.`, icon: '☕' },
+            { mood: 'sad', emoji: '😢', label: '슬퍼요', color: 'bg-blue-500', response: (name) => `${name}이가 슬퍼하는 모습을 보니 마음이 아파. 네 옆에 내가 있으니 너무 걱정 마. 힘내자!`, icon: '🫂' },
+            { mood: 'angry', emoji: '😡', label: '화나요', color: 'bg-red-500', response: (name) => `${name}아, 화가 날 땐 잠시 멈춰보자. 맛있는 쿠키를 먹고 기분 전환하는 건 어때?`, icon: '💥' },
+            { mood: 'excited', emoji: '🥳', label: '너무 신나요', color: 'bg-yellow-500', response: (name) => `와! ${name}이가 신나 보이는걸! 무슨 좋은 일 있어? 네 활기찬 모습이 나에게 힘을 줘!`, icon: '🎈' },
+            { mood: 'calm', emoji: '😌', label: '평온해요', color: 'bg-slate-500', response: (name) => `${name}아, 평온한 기분 정말 좋다! 이 평화로운 기운을 모두와 나눠보자.`, icon: '🧘' },
+        ];
+
+        const TEST_QUESTIONS = [
+            {
+                q: "쉬는 시간에 나는?",
+                a: [{ text: "친구들과 신나게 뛰어논다", type: [3, 5] }, { text: "자리에 앉아 조용히 쉰다", type: [0, 2] }]
+            },
+            {
+                q: "숙제가 어려울 때 나는?",
+                a: [{ text: "끝까지 혼자 해결해본다", type: [1, 4] }, { text: "친구나 선생님께 물어본다", type: [0, 3] }]
+            },
+            {
+                q: "가장 좋아하는 간식은?",
+                a: [{ text: "달콤한 초콜릿/사탕", type: [0, 5] }, { text: "바삭한 과자/빵", type: [1, 2, 4] }]
+            }
+        ];
+
+        // --- 유틸리티 함수 ---
+        const setState = (newState) => {
+            Object.assign(globalState, newState);
+            render();
+        };
+
+        const getCurrentStageInfo = (pet, level, petName) => {
+            if (!pet) return null;
+            const stage = pet.stages ? pet.stages[level] : null;
+
+            const defaultInfo = {
+                emoji: pet.emoji,
+                image: null,
+                message: `${petName || pet.name}이(가) 성장했어요!`,
+            };
+
+            return stage || defaultInfo;
+        };
+
+        const getCurrentPetLevel = (cookies, thresholds) => {
+            let currentLevel = 0;
+            const thres = thresholds;
+            if (thres && thres.length > 0) {
+                for (let i = thres.length - 1; i >= 0; i--) {
+                    if (cookies >= (parseInt(thres[i]) || 0)) {
+                        currentLevel = i;
+                        break;
+                    }
+                }
+            }
+            return currentLevel;
+        };
+
+        const formatIcon = (name, classes) => {
+            // CRITICAL FIX: window.lucide 객체의 존재 여부와 iconFn이 실제로 함수인지 확인합니다.
+            const iconFn = window.lucide ? window.lucide[name] : null;
+            if (typeof iconFn !== 'function') return '';
+            
+            // Lucide 아이콘 함수를 호출하여 SVG 문자열을 생성합니다.
+            // 인자로는 아이콘 속성을 전달합니다.
+            return iconFn({ class: classes, width: 24, height: 24 });
+        };
+        
+        // --- 기능 함수 ---
+        const fetchCookieData = async (key, code) => {
+            if (!key || !code) return;
+            if (globalState.view === 'intro') setState({ loading: true });
+
+            try {
+                const url = `https://api.dahandin.com/openapi/v1/get/student/total?code=${code}`;
+                
+                // 지수 백오프 로직
+                let response = null;
+                let json = null;
+                let maxRetries = 3;
+                let delay = 1000;
+
+                for (let i = 0; i < maxRetries; i++) {
+                    try {
+                        response = await fetch(url, {
+                            method: 'GET',
+                            headers: {
+                                'X-API-Key': key,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        json = await response.json();
+                        
+                        if (json.result) {
+                            break; // 성공 시 루프 탈출
+                        } else if (i === maxRetries - 1) {
+                             console.warn("API 호출 실패:", json.message);
+                             // 마지막 시도 실패 시 경고
+                             if(globalState.view === 'intro') {
+                                 const appElement = document.getElementById('app');
+                                 appElement.insertAdjacentHTML('beforeend', createAlertModal(`오류: ${json.message}`));
+                             }
+                        }
+                    } catch (error) {
+                        if (i === maxRetries - 1) {
+                            console.error("네트워크 오류:", error);
+                        }
+                    }
+                    if (i < maxRetries - 1) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        delay *= 2; // 지수 백오프
+                    }
+                }
+                
+                if (json && json.result && json.data && typeof json.data.cookie === 'number') {
+                    const newLevel = getCurrentPetLevel(json.data.cookie, globalState.globalSettings.thresholds);
+                    setState({ cookies: json.data.cookie, petLevel: newLevel });
+                }
+                
+            } catch (error) {
+                console.error("네트워크 최종 오류:", error);
+            } finally {
+                setState({ loading: false });
+            }
+        };
+
+        const startSync = (key, code) => {
+            if (globalState.syncIntervalId) clearInterval(globalState.syncIntervalId);
+
+            const intervalId = setInterval(() => {
+                fetchCookieData(key, code);
+            }, 60000); 
+            
+            setState({ syncIntervalId: intervalId });
+        };
+        
+        const stopSync = () => {
+            if (globalState.syncIntervalId) clearInterval(globalState.syncIntervalId);
+            setState({ syncIntervalId: null });
+        };
+
+        const handleStudentLogin = async () => {
+            if (!globalState.globalSettings.apiKey) {
+                const appElement = document.getElementById('app');
+                appElement.insertAdjacentHTML('beforeend', createAlertModal("선생님 설정이 아직 완료되지 않았습니다."));
+                return;
+            }
+            const code = globalState.studentCode.trim();
+            if (code.length === 0) {
+                const appElement = document.getElementById('app');
+                appElement.insertAdjacentHTML('beforeend', createAlertModal("학생 코드를 입력해주세요!"));
+                return;
+            }
+
+            // 초기 쿠키 데이터 fetch
+            await fetchCookieData(globalState.globalSettings.apiKey, code);
+            
+            // 로컬 스토리지에서 펫 정보 + 이름 로드
+            const storageKey = `pet_data_${code}`;
+            const savedDataStr = localStorage.getItem(storageKey);
+            let nextView = 'test';
+            let pet = null;
+            let petName = '';
+            
+            if (savedDataStr) {
+                try {
+                    const savedData = JSON.parse(savedDataStr);
+                    if (savedData.typeId) {
+                        pet = ANIMAL_TYPES.find(a => a.id === savedData.typeId);
+                        petName = savedData.name || pet?.name || '';
+                    }
+                } catch (e) {
+                    console.error("데이터 로드 오류", e);
+                }
+            } else {
+                 // 구버전 키 체크 (pet_{studentCode})
+                const oldKey = `pet_${code}`;
+                const oldSavedId = localStorage.getItem(oldKey);
+                if (oldSavedId) {
+                    pet = ANIMAL_TYPES.find(a => a.id === oldSavedId);
+                    if (pet) {
+                        petName = pet.name;
+                    }
+                }
+            }
+            
+            if (pet) {
+                nextView = 'main';
+                setState({ myPet: pet, petName: petName, view: nextView });
+                startSync(globalState.globalSettings.apiKey, code);
+                setTimeout(sayGoodWord, 100);
+            } else {
+                setState({ view: nextView });
+            }
+        };
+
+        const sayGoodWord = () => {
+            const currentStageInfo = getCurrentStageInfo(globalState.myPet, globalState.petLevel, globalState.petName);
+            if (currentStageInfo) {
+                setState({ message: currentStageInfo.message });
+            } else {
+                setState({ message: `${globalState.petName || globalState.myPet?.name}이(가) 힘을 낼게요!` });
+            }
+        };
+        
+        const handleAdminSave = async () => {
+            if (!globalState.user) return;
+            const newThresholds = globalState.adminThresholdsInput.map(t => Math.max(0, parseInt(t) || 0));
+            try {
+                const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'config', 'settings');
+                await setDoc(configRef, {
+                    apiKey: globalState.adminApiKeyInput,
+                    thresholds: newThresholds
+                });
+                
+                const appElement = document.getElementById('app');
+                appElement.insertAdjacentHTML('beforeend', createAlertModal("설정이 저장되었습니다!"));
+                
+                setState({ 
+                    showAdminSettings: false,
+                    globalSettings: {
+                        apiKey: globalState.adminApiKeyInput,
+                        thresholds: newThresholds
+                    }
+                });
+            } catch (e) {
+                console.error("저장 실패:", e);
+                const appElement = document.getElementById('app');
+                appElement.insertAdjacentHTML('beforeend', createAlertModal("저장에 실패했습니다."));
+            }
+        };
+
+        const checkAdminPassword = () => {
+            if (globalState.adminPasswordInput === "0215") {
+                setState({ showAdminLogin: false, showAdminSettings: true, adminPasswordInput: '' });
+            } else {
+                const appElement = document.getElementById('app');
+                appElement.insertAdjacentHTML('beforeend', createAlertModal("암호가 올바르지 않습니다."));
+                setState({ adminPasswordInput: '' });
+            }
+        };
+
+        const handleAnswer = (types) => {
+            const newScores = { ...globalState.testScores };
+            types.forEach(t => newScores[t] += 1);
+            setState({ testScores: newScores });
+
+            if (globalState.testStep < TEST_QUESTIONS.length - 1) {
+                setState({ testStep: globalState.testStep + 1 });
+            } else {
+                let maxScore = -1;
+                let candidates = [];
+                Object.keys(newScores).forEach(key => {
+                    if (newScores[key] > maxScore) {
+                        maxScore = newScores[key];
+                        candidates = [parseInt(key)];
+                    } else if (newScores[key] === maxScore) {
+                        candidates.push(parseInt(key));
+                    }
+                });
+                const finalIndex = candidates[Math.floor(Math.random() * candidates.length)];
+                const selectedPet = ANIMAL_TYPES[finalIndex];
+                
+                setState({ 
+                    myPet: selectedPet, 
+                    inputName: selectedPet.name,
+                    view: 'naming', 
+                    testScores: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+                });
+            }
+        };
+
+        const handleNamingComplete = () => {
+            if (globalState.inputName.trim().length === 0) {
+                const appElement = document.getElementById('app');
+                appElement.insertAdjacentHTML('beforeend', createAlertModal("이름을 입력해주세요!"));
+                return;
+            }
+            const finalName = globalState.inputName.trim();
+            
+            // 저장 (ID + 이름)
+            const storageKey = `pet_data_${globalState.studentCode}`;
+            const dataToSave = {
+                typeId: globalState.myPet.id,
+                name: finalName
+            };
+            localStorage.setItem(storageKey, JSON.stringify(dataToSave));
+
+            setState({ 
+                petName: finalName, 
+                view: 'main' 
+            });
+            startSync(globalState.globalSettings.apiKey, globalState.studentCode);
+            setTimeout(() => {
+                const currentStageInfo = getCurrentStageInfo(globalState.myPet, globalState.petLevel, finalName);
+                if (currentStageInfo) {
+                    setState({ message: currentStageInfo.message });
+                } else {
+                    setState({ message: "만나서 반가워!" });
+                }
+            }, 100);
+        };
+        
+        const handleMoodSelection = (moodObject) => {
+            const displayName = globalState.petName || globalState.myPet?.name || '';
+            const responseText = moodObject.response(displayName);
+            setState({ message: responseText, showMoodCheck: false });
+        };
+
+        // --- 렌더링 함수 ---
+        const renderIntro = () => {
+            const { loading, studentCode, showAdminLogin, showAdminSettings, adminPasswordInput, adminApiKeyInput, adminThresholdsInput } = globalState;
+            
+            const adminLoginModal = showAdminLogin ? `
+                <div class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center animate-fade-in">
+                        <div class="flex justify-center mb-4 text-slate-400">
+                            ${formatIcon('Lock', 'w-8 h-8')}
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-700 mb-2">선생님 확인</h3>
+                        <input 
+                            type="password" 
+                            id="adminPasswordInput"
+                            placeholder="암호를 입력하세요"
+                            value="${adminPasswordInput}"
+                            onchange="globalState.adminPasswordInput = this.value; render();"
+                            class="w-full p-3 border rounded-xl mb-4 focus:outline-sky-500"
+                        />
+                        <div class="flex gap-2">
+                            <button 
+                                onclick="setState({ showAdminLogin: false, adminPasswordInput: '' })"
+                                class="flex-1 py-3 text-slate-500 font-bold bg-slate-100 rounded-xl"
+                            >
+                                취소
+                            </button>
+                            <button 
+                                onclick="checkAdminPassword()"
+                                class="flex-1 py-3 text-white font-bold bg-sky-500 rounded-xl"
+                            >
+                                확인
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ` : '';
+
+            const adminSettingsModal = showAdminSettings ? `
+                <div class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm h-3/4 overflow-y-auto">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 class="font-bold text-lg flex items-center gap-2">
+                                ${formatIcon('Settings', 'w-5 h-5')} 반 설정
+                            </h3>
+                            <button onclick="setState({ showAdminSettings: false })" class="text-slate-400 hover:text-slate-600">✕</button>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="text-sm font-bold text-slate-700 block mb-1">
+                                    다했니 X-API-Key
+                                </label>
+                                <input 
+                                    type="text"
+                                    value="${adminApiKeyInput}" 
+                                    onchange="globalState.adminApiKeyInput = this.value; render();"
+                                    placeholder="API Key 붙여넣기"
+                                    class="w-full p-3 border rounded-lg focus:outline-sky-500 text-sm bg-slate-50"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-bold text-slate-700 block mb-2">
+                                    성장별 필요 쿠키 수
+                                </label>
+                                ${STAGES.map((stage, idx) => `
+                                    <div key="${idx}" class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-slate-600 w-24">${stage.name}</span>
+                                        <div class="flex items-center gap-2">
+                                            <input 
+                                                type="number" 
+                                                value="${adminThresholdsInput[idx]}" 
+                                                onchange="globalState.adminThresholdsInput[${idx}] = this.value; render();"
+                                                ${idx === 0 ? 'disabled' : ''} 
+                                                class="w-20 p-2 border rounded-lg text-right focus:outline-sky-500 text-sm"
+                                            />
+                                            <span class="text-xs text-slate-400">개 이상</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t flex gap-2">
+                            <button 
+                                onclick="setState({ showAdminSettings: false })"
+                                class="flex-1 py-3 text-slate-500 font-bold bg-slate-100 rounded-xl"
+                            >
+                                취소
+                            </button>
+                            <button 
+                                onclick="handleAdminSave()"
+                                class="flex-1 py-3 bg-sky-500 text-white rounded-xl font-bold hover:bg-sky-600 flex items-center justify-center gap-2"
+                            >
+                                ${formatIcon('Save', 'w-4 h-4')} 저장하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ` : '';
+
+            return `
+                <div class="min-h-screen bg-sky-50 flex flex-col items-center justify-center p-4 font-sans relative">
+                    <div class="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center border-4 border-sky-100 z-10">
+                        <div class="flex justify-center mb-6">
+                            <div class="bg-sky-100 p-4 rounded-full">
+                                ${formatIcon('Sparkles', 'w-12 h-12 text-sky-500')}
+                            </div>
+                        </div>
+                        <h1 class="text-3xl font-bold text-slate-700 mb-2">나만의 쿠키 펫</h1>
+                        <p class="text-slate-500 mb-6">학생 코드를 입력하고 시작해보세요!</p>
+                        
+                        <div class="mb-6 text-left">
+                            <label class="text-xs font-bold text-slate-500 ml-1">학생 코드</label>
+                            <div class="relative">
+                                ${formatIcon('User', 'absolute left-3 top-3.5 w-4 h-4 text-slate-400')}
+                                <input
+                                    type="text"
+                                    placeholder="예: STU12345"
+                                    class="w-full pl-10 p-3 bg-slate-50 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-sky-400 transition-colors"
+                                    value="${studentCode}"
+                                    oninput="globalState.studentCode = this.value; render();"
+                                />
+                            </div>
+                        </div>
+
+                        <button 
+                            onclick="handleStudentLogin()"
+                            ${loading ? 'disabled' : ''}
+                            class="w-full bg-sky-400 hover:bg-sky-500 text-white font-bold py-4 rounded-xl transition-all shadow-md active:scale-95 disabled:opacity-50 mb-4"
+                        >
+                            ${loading ? '펫을 찾는 중...' : '시작하기'}
+                        </button>
+
+                        <button 
+                            onclick="setState({ showAdminLogin: true })"
+                            class="text-xs text-slate-400 underline hover:text-slate-600 p-2"
+                        >
+                            선생님 설정 (API 키 입력)
+                        </button>
+                    </div>
+
+                    ${adminLoginModal}
+                    ${adminSettingsModal}
+                </div>
+            `;
+        };
+
+        const renderTest = () => {
+            const { testStep } = globalState;
+            const currentQuestion = TEST_QUESTIONS[testStep];
+
+            return `
+                <div class="min-h-screen bg-purple-50 flex flex-col items-center justify-center p-4">
+                    <div class="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full border-4 border-purple-100 animate-fade-in">
+                        <div class="mb-6 flex justify-between text-purple-400 font-bold">
+                            <span>나의 펫 찾기</span>
+                            <span>${testStep + 1} / ${TEST_QUESTIONS.length}</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-700 mb-8 leading-snug">
+                            ${currentQuestion.q}
+                        </h2>
+                        <div class="space-y-4">
+                            ${currentQuestion.a.map((ans, idx) => `
+                                <button
+                                    key="${idx}"
+                                    onclick="handleAnswer([${ans.type.join(',')}])"
+                                    class="w-full p-5 text-left bg-purple-50 hover:bg-purple-100 text-purple-900 rounded-xl font-medium transition-colors border-2 border-transparent hover:border-purple-200"
+                                >
+                                    ${ans.text}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        const renderNaming = () => {
+            const { myPet, inputName } = globalState;
+            return `
+                <div class="min-h-screen ${myPet.color} flex flex-col items-center justify-center p-4">
+                    <div class="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full text-center border-4 border-white/50 animate-fade-in">
+                        <div class="text-6xl mb-6">${myPet.emoji}</div>
+                        <h2 class="text-2xl font-bold text-slate-700 mb-2">
+                            당신의 펫은 <span class="${myPet.text}">${myPet.name}</span>입니다!
+                        </h2>
+                        <p class="text-slate-500 mb-6">펫에게 특별한 이름을 지어주세요.</p>
+                        
+                        <input
+                            type="text"
+                            placeholder="이름 입력"
+                            class="w-full p-4 bg-slate-50 rounded-xl border-2 border-slate-200 mb-4 focus:outline-none focus:border-sky-400 text-center text-lg font-bold text-slate-700"
+                            value="${inputName}"
+                            oninput="globalState.inputName = this.value; render();"
+                            maxlength="10"
+                        />
+                        <button 
+                            onclick="handleNamingComplete()"
+                            class="w-full bg-sky-400 hover:bg-sky-500 text-white font-bold py-4 rounded-xl transition-all shadow-md active:scale-95"
+                        >
+                            이 이름으로 키우기
+                        </button>
+                    </div>
+                </div>
+            `;
+        };
+        
+        const renderMain = () => {
+            const { cookies, myPet, petName, petLevel, message, showMoodCheck, showAdminLogin, showAdminSettings, adminPasswordInput, adminApiKeyInput, adminThresholdsInput, imageError } = globalState;
+
+            if (!myPet) return `<div class="p-8 text-center">펫 정보 로딩 중...</div>`;
+
+            const currentStageInfo = getCurrentStageInfo(myPet, petLevel, petName);
+            const nextLevelThreshold = globalState.globalSettings.thresholds[petLevel + 1] || 0;
+            const currentLevelThreshold = globalState.globalSettings.thresholds[petLevel] || 0;
+            const progressRange = nextLevelThreshold - currentLevelThreshold;
+            const progressValue = cookies - currentLevelThreshold;
+            const progressPercent = progressRange > 0 ? Math.min(100, (progressValue / progressRange) * 100) : 0;
+            
+            const adminLoginModal = showAdminLogin ? `
+                <div class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center animate-fade-in">
+                        <div class="flex justify-center mb-4 text-slate-400">
+                            ${formatIcon('Lock', 'w-8 h-8')}
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-700 mb-2">선생님 확인</h3>
+                        <input 
+                            type="password" 
+                            placeholder="암호를 입력하세요"
+                            value="${adminPasswordInput}"
+                            onchange="globalState.adminPasswordInput = this.value; render();"
+                            class="w-full p-3 border rounded-xl mb-4 focus:outline-sky-500"
+                        />
+                        <div class="flex gap-2">
+                            <button 
+                                onclick="setState({ showAdminLogin: false, adminPasswordInput: '' })"
+                                class="flex-1 py-3 text-slate-500 font-bold bg-slate-100 rounded-xl"
+                            >
+                                취소
+                            </button>
+                            <button 
+                                onclick="checkAdminPassword()"
+                                class="flex-1 py-3 text-white font-bold bg-sky-500 rounded-xl"
+                            >
+                                확인
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ` : '';
+
+            const adminSettingsModal = showAdminSettings ? `
+                <div class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm h-3/4 overflow-y-auto">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 class="font-bold text-lg flex items-center gap-2">
+                                ${formatIcon('Settings', 'w-5 h-5')} 반 설정
+                            </h3>
+                            <button onclick="setState({ showAdminSettings: false })" class="text-slate-400 hover:text-slate-600">✕</button>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="text-sm font-bold text-slate-700 block mb-1">다했니 X-API-Key</label>
+                                <input 
+                                    type="text"
+                                    value="${adminApiKeyInput}" 
+                                    onchange="globalState.adminApiKeyInput = this.value; render();"
+                                    placeholder="API Key 붙여넣기"
+                                    class="w-full p-3 border rounded-lg focus:outline-sky-500 text-sm bg-slate-50"
+                                />
+                            </div>
+
+                            <div>
+                                <label class="text-sm font-bold text-slate-700 block mb-2">성장별 필요 쿠키 수</label>
+                                ${STAGES.map((stage, idx) => `
+                                    <div key="${idx}" class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-slate-600 w-24">${stage.name}</span>
+                                        <div class="flex items-center gap-2">
+                                            <input 
+                                                type="number" 
+                                                value="${adminThresholdsInput[idx]}" 
+                                                onchange="globalState.adminThresholdsInput[${idx}] = this.value; render();"
+                                                ${idx === 0 ? 'disabled' : ''} 
+                                                class="w-20 p-2 border rounded-lg text-right focus:outline-sky-500 text-sm"
+                                            />
+                                            <span class="text-xs text-slate-400">개 이상</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t flex gap-2">
+                            <button 
+                                onclick="setState({ showAdminSettings: false })"
+                                class="flex-1 py-3 text-slate-500 font-bold bg-slate-100 rounded-xl"
+                            >
+                                취소
+                            </button>
+                            <button 
+                                onclick="handleAdminSave()"
+                                class="flex-1 py-3 bg-sky-500 text-white rounded-xl font-bold hover:bg-sky-600 flex items-center justify-center gap-2"
+                            >
+                                ${formatIcon('Save', 'w-4 h-4')} 저장하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ` : '';
+            
+            const moodCheckModal = showMoodCheck ? `
+                <div class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div class="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-md animate-fade-in text-center">
+                        <div class="flex justify-between items-center mb-4 border-b pb-2">
+                            <h3 class="font-bold text-xl text-slate-700 flex items-center gap-2">
+                                ${formatIcon('MessageSquare', 'w-6 h-6 text-purple-500')} ${petName || myPet.name}의 기분 체크인
+                            </h3>
+                            <button onclick="setState({ showMoodCheck: false })" class="text-slate-400 hover:text-slate-600">✕</button>
+                        </div>
+                        <p class="text-slate-600 text-lg mb-6">${petName || myPet.name}에게 오늘의 기분을 공유해 줘!</p>
+                        
+                        <div class="grid grid-cols-3 gap-4">
+                            ${MOODS.map((moodObj) => `
+                                <button
+                                    key="${moodObj.mood}"
+                                    onclick="handleMoodSelection({ mood: '${moodObj.mood}', response: (name) => '${moodObj.response(petName || myPet.name)}', icon: '${moodObj.icon}' })"
+                                    class="flex flex-col items-center justify-center p-4 rounded-xl text-white font-bold transition-all shadow-md hover:shadow-lg active:scale-95 ${moodObj.color}"
+                                >
+                                    <span class="text-4xl">${moodObj.icon}</span>
+                                    <span class="mt-2 text-sm">${moodObj.label}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            ` : '';
+
+            const petImageContent = currentStageInfo.image && !imageError ? 
+                `<img 
+                    src="${currentStageInfo.image}" 
+                    alt="${myPet.name}" 
+                    class="w-64 h-64 object-contain" 
+                    onerror="globalState.imageError = true; render();" 
+                />` : 
+                `<span class="text-9xl select-none">${currentStageInfo.emoji}</span>`;
+
+            return `
+                <div class="min-h-screen transition-colors duration-500 ${myPet.color} flex flex-col items-center relative overflow-hidden">
+                    
+                    <button 
+                        onclick="setState({ showAdminLogin: true, adminPasswordInput: '', adminApiKeyInput: globalState.globalSettings.apiKey, adminThresholdsInput: globalState.globalSettings.thresholds })"
+                        class="absolute top-4 right-4 p-2 bg-white/50 rounded-full hover:bg-white transition-colors z-50 shadow-sm"
+                        aria-label="관리자 설정"
+                    >
+                        ${formatIcon('Settings', 'w-6 h-6 text-slate-600')}
+                    </button>
+
+                    <!-- 헤더 정보 -->
+                    <div class="w-full max-w-md mt-10 px-6 flex justify-between items-center z-10">
+                        <div class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-sm border border-white/50">
+                            <span class="text-xs text-slate-500 block">현재 단계</span>
+                            <span class="font-bold text-slate-700">${STAGES[petLevel].name}</span>
+                        </div>
+                        <div class="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-sm border border-white/50 flex items-center gap-2">
+                            <span class="text-amber-500">🍪</span>
+                            <span class="font-bold text-slate-700 text-lg">${cookies}개</span>
+                        </div>
+                    </div>
+
+                    <!-- 펫 표시 영역 -->
+                    <div class="flex-1 flex flex-col items-center justify-center w-full max-w-md relative z-10">
+                        <div 
+                            class="mb-8 px-6 py-4 bg-white rounded-t-3xl rounded-br-3xl rounded-bl-none shadow-lg transform transition-all duration-300 ${message ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}"
+                            style="min-height: 80px; min-width: 200px; max-width: 300px;"
+                        >
+                            <p class="text-slate-600 font-medium text-center break-keep leading-relaxed">
+                                ${message || (currentStageInfo?.message || "안녕하세요!")}
+                            </p>
+                        </div>
+
+                        <div 
+                            onclick="sayGoodWord()"
+                            class="cursor-pointer transition-transform active:scale-95 hover:-translate-y-2 duration-300"
+                        >
+                            <div class="relative flex justify-center items-center">
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/30 rounded-full blur-3xl -z-10"></div>
+                                <div class="filter drop-shadow-xl animate-bounce-slow">
+                                    ${petImageContent}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 이름표 (사용자 지정 이름) -->
+                        <div class="mt-8 bg-white/60 backdrop-blur-md px-6 py-2 rounded-full shadow-sm flex items-center gap-2">
+                            <h2 class="text-xl font-bold ${myPet.text}">
+                                ${petLevel === 0 ? '???' : (petName || myPet.name)}
+                            </h2>
+                        </div>
+                        
+                        ${petLevel < 4 ? `
+                            <div class="w-64 mt-6">
+                                <div class="flex justify-between text-xs text-slate-500 mb-1">
+                                    <span>다음 단계까지</span>
+                                    <span>${Math.max(0, nextLevelThreshold - cookies)} 쿠키 남음</span>
+                                </div>
+                                <div class="w-full bg-white/50 rounded-full h-3 overflow-hidden">
+                                    <div 
+                                        class="h-full rounded-full transition-all duration-1000 ${myPet.text.replace('text', 'bg')}"
+                                        style="width: ${progressPercent}%" 
+                                    ></div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="w-full bg-white/80 backdrop-blur-lg p-6 rounded-t-3xl shadow-negative-lg z-20">
+                        <div class="max-w-md mx-auto space-y-3">
+                            <button 
+                                onclick="setState({ showMoodCheck: true })"
+                                ${petLevel === 0 ? 'disabled' : ''}
+                                class="w-full py-3 bg-purple-500 text-white rounded-xl font-bold shadow-lg active:scale-95 transition-all flex justify-center items-center gap-2 disabled:opacity-50"
+                            >
+                                ${formatIcon('Smile', 'w-4 h-4')} 오늘의 기분은?
+                            </button>
+                            
+                            <div class="flex justify-between items-center mb-4 pt-2">
+                                <h3 class="font-bold text-slate-700 flex items-center gap-2">
+                                    ${formatIcon('RefreshCw', 'w-4 h-4')} 다했니 동기화
+                                </h3>
+                                <span class="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded">
+                                    자동 (1분 주기)
+                                
+                                </span>
+                            </div>
+                            <button 
+                                onclick="setState({ cookies: globalState.cookies + 1 }); if(globalState.petLevel > 0) setState({ message: '와! 쿠키가 늘어났어!' });"
+                                class="w-full py-3 bg-slate-800 text-white rounded-xl font-bold shadow-lg active:scale-95 transition-all flex justify-center items-center gap-2"
+                            >
+                                <span class="text-yellow-400">🍪</span> 쿠키 1개 획득 (테스트용)
+                            </button>
+                        </div>
+                    </div>
+
+                    ${adminLoginModal}
+                    ${adminSettingsModal}
+                    ${moodCheckModal}
+                </div>
+            `;
+        };
+
+        // --- 메인 렌더 함수 ---
+        const render = () => {
+            const appElement = document.getElementById('app');
+            let html = '';
+
+            // 기존에 존재하는 alert 모달 제거
+            document.querySelectorAll('.alert-modal').forEach(el => el.remove());
+            
+            switch (globalState.view) {
+                case 'intro':
+                    html = renderIntro();
+                    break;
+                case 'test':
+                    html = renderTest();
+                    break;
+                case 'naming':
+                    html = renderNaming();
+                    break;
+                case 'main':
+                    html = renderMain();
+                    break;
+                default:
+                    html = '<div>오류: 잘못된 뷰 상태</div>';
+            }
+            appElement.innerHTML = html;
+            // createLucideIcons는 DOM에 직접 아이콘 태그를 삽입하는 방식이므로, formatIcon을 사용할 때는 필요 없습니다.
+            // window.createLucideIcons(); 
+        };
+        
+        // --- Custom Alert Modal ---
+        const createAlertModal = (message) => {
+            return `
+                <div class="alert-modal fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm text-center animate-fade-in">
+                        <h3 class="font-bold text-lg text-slate-700 mb-4">알림</h3>
+                        <p class="text-slate-600 mb-6">${message}</p>
+                        <button 
+                            onclick="document.querySelector('.alert-modal').remove()"
+                            class="w-full py-3 text-white font-bold bg-sky-500 rounded-xl"
+                        >
+                            닫기
+                        </button>
+                    </div>
+                </div>
+            `;
+        };
+
+        // --- 초기화 로직 ---
+        window.onload = async () => {
+            if (Object.keys(firebaseConfig).length > 0) {
+                appInstance = initializeApp(firebaseConfig);
+                auth = getAuth(appInstance);
+                db = getFirestore(appInstance);
+            }
+
+            // 인증 및 설정 로드
+            if (auth) {
+                const initAuth = async () => {
+                    if (initialAuthToken) {
+                        try {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } catch (e) {
+                            console.error("Custom Token Sign-in Failed:", e);
+                            await signInAnonymously(auth);
+                        }
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                };
+                await initAuth();
+                
+                onAuthStateChanged(auth, (user) => {
+                    setState({ user });
+                    // 설정값 리스너 등록
+                    if (user) {
+                        const configRef = doc(db, 'artifacts', appId, 'public', 'data', 'config', 'settings');
+                        const unsubscribe = onSnapshot(configRef, (docSnap) => {
+                            if (docSnap.exists()) {
+                                const data = docSnap.data();
+                                const newThresholds = data.thresholds || [0, 10, 30, 60, 100];
+                                const newApiKey = data.apiKey || '';
+                                setState({
+                                    globalSettings: {
+                                        apiKey: newApiKey,
+                                        thresholds: newThresholds
+                                    },
+                                    adminApiKeyInput: newApiKey,
+                                    adminThresholdsInput: newThresholds
+                                });
+                            }
+                        }, (error) => {
+                            console.error("설정 불러오기 실패:", error);
+                        });
+                        globalState.unsubscribes.push(unsubscribe);
+                    }
+                });
+            }
+            render(); 
+        };
+    </script>
+</body>
+</html>
