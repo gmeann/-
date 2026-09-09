@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>진짜일까? 가짜일까? - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 50%, #2d5016 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .question-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            font-weight: bold;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .choice-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .choice-btn {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .choice-btn.true-btn {
+            border-left: 5px solid #5aa956;
+        }
+
+        .choice-btn.false-btn {
+            border-left: 5px solid #e74c3c;
+        }
+
+        .choice-btn.selected {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.8);
+            animation: pulse 0.5s ease-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .result-box {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 2em;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        .result-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .explanation {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid rgba(255, 215, 0, 0.6);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1em;
+        }
+
+        .next-question-btn {
+            padding: 15px 40px;
+            background: rgba(255, 215, 0, 0.3);
+            color: white;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .next-question-btn:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        .completion-box {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .completion-box.show {
+            display: block;
+        }
+
+        .completion-box h2 {
+            font-size: 2em;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        .next-button {
+            padding: 15px 40px;
+            background: #5aa956;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .next-button:hover {
+            background: #4a9744;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .choice-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🔎 진짜일까? 가짜일까?</h1>
+            <p class="subtitle">차례상과 추석 문화에 대한 통념을 검증해보세요!</p>
+        </div>
+
+        <div class="question-box" id="questionBox">
+            <div class="question-text" id="questionText">질문을 불러오는 중...</div>
+            <div class="choice-buttons">
+                <button class="choice-btn true-btn" onclick="answerQuestion(true)">✅ 진짜</button>
+                <button class="choice-btn false-btn" onclick="answerQuestion(false)">❌ 가짜</button>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-title" id="resultTitle">정답!</div>
+            <div class="result-text" id="resultText"></div>
+            <div class="explanation" id="explanation"></div>
+            <button class="next-question-btn" onclick="nextQuestion()">다음 문제</button>
+        </div>
+
+        <div class="completion-box" id="completionBox">
+            <h2>🎉 모든 문제를 풀었어요!</h2>
+            <p>전통 문화도 시대와 함께 변하고, 지역마다 다양한 모습으로 나타나요.<br>올바른 이해로 우리 문화를 소중히 여기는 것이 중요해요!</p>
+            <button class="next-button" onclick="completeGame()">다음 게임으로</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-b-progress';
+
+        const questions = [
+            {
+                question: "차례상에는 반드시 정해진 순서대로 음식을 놓아야 한다.",
+                isTrue: false,
+                explanation: "차례상의 배치는 지역과 가정에 따라 다릅니다. 중요한 것은 정해진 규칙보다 함께 하는 마음이에요.",
+                factKey: 'charye'
+            },
+            {
+                question: "홍동백서는 모든 전통 제사에서 지켜야 하는 원칙이다.",
+                isTrue: false,
+                explanation: "홍동백서는 하나의 관례일 뿐, 모든 가정이 따르는 절대적 규칙은 아닙니다. 각 가정의 전통을 존중하는 것이 맞아요.",
+                factKey: 'hongdongbaekseo'
+            },
+            {
+                question: "추석에는 꼭 이웃과 성묘를 가야 한다.",
+                isTrue: false,
+                explanation: "성묘는 추석의 중요한 전통이지만, 상황에 따라 다른 형태로 조상을 추모할 수도 있습니다.",
+                factKey: 'seongmyo'
+            },
+            {
+                question: "송편의 반달 모양은 보름달을 닮기 위해 만들어졌다.",
+                isTrue: true,
+                explanation: "네, 송편의 반달 모양은 추석의 보름달을 상징합니다. 우리 조상들이 달에 대한 마음을 담아 만들었어요.",
+                factKey: 'songpyeon'
+            },
+            {
+                question: "현대에는 전통적인 방식으로 차례를 지내는 것이 줄어들고 있다.",
+                isTrue: true,
+                explanation: "네, 현대 사회의 변화에 따라 차례의 형태도 다양해지고 있습니다. 이것은 자연스러운 문화의 발전이에요.",
+                factKey: 'changing-chuseok'
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answeredCount = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionText').textContent = q.question;
+            document.getElementById('questionBox').style.display = 'block';
+            document.getElementById('resultBox').classList.remove('show');
+        }
+
+        function answerQuestion(answer) {
+            const q = questions[currentQuestion];
+            const isCorrect = answer === q.isTrue;
+
+            const resultBox = document.getElementById('resultBox');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultText = document.getElementById('resultText');
+            const explanation = document.getElementById('explanation');
+
+            resultTitle.textContent = isCorrect ? '✅ 맞았어요!' : '❌ 틀렸어요!';
+            resultText.textContent = q.isTrue ? '네, 그것이 맞습니다!' : '아니요, 그것은 정답이 아닙니다.';
+            explanation.innerHTML = `<strong>📚 설명:</strong> ${q.explanation}<br><button class="learn-more-btn" onclick="openFactCheck('${q.factKey}')" style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 20px; font-size: 0.85em; cursor: pointer; margin-top: 12px; display: inline-block;">📖 더 알아보기</button></p>`;
+
+            document.getElementById('questionBox').style.display = 'none';
+            resultBox.classList.add('show');
+
+            answeredCount++;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                document.getElementById('resultBox').classList.remove('show');
+                document.getElementById('completionBox').classList.add('show');
+            } else {
+                loadQuestion();
+            }
+        }
+
+        function completeGame() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false, false],
+                facts: []
+            };
+            progress.games[3] = true;
+            if (!progress.facts.includes('🔍')) {
+                progress.facts.push('🔍');
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        loadQuestion();
+    </script>
+    <script src="../../../fact-check.js"></script>
+</body>
+</html>

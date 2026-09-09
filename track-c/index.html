@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트랙 C - 추석 문화 탐정단</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 50%, #1a3a52 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .intro-box {
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 5px solid #4a90e2;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .progress-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .progress-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4a90e2, #357abd);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .case-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            z-index: 0;
+        }
+
+        .case-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .case-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .case-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .case-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .case-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .case-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .completed-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4a90e2;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            z-index: 2;
+        }
+
+        .completed-badge.show {
+            display: flex;
+        }
+
+        .info-section {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .info-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .info-text {
+            font-size: 1em;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🔎 트랙 C</h1>
+            <p class="subtitle">추석 문화 탐정단</p>
+        </div>
+
+        <div class="intro-box">
+            <strong>🎯 미션:</strong> 우리가 알고 있는 추석 정보가 정말 사실일까요?<br>
+            다양한 자료와 비판적 사고를 통해 추석 문화의 참 의미를 찾아보세요.
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-title">🎯 탐정 진행 상황</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+            <div class="progress-text">
+                <span id="completedCount">0</span> / 4 케이스 완료
+            </div>
+        </div>
+
+        <div class="cases-grid">
+            <a href="cases/01-hongdong-baekseo.html" class="case-card">
+                <div class="case-content">
+                    <span class="case-icon">🔎</span>
+                    <h3>홍동백서의 비밀</h3>
+                    <p>전통 규칙의 진실을 파헤치세요</p>
+                </div>
+                <div class="completed-badge" id="completed-1">✓</div>
+            </a>
+
+            <a href="cases/02-different-festival.html" class="case-card">
+                <div class="case-content">
+                    <span class="case-icon">🌏</span>
+                    <h3>같은 보름달, 다른 명절</h3>
+                    <p>한국과 중국의 명절을 비교해요</p>
+                </div>
+                <div class="completed-badge" id="completed-2">✓</div>
+            </a>
+
+            <a href="cases/03-thanksgiving.html" class="case-card">
+                <div class="case-content">
+                    <span class="case-icon">🇺🇸</span>
+                    <h3>추석은 추수감사절일까?</h3>
+                    <p>두 명절의 공통점과 차이점</p>
+                </div>
+                <div class="completed-badge" id="completed-3">✓</div>
+            </a>
+
+            <a href="cases/04-changing-chuseok.html" class="case-card">
+                <div class="case-content">
+                    <span class="case-icon">🔄</span>
+                    <h3>변화하는 추석</h3>
+                    <p>현대 사회의 명절 문화를 생각해요</p>
+                </div>
+                <div class="completed-badge" id="completed-4">✓</div>
+            </a>
+        </div>
+
+        <div class="info-section">
+            <div class="info-title">💡 탐정 팁</div>
+            <div class="info-text">
+                각 케이스를 통해 전통문화를 단순히 암기하는 것이 아니라<br>
+                깊이 있게 이해하고 비판적으로 생각하는 능력을 기를 수 있습니다.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-c-progress';
+
+        function loadProgress() {
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                cases: [false, false, false, false]
+            };
+            return progress;
+        }
+
+        function updateUI() {
+            const progress = loadProgress();
+            const completedCount = progress.cases.filter(Boolean).length;
+            const percentage = (completedCount / 4) * 100;
+
+            // Update progress bar
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = Math.round(percentage) + '%';
+            document.getElementById('completedCount').textContent = completedCount;
+
+            // Show completed badges
+            progress.cases.forEach((completed, index) => {
+                if (completed) {
+                    document.getElementById(`completed-${index + 1}`).classList.add('show');
+                }
+            });
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>

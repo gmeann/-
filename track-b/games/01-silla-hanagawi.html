@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신라의 한가위 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 50%, #2d5016 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .game-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .game-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .team {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .team.team-a {
+            border-left: 5px solid #ff9a56;
+        }
+
+        .team.team-b {
+            border-left: 5px solid #5aa956;
+        }
+
+        .team-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .team-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .team-status {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .thread-count {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .action-button {
+            padding: 15px 35px;
+            background: rgba(255, 215, 0, 0.3);
+            color: white;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .action-button:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        .action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result-box {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-box h2 {
+            font-size: 2em;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        .result-box p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .fact-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            text-align: left;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .next-button {
+            padding: 15px 40px;
+            background: #5aa956;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .next-button:hover {
+            background: #4a9744;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🏺 신라의 한가위</h1>
+            <p class="description">신라 시대의 '가배' 행사를 게임으로 경험해보세요!<br>두 팀으로 나뉘어 길쌈 활동을 수행합니다.</p>
+        </div>
+
+        <!-- Game Section -->
+        <div class="game-section active" id="gameSection">
+            <div class="teams-grid">
+                <div class="team team-a">
+                    <div class="team-icon">🧵</div>
+                    <div class="team-name">팀 A</div>
+                    <div class="team-status">길을 쌓는 중...</div>
+                    <div class="thread-count" id="threadA">0</div>
+                    <button class="action-button" onclick="addThread('a')">길 쌓기</button>
+                </div>
+
+                <div class="team team-b">
+                    <div class="team-icon">🧵</div>
+                    <div class="team-name">팀 B</div>
+                    <div class="team-status">길을 쌓는 중...</div>
+                    <div class="thread-count" id="threadB">0</div>
+                    <button class="action-button" onclick="addThread('b')">길 쌓기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-box" id="resultBox">
+            <h2 id="resultTitle">게임 결과!</h2>
+            <p id="resultText"></p>
+            <div class="fact-box">
+                <strong>📚 신라의 가배란?</strong>
+                <p>신라 시대에는 음력 8월 15일을 '가배(嘉俳)'라고 부르며, 여인들이 달맞이를 하면서 길쌈 기술을 겨루는 행사를 했대요. 이것이 오늘날의 추석 문화의 뿌리가 되었답니다!</p>
+                <button class="learn-more-btn" onclick="openFactCheck('gaebae')" style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 20px; font-size: 0.85em; cursor: pointer; margin-top: 12px; display: block;">📖 더 알아보기</button>
+            </div>
+            <button class="next-button" onclick="completeGame()">다음 게임으로</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-b-progress';
+        let threadA = 0;
+        let threadB = 0;
+        const maxThreads = 5;
+        let gameComplete = false;
+
+        function addThread(team) {
+            if (gameComplete) return;
+
+            if (team === 'a') {
+                if (threadA < maxThreads) {
+                    threadA++;
+                    document.getElementById('threadA').textContent = threadA;
+                }
+            } else {
+                if (threadB < maxThreads) {
+                    threadB++;
+                    document.getElementById('threadB').textContent = threadB;
+                }
+            }
+
+            // Check if game is complete
+            if (threadA === maxThreads && threadB === maxThreads) {
+                gameComplete = true;
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            const gameSection = document.getElementById('gameSection');
+            const resultBox = document.getElementById('resultBox');
+            const titleEl = document.getElementById('resultTitle');
+            const textEl = document.getElementById('resultText');
+
+            gameSection.style.display = 'none';
+            resultBox.classList.add('show');
+
+            titleEl.textContent = '🎉 길쌈이 완성되었어요!';
+            textEl.textContent = '신라 시대의 여인들은 이렇게 달밤에 함께 길을 쌓으며 친목을 도모했다고 해요.';
+        }
+
+        function completeGame() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false, false],
+                facts: []
+            };
+            progress.games[0] = true;
+            if (!progress.facts.includes('🏺')) {
+                progress.facts.push('🏺');
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+    </script>
+    <script src="../../../fact-check.js"></script>
+</body>
+</html>

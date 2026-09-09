@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>송편 공방 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .step {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+
+        .step-description {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .songpyeon-display {
+            font-size: 10em;
+            margin: 30px 0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .action-btn {
+            background: rgba(255, 215, 0, 0.3);
+            color: white;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        .next-btn {
+            background: #4caf50;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .progress {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .progress-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .progress-dot.active {
+            background: rgba(255, 215, 0, 0.6);
+            border: 2px solid rgba(255, 215, 0, 1);
+        }
+
+        .progress-dot.completed {
+            background: rgba(76, 175, 80, 0.6);
+            border: 2px solid rgba(76, 175, 80, 1);
+        }
+
+        .result {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .result h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #4caf50;
+        }
+
+        .result p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .fact-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+
+        .learn-more-btn {
+            padding: 10px 20px;
+            background: rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 25px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .learn-more-btn:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .songpyeon-display {
+                font-size: 6em;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🍡 송편 공방</h1>
+        </div>
+
+        <div class="progress" id="progress"></div>
+
+        <!-- Step 1: 반죽하기 -->
+        <div class="step active" id="step-0">
+            <p class="step-title">1️⃣ 반죽하기</p>
+            <p class="step-description">반죽을 치대서 부드럽게 만들어요!</p>
+            <div class="songpyeon-display">🍚</div>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="nextStep()">반죽 치대기</button>
+            </div>
+        </div>
+
+        <!-- Step 2: 속 넣기 -->
+        <div class="step" id="step-1">
+            <p class="step-title">2️⃣ 속 넣기</p>
+            <p class="step-description">팥소를 넣어요!</p>
+            <div class="songpyeon-display">🫘</div>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="nextStep()">팥소 담기</button>
+            </div>
+        </div>
+
+        <!-- Step 3: 모양 빚기 -->
+        <div class="step" id="step-2">
+            <p class="step-title">3️⃣ 모양 빚기</p>
+            <p class="step-description">반달 모양으로 예쁘게 만들어요!</p>
+            <div class="songpyeon-display">👐</div>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="nextStep()">손으로 모양 빚기</button>
+            </div>
+        </div>
+
+        <!-- Step 4: 솔잎 위에 올리기 -->
+        <div class="step" id="step-3">
+            <p class="step-title">4️⃣ 솔잎 위에 올리기</p>
+            <p class="step-description">향긋한 솔잎 위에 차곡차곡 올려요!</p>
+            <div class="songpyeon-display">🌿</div>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="nextStep()">솔잎에 올리기</button>
+            </div>
+        </div>
+
+        <!-- Step 5: 송편 완성 -->
+        <div class="step" id="step-4">
+            <p class="step-title">5️⃣ 송편 완성!</p>
+            <p class="step-description">와! 맛있는 송편이 완성되었어요!</p>
+            <div class="songpyeon-display">🍡</div>
+            <div class="result">
+                <h2>🎉 송편을 만들었어요!</h2>
+                <p>송편은 추석을 대표하는 음식이에요.</p>
+                <div class="fact-box">
+                    <strong>📚 추석 팩트:</strong>
+                    <p>송편의 반달 모양은 보름달을 닮았어요.<br>우리 조상들이 달에 대한 마음을 담아 만들었대요!</p>
+                    <button class="learn-more-btn" onclick="openFactCheck('songpyeon')">📖 더 알아보기</button>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="next-btn" onclick="completeGame()">다음 게임으로</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-a-progress';
+        let currentStep = 0;
+        const totalSteps = 5;
+
+        function initProgress() {
+            const progressEl = document.getElementById('progress');
+            progressEl.innerHTML = '';
+            for (let i = 0; i < totalSteps; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (i < currentStep) {
+                    dot.classList.add('completed');
+                    dot.textContent = '✓';
+                } else if (i === currentStep) {
+                    dot.classList.add('active');
+                    dot.textContent = currentStep + 1;
+                } else {
+                    dot.textContent = i + 1;
+                }
+                progressEl.appendChild(dot);
+            }
+        }
+
+        function showStep(stepIndex) {
+            document.querySelectorAll('.step').forEach((step, idx) => {
+                step.classList.toggle('active', idx === stepIndex);
+            });
+            initProgress();
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+
+        function completeGame() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false]
+            };
+            progress.games[1] = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            // Go back to main page
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        initProgress();
+    </script>
+    <script src="../../fact-check.js"></script>
+</body>
+</html>

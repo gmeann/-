@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>변화하는 추석 - 추석 문화 탐정단</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 50%, #1a3a52 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 20px; color: white;
+        }
+        .container { max-width: 900px; width: 100%; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .back-btn {
+            display: inline-block; padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2); color: white;
+            border: none; border-radius: 50px; margin-bottom: 20px;
+            font-size: 0.95em; cursor: pointer; transition: all 0.3s;
+        }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        h1 { font-size: 2.5em; margin-bottom: 15px; }
+        .case-description {
+            font-size: 1.1em; color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px; line-height: 1.6;
+        }
+        .scenario-section {
+            background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px; padding: 30px; margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.3em; font-weight: bold; margin-bottom: 20px;
+            padding-bottom: 15px; border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        .scenario-box {
+            background: rgba(255, 255, 255, 0.08); border-left: 4px solid rgba(255, 215, 0, 0.6);
+            padding: 25px; border-radius: 8px; margin-bottom: 20px; line-height: 1.8;
+        }
+        .choices-section {
+            background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; padding: 30px; margin-bottom: 30px;
+        }
+        .choice-title { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; }
+        .choice-buttons {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;
+        }
+        .choice-btn {
+            padding: 15px; background: rgba(255, 255, 255, 0.1); color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
+            font-size: 0.95em; cursor: pointer; transition: all 0.3s;
+        }
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 215, 0, 0.6); transform: scale(1.03);
+        }
+        .reflection-section {
+            background: rgba(76, 175, 80, 0.2); border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px; padding: 30px; text-align: center;
+            display: none; animation: slideUp 0.5s ease-out;
+        }
+        .reflection-section.show { display: block; }
+        .reflection-title { font-size: 1.8em; color: #4caf50; margin-bottom: 15px; }
+        .reflection-text { font-size: 1.05em; line-height: 1.8; margin-bottom: 20px; }
+        .insight-box {
+            background: rgba(255, 215, 0, 0.15); border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left;
+        }
+        .next-button {
+            padding: 15px 40px; background: #4a90e2; color: white;
+            border: none; border-radius: 50px; font-size: 1.1em;
+            cursor: pointer; transition: all 0.3s; font-weight: bold; margin-top: 20px;
+        }
+        .next-button:hover { background: #357abd; transform: scale(1.02); }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .choice-buttons { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🔄 변화하는 추석</h1>
+            <p class="case-description">
+                현대 사회에서 전통 명절은 계속 변하고 있습니다.<br>
+                변화하는 추석 문화에 대해 깊이 생각해보세요.
+            </p>
+        </div>
+
+        <div class="scenario-section">
+            <div class="section-title">📖 가상의 상황</div>
+            <div class="scenario-box">
+                <strong>상황:</strong> 최근 몇 년간 많은 가정들이 <strong>차례를 간소화</strong>하고 있습니다.<br>
+                가족 구성원들이 모두 다른 지역에 살고, 명절 연휴가 짧으며,<br>
+                전통 제사의 의미를 묻는 세대들이 늘고 있습니다.
+            </div>
+        </div>
+
+        <div class="choices-section">
+            <div class="choice-title">🤔 당신의 생각은?</div>
+            <div class="choice-buttons">
+                <button class="choice-btn" onclick="submitReflection('tradition')">전통을 지켜야 한다</button>
+                <button class="choice-btn" onclick="submitReflection('change')">시대에 맞게 변해야 한다</button>
+            </div>
+            <div class="choice-buttons">
+                <button class="choice-btn" onclick="submitReflection('balance')">전통과 변화의 균형</button>
+                <button class="choice-btn" onclick="submitReflection('personal')">가족이 원하는 대로</button>
+            </div>
+        </div>
+
+        <div class="reflection-section" id="reflectionBox">
+            <div class="reflection-title">💡 당신의 생각</div>
+            <div class="reflection-text" id="reflectionText"></div>
+            <div class="insight-box">
+                <strong>🎯 핵심 질문:</strong><br>
+                전통문화는 고정된 것이 아니라 시간과 함께 변합니다.<br>
+                중요한 것은 조상을 추모하는 마음을 어떤 방식으로든 표현하는 것입니다.<br>
+                규칙을 따르는 것보다 가족의 마음을 담는 것이 더 중요해요.
+            </div>
+            <button class="learn-more-btn" onclick="openFactCheck('changing-chuseok')" style="padding: 10px 20px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 25px; font-size: 0.95em; cursor: pointer; margin: 15px 0; display: block;">📖 더 알아보기</button>
+            <button class="next-button" onclick="completeCase()">트랙 C 완료!</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-c-progress';
+        const responses = {
+            tradition: '전통을 지키고자 하는 마음, 멋있습니다. 하지만 전통은 살아있는 것이어야 합니다.',
+            change: '변화를 수용하는 열린 태도, 좋습니다. 명절의 의미는 형식이 아니라 마음입니다.',
+            balance: '균형 잡힌 생각입니다! 전통을 존중하되 현대성도 함께 고려하는 것이 지혜로워요.',
+            personal: '가족이 원하는 대로 하는 것도 훌륭한 선택입니다. 명절의 본질은 함께하는 것입니다.'
+        };
+
+        function submitReflection(choice) {
+            const reflectionBox = document.getElementById('reflectionBox');
+            const textEl = document.getElementById('reflectionText');
+
+            textEl.textContent = responses[choice];
+            reflectionBox.classList.add('show');
+        }
+
+        function completeCase() {
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { cases: [false, false, false, false] };
+            progress.cases[3] = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+    </script>
+    <script src="../../../fact-check.js"></script>
+</body>
+</html>

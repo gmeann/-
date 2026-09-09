@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홍동백서의 비밀 - 추석 문화 탐정단</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 50%, #1a3a52 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .case-description {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .evidence-section {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .evidence-box {
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid rgba(255, 215, 0, 0.6);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .evidence-box strong {
+            color: #ffd700;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .decision-section {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .decision-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .choice-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .choice-btn {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .result-box {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 1.8em;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        .result-text {
+            font-size: 1.05em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .insight-box {
+            background: rgba(255, 215, 0, 0.15);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .next-button {
+            padding: 15px 40px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .next-button:hover {
+            background: #357abd;
+            transform: scale(1.02);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .choice-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🔎 홍동백서의 비밀</h1>
+            <p class="case-description">
+                "차례상에는 반드시 동쪽에 빨간 색 음식, 서쪽에 흰 색 음식을 놓아야 한다."<br>
+                이 규칙이 정말 전통일까요? 근거를 찾아보세요!
+            </p>
+        </div>
+
+        <div class="evidence-section" id="evidenceSection">
+            <div class="section-title">📋 증거 자료</div>
+            <div class="evidence-box">
+                <strong>자료 1: 역사 기록</strong>
+                차례상의 배치 방법은 시대에 따라, 지역에 따라 달랐습니다. 특정 규칙이 모든 시대에 적용된 것이 아니에요.
+            </div>
+            <div class="evidence-box">
+                <strong>자료 2: 지역별 차이</strong>
+                서울, 경주, 전주 등 지역마다 차례를 지내는 방식이 다릅니다. 어느 한 방식이 "정통"이라고 볼 수 없어요.
+            </div>
+            <div class="evidence-box">
+                <strong>자료 3: 현대적 변화</strong>
+                현대 사회에서는 전통을 존중하면서도 가족의 상황에 맞게 변형하는 것이 일반적입니다.
+            </div>
+        </div>
+
+        <div class="decision-section">
+            <div class="decision-title">당신의 결론은?</div>
+            <div class="choice-buttons">
+                <button class="choice-btn" onclick="selectAnswer(true)">홍동백서는 절대적 규칙이다</button>
+                <button class="choice-btn" onclick="selectAnswer(false)">홍동백서는 하나의 관례일 뿐이다</button>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-title" id="resultTitle">결론</div>
+            <div class="result-text" id="resultText"></div>
+            <div class="insight-box">
+                <strong>💡 핵심 인사이트:</strong><br>
+                전통문화는 고정된 규칙이 아니라 시간과 함께 변화하는 살아있는 문화입니다.<br>
+                중요한 것은 규칙을 따르는 것이 아니라, 조상을 추모하는 마음을 담는 것이에요.
+            </div>
+            <button class="learn-more-btn" onclick="openFactCheck('hongdongbaekseo')" style="padding: 10px 20px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 25px; font-size: 0.95em; cursor: pointer; margin: 15px 0; display: block;">📖 더 알아보기</button>
+            <button class="next-button" onclick="completeCase()">다음 케이스로</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-c-progress';
+        let caseCompleted = false;
+
+        function selectAnswer(answer) {
+            if (caseCompleted) return;
+
+            const resultBox = document.getElementById('resultBox');
+            const titleEl = document.getElementById('resultTitle');
+            const textEl = document.getElementById('resultText');
+
+            if (!answer) {
+                titleEl.textContent = '✅ 정답입니다!';
+                textEl.textContent = '홍동백서는 하나의 관례이지, 모든 가정이 반드시 따라야 하는 절대적 규칙은 아닙니다.';
+            } else {
+                titleEl.textContent = '❌ 다시 생각해보세요';
+                textEl.textContent = '실제로는 지역과 가정에 따라 다양한 방식으로 차례가 행해져왔습니다.';
+            }
+
+            resultBox.classList.add('show');
+            caseCompleted = true;
+        }
+
+        function completeCase() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                cases: [false, false, false, false]
+            };
+            progress.cases[0] = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+    </script>
+    <script src="../../../fact-check.js"></script>
+</body>
+</html>

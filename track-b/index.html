@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트랙 B - 한가위 마을 탐험대</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 50%, #2d5016 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 1em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+        }
+
+        .progress-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .progress-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #5aa956, #7bc74f);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            z-index: 0;
+        }
+
+        .game-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .game-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .game-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .game-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 8px;
+        }
+
+        .game-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .completed-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #5aa956;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            z-index: 2;
+        }
+
+        .completed-badge.show {
+            display: flex;
+        }
+
+        .collection-info {
+            background: rgba(255, 215, 0, 0.15);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .collection-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .collection-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+        }
+
+        .collection-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .collection-item.empty {
+            opacity: 0.3;
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .collection-items {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🌱 트랙 B</h1>
+            <p class="subtitle">한가위 마을 탐험대</p>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-title">🎮 게임 진행 상황</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+            <div class="progress-text">
+                <span id="completedCount">0</span> / 5 게임 완료
+            </div>
+        </div>
+
+        <div class="games-grid">
+            <a href="games/01-silla-hanagawi.html" class="game-card">
+                <div class="game-content">
+                    <span class="game-icon">🏺</span>
+                    <h3>신라의 한가위</h3>
+                    <p>길쌈 활동으로 역사를 경험해요</p>
+                </div>
+                <div class="completed-badge" id="completed-1">✓</div>
+            </a>
+
+            <a href="games/02-songpyeon-regions.html" class="game-card">
+                <div class="game-content">
+                    <span class="game-icon">🍡</span>
+                    <h3>송편 지역 탐험</h3>
+                    <p>지역마다 다른 송편을 찾아보세요</p>
+                </div>
+                <div class="completed-badge" id="completed-2">✓</div>
+            </a>
+
+            <a href="games/03-mini-games.html" class="game-card">
+                <div class="game-content">
+                    <span class="game-icon">🎲</span>
+                    <h3>한가위 놀이마당</h3>
+                    <p>다양한 전통 놀이를 즐겨보세요</p>
+                </div>
+                <div class="completed-badge" id="completed-3">✓</div>
+            </a>
+
+            <a href="games/04-fact-check.html" class="game-card">
+                <div class="game-content">
+                    <span class="game-icon">🔎</span>
+                    <h3>진짜일까? 가짜일까?</h3>
+                    <p>차례상 규칙을 판단해 보세요</p>
+                </div>
+                <div class="completed-badge" id="completed-4">✓</div>
+            </a>
+
+            <a href="games/05-collection.html" class="game-card">
+                <div class="game-content">
+                    <span class="game-icon">📖</span>
+                    <h3>한가위 도감</h3>
+                    <p>게임에서 배운 내용을 확인하세요</p>
+                </div>
+                <div class="completed-badge" id="completed-5">✓</div>
+            </a>
+        </div>
+
+        <div class="collection-info">
+            <div class="collection-title">📚 발견한 팩트</div>
+            <div class="collection-items" id="collectionItems">
+                <div class="collection-item empty">?</div>
+                <div class="collection-item empty">?</div>
+                <div class="collection-item empty">?</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-b-progress';
+
+        function loadProgress() {
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false, false],
+                facts: []
+            };
+            return progress;
+        }
+
+        function updateUI() {
+            const progress = loadProgress();
+            const completedCount = progress.games.filter(Boolean).length;
+            const percentage = (completedCount / 5) * 100;
+
+            // Update progress bar
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressFill').textContent = Math.round(percentage) + '%';
+            document.getElementById('completedCount').textContent = completedCount;
+
+            // Show completed badges
+            progress.games.forEach((completed, index) => {
+                if (completed) {
+                    document.getElementById(`completed-${index + 1}`).classList.add('show');
+                }
+            });
+
+            // Update collection display
+            updateCollectionDisplay(progress.facts);
+        }
+
+        function updateCollectionDisplay(facts) {
+            const container = document.getElementById('collectionItems');
+            container.innerHTML = '';
+
+            const maxItems = 8;
+            for (let i = 0; i < maxItems; i++) {
+                const item = document.createElement('div');
+                item.className = 'collection-item';
+                if (i < facts.length) {
+                    item.textContent = facts[i];
+                } else {
+                    item.classList.add('empty');
+                    item.textContent = '?';
+                }
+                container.appendChild(item);
+            }
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>

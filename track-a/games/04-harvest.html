@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>풍년 바구니 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .item-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .item-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .item-card.new-harvest {
+            cursor: grab;
+        }
+
+        .item-card.new-harvest:active {
+            cursor: grabbing;
+        }
+
+        .item-emoji {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .item-name {
+            font-size: 0.95em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .item-label {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .basket {
+            background: rgba(255, 215, 0, 0.15);
+            border: 3px dashed rgba(255, 215, 0, 0.6);
+            border-radius: 20px;
+            padding: 30px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .basket-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .basket-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .basket-items {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+            min-height: 50px;
+            width: 100%;
+        }
+
+        .basket-item {
+            font-size: 2em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 10px;
+            animation: drop 0.5s ease-out;
+        }
+
+        @keyframes drop {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #4caf50;
+        }
+
+        .result p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .fact-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            text-align: left;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .next-btn {
+            background: #4caf50;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🌾 풍년 바구니</h1>
+            <p class="question">새로 난 음식을 바구니에 담아보세요!</p>
+        </div>
+
+        <div class="game-area">
+            <div class="items-grid" id="itemsList"></div>
+            <div class="basket" id="basket">
+                <div class="basket-icon">🧺</div>
+                <div class="basket-title">바구니</div>
+                <p style="font-size: 0.9em; color: rgba(255, 255, 255, 0.7);">새로 난 음식을 여기에 끌어다 놓으세요!</p>
+                <div class="basket-items" id="basketItems"></div>
+            </div>
+        </div>
+
+        <div class="result" id="result">
+            <h2 id="resultTitle">좋아요!</h2>
+            <p id="resultText"></p>
+            <div class="fact-box" id="factBox"></div>
+        </div>
+
+        <div id="completionMessage" style="text-align: center; margin-top: 40px; display: none;">
+            <div class="result show">
+                <h2>🎉 풍년 바구니를 완성했어요!</h2>
+                <p>모든 새로 난 음식을 찾았어요!</p>
+                <div class="fact-box">
+                    <strong>📚 추석 팩트:</strong>
+                    <p>햇곡식은 그해에 새로 난 곡식을 뜻해요. 추석은 새로 난 곡식을 먹으며 풍요로움을 감사하는 명절이에요!</p>
+                    <button class="learn-more-btn" onclick="openFactCheck('newgrain')" style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 20px; font-size: 0.85em; cursor: pointer; margin-top: 12px; display: block;">📖 더 알아보기</button>
+                </div>
+                <div class="action-buttons">
+                    <button class="next-btn" onclick="completeGame()">다음 게임으로</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-a-progress';
+
+        const items = [
+            { emoji: '🌾', name: '쌀', isNewHarvest: true, fact: '쌀은 그해에 새로 난 곡식이에요. 추석에 밥을 지어 먹으며 풍요로움을 감사해요.' },
+            { emoji: '🥔', name: '감자', isNewHarvest: true, fact: '감자도 새로 나온 햇감자로 추석 음식을 만들어요.' },
+            { emoji: '🫘', name: '팥', isNewHarvest: true, fact: '팥은 송편의 속으로 쓰는 새로 난 햇팥이에요.' },
+            { emoji: '🌽', name: '옥수수', isNewHarvest: true, fact: '옥수수도 추석 때 새로 난 것을 먹으며 감사해요.' },
+            { emoji: '🍎', name: '사과', isNewHarvest: false, fact: '사과는 추석 때 나오지만, 새로 난 음식만 찾는 거예요!' },
+            { emoji: '🍊', name: '귤', isNewHarvest: false, fact: '귤은 겨울에 나와요. 지금은 찾지 말아야 해요!' },
+            { emoji: '🍌', name: '바나나', isNewHarvest: false, fact: '바나나는 추석과 관계없는 음식이에요!' },
+            { emoji: '🥒', name: '무', isNewHarvest: false, fact: '무는 가을이 지난 후에 나와요. 추석에는 아직 일찍 나온 거예요!' }
+        ];
+
+        let collectedCount = 0;
+        let collectedItems = new Set();
+
+        function initGame() {
+            const itemsList = document.getElementById('itemsList');
+            itemsList.innerHTML = '';
+
+            // Shuffle items
+            const shuffled = [...items].sort(() => Math.random() - 0.5);
+
+            shuffled.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'item-card' + (item.isNewHarvest ? ' new-harvest' : '');
+                card.draggable = item.isNewHarvest;
+                card.innerHTML = `
+                    <span class="item-emoji">${item.emoji}</span>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-label">${item.isNewHarvest ? '🆕 새로 난 것' : '❌ 아닌 것'}</div>
+                `;
+
+                if (item.isNewHarvest) {
+                    card.ondragstart = (e) => {
+                        e.dataTransfer.effectAllowed = 'move';
+                        e.dataTransfer.setData('text/plain', index);
+                    };
+                } else {
+                    card.onclick = () => {
+                        showFeedback(item, false);
+                        card.style.opacity = '0.5';
+                    };
+                }
+
+                itemsList.appendChild(card);
+            });
+
+            // Setup basket
+            const basket = document.getElementById('basket');
+            basket.ondragover = (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                basket.style.background = 'rgba(76, 175, 80, 0.3)';
+            };
+            basket.ondragleave = () => {
+                basket.style.background = 'rgba(255, 215, 0, 0.15)';
+            };
+            basket.ondrop = (e) => {
+                e.preventDefault();
+                basket.style.background = 'rgba(255, 215, 0, 0.15)';
+                const index = parseInt(e.dataTransfer.getData('text/plain'));
+                const item = items[index];
+                collectItem(item, index);
+            };
+        }
+
+        function collectItem(item, index) {
+            if (collectedItems.has(index)) return;
+
+            collectedItems.add(index);
+            collectedCount++;
+
+            // Add to basket
+            const basketItems = document.getElementById('basketItems');
+            const itemEl = document.createElement('div');
+            itemEl.className = 'basket-item';
+            itemEl.textContent = item.emoji;
+            basketItems.appendChild(itemEl);
+
+            showFeedback(item, true);
+
+            if (collectedCount === 4) {
+                setTimeout(() => {
+                    document.getElementById('completionMessage').style.display = 'block';
+                }, 1000);
+            }
+        }
+
+        function showFeedback(item, isCorrect) {
+            const resultEl = document.getElementById('result');
+            const titleEl = document.getElementById('resultTitle');
+            const textEl = document.getElementById('resultText');
+            const factEl = document.getElementById('factBox');
+
+            if (isCorrect) {
+                titleEl.textContent = `✨ ${item.name}을 넣었어요!`;
+                textEl.textContent = '좋은 선택이에요!';
+            } else {
+                titleEl.textContent = `음... ${item.name}은요?`;
+                textEl.textContent = '다시 생각해 보세요!';
+            }
+            factEl.innerHTML = `<strong>📚 알아보기:</strong><p>${item.fact}</p>`;
+
+            resultEl.classList.add('show');
+            setTimeout(() => {
+                resultEl.classList.remove('show');
+            }, 2500);
+        }
+
+        function completeGame() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false]
+            };
+            progress.games[3] = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            // Go back to main page
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        initGame();
+    </script>
+    <script src="../../fact-check.js"></script>
+</body>
+</html>

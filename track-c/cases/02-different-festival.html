@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>같은 보름달, 다른 명절 - 추석 문화 탐정단</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 50%, #1a3a52 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 20px; color: white;
+        }
+        .container { max-width: 900px; width: 100%; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .back-btn {
+            display: inline-block; padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2); color: white;
+            border: none; border-radius: 50px; margin-bottom: 20px;
+            font-size: 0.95em; cursor: pointer; transition: all 0.3s;
+        }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        h1 { font-size: 2.5em; margin-bottom: 15px; }
+        .case-description {
+            font-size: 1.1em; color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px; line-height: 1.6;
+        }
+        .comparison-section {
+            background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; padding: 30px; margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.3em; font-weight: bold; margin-bottom: 20px;
+            padding-bottom: 15px; border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        .comparison-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .country-info {
+            background: rgba(255, 255, 255, 0.08); border-left: 4px solid rgba(255, 215, 0, 0.6);
+            padding: 20px; border-radius: 8px;
+        }
+        .country-name { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; }
+        .info-item {
+            background: rgba(255, 255, 255, 0.05); padding: 12px; margin-bottom: 10px;
+            border-radius: 6px; font-size: 0.95em;
+        }
+        .info-label { color: #ffd700; font-weight: bold; }
+        .question-section {
+            background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 30px;
+        }
+        .question-text { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; }
+        .choice-buttons {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;
+        }
+        .choice-btn {
+            padding: 20px; background: rgba(255, 255, 255, 0.1); color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 15px;
+            font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: bold;
+        }
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 215, 0, 0.6); transform: scale(1.05);
+        }
+        .result-box {
+            background: rgba(76, 175, 80, 0.2); border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px; padding: 30px; text-align: center;
+            display: none; animation: slideUp 0.5s ease-out;
+        }
+        .result-box.show { display: block; }
+        .result-title { font-size: 1.8em; color: #4caf50; margin-bottom: 15px; }
+        .result-text { font-size: 1.05em; line-height: 1.8; margin-bottom: 20px; }
+        .insight-box {
+            background: rgba(255, 215, 0, 0.15); border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px; padding: 20px; margin-top: 20px; text-align: left;
+        }
+        .next-button {
+            padding: 15px 40px; background: #4a90e2; color: white;
+            border: none; border-radius: 50px; font-size: 1.1em;
+            cursor: pointer; transition: all 0.3s; font-weight: bold; margin-top: 20px;
+        }
+        .next-button:hover { background: #357abd; transform: scale(1.02); }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .choice-buttons { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🌏 같은 보름달, 다른 명절</h1>
+            <p class="case-description">한국의 추석과 중국의 중추절은 같은 날, 같은 보름달을 축하합니다.<br>그런데 정말 같은 명절일까요?</p>
+        </div>
+
+        <div class="comparison-section">
+            <div class="section-title">📊 명절 비교</div>
+            <div class="comparison-grid">
+                <div class="country-info">
+                    <div class="country-name">🇰🇷 추석 (한국)</div>
+                    <div class="info-item">
+                        <span class="info-label">날짜:</span> 음력 8월 15일
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">의미:</span> 가을 수확, 조상 추모
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">음식:</span> 송편, 나물, 소고기
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">활동:</span> 차례, 성묘, 전통놀이
+                    </div>
+                </div>
+                <div class="country-info">
+                    <div class="country-name">🇨🇳 중추절 (중국)</div>
+                    <div class="info-item">
+                        <span class="info-label">날짜:</span> 음력 8월 15일
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">의미:</span> 가을, 단합, 단원
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">음식:</span> 월병, 과일
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">활동:</span> 달구경, 가족 모임
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-section">
+            <div class="question-text">🤔 당신의 생각은?</div>
+            <div class="choice-buttons">
+                <button class="choice-btn" onclick="selectAnswer(true)">같은 명절이다</button>
+                <button class="choice-btn" onclick="selectAnswer(false)">다른 명절이다</button>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-title" id="resultTitle">결론</div>
+            <div class="result-text" id="resultText"></div>
+            <div class="insight-box">
+                <strong>💡 핵심 인사이트:</strong><br>
+                같은 날짜, 같은 보름달을 축하하지만, 각 나라의 문화와 역사에 따라<br>
+                명절의 의미와 방식이 다릅니다. 이것이 문화의 다양성이에요!
+            </div>
+            <button class="learn-more-btn" onclick="openFactCheck('korea-vs-china')" style="padding: 10px 20px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 25px; font-size: 0.95em; cursor: pointer; margin: 15px 0; display: block;">📖 더 알아보기</button>
+            <button class="next-button" onclick="completeCase()">다음 케이스로</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-c-progress';
+        let caseCompleted = false;
+
+        function selectAnswer(answer) {
+            if (caseCompleted) return;
+            const resultBox = document.getElementById('resultBox');
+            const titleEl = document.getElementById('resultTitle');
+            const textEl = document.getElementById('resultText');
+
+            if (!answer) {
+                titleEl.textContent = '✅ 맞습니다!';
+                textEl.textContent = '같은 날짜이지만, 각각의 문화적 배경과 의미가 다른 별개의 명절입니다.';
+            } else {
+                titleEl.textContent = '❌ 다시 생각해보세요';
+                textEl.textContent = '표면상 같아 보이지만, 역사와 문화적 배경이 달라 다른 명절이에요.';
+            }
+
+            resultBox.classList.add('show');
+            caseCompleted = true;
+        }
+
+        function completeCase() {
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { cases: [false, false, false, false] };
+            progress.cases[1] = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+    </script>
+    <script src="../../../fact-check.js"></script>
+</body>
+</html>

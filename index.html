@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한가위 어드벤처 - 추석 계기교육 게임</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: bounce 2s infinite;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .tracks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .track-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .track-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .track-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .track-card h2 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .track-card .age {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .track-card .description {
+            font-size: 0.95em;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        .track-card.track-a {
+            border-top: 5px solid #ff9a56;
+        }
+
+        .track-card.track-b {
+            border-top: 5px solid #5aa956;
+        }
+
+        .track-card.track-c {
+            border-top: 5px solid #4a90e2;
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            margin-top: 30px;
+            font-size: 0.95em;
+            line-height: 1.8;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .tracks {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌕 한가위 어드벤처</h1>
+        <p class="subtitle">추석을 알고 → 놀고 → 생각하는 게임</p>
+
+        <div class="tracks">
+            <a href="track-a/" class="track-card track-a">
+                <div class="track-icon">🧸</div>
+                <h2>트랙 A</h2>
+                <div class="age">유·초저·특수교육</div>
+                <div class="description">달님과 함께하는 한가위</div>
+            </a>
+
+            <a href="track-b/" class="track-card track-b">
+                <div class="track-icon">🌱</div>
+                <h2>트랙 B</h2>
+                <div class="age">초등학교 3~6학년</div>
+                <div class="description">한가위 마을 탐험대</div>
+            </a>
+
+            <a href="track-c/" class="track-card track-c">
+                <div class="track-icon">🔎</div>
+                <h2>트랙 C</h2>
+                <div class="age">중·고등학교</div>
+                <div class="description">추석 문화 탐정단</div>
+            </a>
+        </div>
+
+        <div class="info">
+            <strong>💡 팁:</strong> 자신의 학년에 맞는 트랙을 선택하세요.<br>
+            각 트랙의 게임을 모두 완료하면 보름달을 완성할 수 있습니다!
+        </div>
+    </div>
+</body>
+</html>

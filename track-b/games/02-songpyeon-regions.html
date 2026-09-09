@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>송편 지역 탐험 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 50%, #2d5016 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .region-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .region-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .region-card.selected {
+            border-color: #5aa956;
+            background: rgba(90, 169, 86, 0.3);
+            animation: pulse 0.5s ease-out;
+        }
+
+        .region-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .region-name {
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .region-label {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .info-box.show {
+            display: block;
+        }
+
+        .songpyeon-display {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+
+        .region-info {
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .characteristic {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid rgba(255, 215, 0, 0.6);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .completion-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .completion-message.show {
+            display: block;
+        }
+
+        .completion-message h2 {
+            font-size: 2em;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        .completion-message p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .next-button {
+            padding: 15px 40px;
+            background: #5aa956;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .next-button:hover {
+            background: #4a9744;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .regions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .songpyeon-display {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🍡 송편 지역 탐험</h1>
+            <p class="subtitle">한국의 여러 지역을 돌며 송편의 다양한 모습을 발견하세요!</p>
+        </div>
+
+        <div class="regions-grid" id="regionsGrid"></div>
+
+        <div class="info-box" id="infoBox">
+            <div class="songpyeon-display" id="songpyeonIcon">🍡</div>
+            <h2 id="regionTitle">지역명</h2>
+            <div class="region-info" id="regionInfo"></div>
+        </div>
+
+        <div class="completion-message" id="completionMessage">
+            <h2>🎉 모든 지역을 탐험했어요!</h2>
+            <p>전통은 지역에 따라 다양한 모습으로 나타나요.<br>각 지역의 특색을 담은 송편들이 우리의 문화를 풍요롭게 만들어줍니다!</p>
+            <button class="learn-more-btn" onclick="openFactCheck('songpyeon')" style="padding: 10px 20px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 25px; font-size: 0.95em; cursor: pointer; margin: 15px 0;">📖 송편 더 알아보기</button>
+            <button class="next-button" onclick="completeGame()">다음 게임으로</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-b-progress';
+
+        const regions = [
+            {
+                name: '강원도',
+                emoji: '🏔️',
+                icon: '🍡',
+                characteristic: '멸치나 깨를 넣은 짭짤한 송편이 특징이에요.'
+            },
+            {
+                name: '경주',
+                emoji: '🏛️',
+                icon: '🍡',
+                characteristic: '팥 대신 밤을 넣은 밤송편이 유명해요.'
+            },
+            {
+                name: '전주',
+                emoji: '🌾',
+                icon: '🍡',
+                characteristic: '설기와 송편을 함께 만드는 문화가 있어요.'
+            },
+            {
+                name: '제주도',
+                emoji: '🏝️',
+                icon: '🍡',
+                characteristic: '검은 콩을 넣은 송편과 팥소 송편을 함께 먹어요.'
+            },
+            {
+                name: '서울',
+                emoji: '🏙️',
+                icon: '🍡',
+                characteristic: '팥소를 기본으로 하는 전통 송편을 만들어요.'
+            },
+            {
+                name: '부산',
+                emoji: '⛵',
+                icon: '🍡',
+                characteristic: '해산물 맛을 낸 소를 사용하기도 해요.'
+            }
+        ];
+
+        let exploredRegions = new Set();
+
+        function initGame() {
+            const grid = document.getElementById('regionsGrid');
+            grid.innerHTML = '';
+
+            regions.forEach((region, index) => {
+                const card = document.createElement('div');
+                card.className = 'region-card';
+                card.innerHTML = `
+                    <div class="region-icon">${region.emoji}</div>
+                    <div class="region-name">${region.name}</div>
+                    <div class="region-label">클릭하여 탐험</div>
+                `;
+                card.onclick = () => selectRegion(card, region, index);
+                grid.appendChild(card);
+            });
+        }
+
+        function selectRegion(element, region, index) {
+            element.classList.add('selected');
+            exploredRegions.add(index);
+
+            const infoBox = document.getElementById('infoBox');
+            const regionTitle = document.getElementById('regionTitle');
+            const regionInfo = document.getElementById('regionInfo');
+            const songpyeonIcon = document.getElementById('songpyeonIcon');
+
+            regionTitle.textContent = region.name + '의 송편';
+            songpyeonIcon.textContent = region.icon;
+            regionInfo.innerHTML = `
+                <div class="characteristic">
+                    <strong>🌟 특징:</strong><br>
+                    ${region.characteristic}
+                </div>
+            `;
+
+            infoBox.classList.add('show');
+
+            setTimeout(() => {
+                if (exploredRegions.size === regions.length) {
+                    infoBox.classList.remove('show');
+                    document.getElementById('completionMessage').classList.add('show');
+                }
+            }, 2000);
+        }
+
+        function completeGame() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false, false],
+                facts: []
+            };
+            progress.games[1] = true;
+            if (!progress.facts.includes('🍡')) {
+                progress.facts.push('🍡');
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        initGame();
+    </script>
+    <script src="../../../fact-check.js"></script>
+</body>
+</html>

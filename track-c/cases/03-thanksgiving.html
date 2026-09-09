@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>추석은 추수감사절일까? - 추석 문화 탐정단</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5a7b 50%, #1a3a52 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 20px; color: white;
+        }
+        .container { max-width: 900px; width: 100%; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .back-btn {
+            display: inline-block; padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2); color: white;
+            border: none; border-radius: 50px; margin-bottom: 20px;
+            font-size: 0.95em; cursor: pointer; transition: all 0.3s;
+        }
+        .back-btn:hover { background: rgba(255, 255, 255, 0.3); }
+        h1 { font-size: 2.5em; margin-bottom: 15px; }
+        .case-description {
+            font-size: 1.1em; color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px; line-height: 1.6;
+        }
+        .comparison-section {
+            background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; padding: 30px; margin-bottom: 30px;
+        }
+        .section-title {
+            font-size: 1.3em; font-weight: bold; margin-bottom: 20px;
+            padding-bottom: 15px; border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        .comparison-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+        }
+        .country-info {
+            background: rgba(255, 255, 255, 0.08); border-left: 4px solid rgba(255, 215, 0, 0.6);
+            padding: 20px; border-radius: 8px;
+        }
+        .country-name { font-size: 1.2em; font-weight: bold; margin-bottom: 15px; }
+        .info-item {
+            background: rgba(255, 255, 255, 0.05); padding: 12px; margin-bottom: 10px;
+            border-radius: 6px; font-size: 0.95em;
+        }
+        .info-label { color: #ffd700; font-weight: bold; }
+        .difference-section {
+            background: rgba(255, 215, 0, 0.1); border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px; padding: 20px; margin-bottom: 30px;
+        }
+        .difference-item {
+            background: rgba(255, 255, 255, 0.05); padding: 15px; margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .question-section {
+            background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 30px;
+        }
+        .choice-buttons {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;
+        }
+        .choice-btn {
+            padding: 20px; background: rgba(255, 255, 255, 0.1); color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 15px;
+            font-size: 1em; cursor: pointer; transition: all 0.3s; font-weight: bold;
+        }
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 215, 0, 0.6); transform: scale(1.05);
+        }
+        .result-box {
+            background: rgba(76, 175, 80, 0.2); border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px; padding: 30px; text-align: center;
+            display: none; animation: slideUp 0.5s ease-out;
+        }
+        .result-box.show { display: block; }
+        .result-title { font-size: 1.8em; color: #4caf50; margin-bottom: 15px; }
+        .next-button {
+            padding: 15px 40px; background: #4a90e2; color: white;
+            border: none; border-radius: 50px; font-size: 1.1em;
+            cursor: pointer; transition: all 0.3s; font-weight: bold; margin-top: 20px;
+        }
+        .next-button:hover { background: #357abd; transform: scale(1.02); }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8em; }
+            .comparison-grid { grid-template-columns: 1fr; }
+            .choice-buttons { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🇺🇸 추석은 추수감사절일까?</h1>
+            <p class="case-description">
+                흔히 "추석은 한국판 추수감사절"이라는 표현을 씁니다.<br>
+                이것이 정확한 표현일까요? 직접 비교해보세요!
+            </p>
+        </div>
+
+        <div class="comparison-section">
+            <div class="section-title">📊 공통점과 차이점</div>
+            <div class="comparison-grid">
+                <div class="country-info">
+                    <div class="country-name">🇰🇷 추석</div>
+                    <div class="info-item"><span class="info-label">유래:</span> 신라 시대부터</div>
+                    <div class="info-item"><span class="info-label">시기:</span> 음력 8월 15일</div>
+                    <div class="info-item"><span class="info-label">의미:</span> 조상 추모, 수확 감사</div>
+                    <div class="info-item"><span class="info-label">특징:</span> 제사, 성묘 중심</div>
+                </div>
+                <div class="country-info">
+                    <div class="country-name">🦃 추수감사절</div>
+                    <div class="info-item"><span class="info-label">유래:</span> 1621년 미국</div>
+                    <div class="info-item"><span class="info-label">시기:</span> 11월 4번째 목요일</div>
+                    <div class="info-item"><span class="info-label">의미:</span> 신에게 수확 감사</div>
+                    <div class="info-item"><span class="info-label">특징:</span> 가족 식사, 축제</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="difference-section">
+            <div class="section-title">🔍 중요한 차이점</div>
+            <div class="difference-item">
+                <strong>역사적 배경:</strong> 추석은 1000년 이상의 동양 역사 전통, 추수감사절은 근현대 서양 종교 전통
+            </div>
+            <div class="difference-item">
+                <strong>의례 형태:</strong> 추석은 조상 제사 중심, 추수감사절은 신 감사 중심
+            </div>
+            <div class="difference-item">
+                <strong>문화적 맥락:</strong> 추석은 동양 음력 전통, 추수감사절은 서양 기독교 전통
+            </div>
+        </div>
+
+        <div class="question-section">
+            <div class="question-text">🤔 결론: 추석을 뭐라고 부르는 것이 맞을까?</div>
+            <div class="choice-buttons">
+                <button class="choice-btn" onclick="selectAnswer(true)">한국판 추수감사절</button>
+                <button class="choice-btn" onclick="selectAnswer(false)">독자적인 추석</button>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-title" id="resultTitle">결론</div>
+            <div id="resultText"></div>
+            <button class="learn-more-btn" onclick="openFactCheck('korea-vs-thanksgiving')" style="padding: 10px 20px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 25px; font-size: 0.95em; cursor: pointer; margin: 15px 0; display: block;">📖 더 알아보기</button>
+            <button class="next-button" onclick="completeCase()">다음 케이스로</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-c-progress';
+        let caseCompleted = false;
+
+        function selectAnswer(answer) {
+            if (caseCompleted) return;
+            const resultBox = document.getElementById('resultBox');
+            const titleEl = document.getElementById('resultTitle');
+            const textEl = document.getElementById('resultText');
+
+            if (!answer) {
+                titleEl.textContent = '✅ 정확합니다!';
+                textEl.innerHTML = `추석은 동양의 고유한 전통문화입니다.<br>
+                비록 수확을 감사한다는 점에서 유사하지만,<br>
+                역사, 의례, 문화적 맥락이 완전히 다릅니다!`;
+            } else {
+                titleEl.textContent = '❌ 다시 생각해보세요';
+                textEl.innerHTML = `추석은 서양의 추수감사절과 비교하기 보다는<br>
+                그 자체의 가치를 인정하는 것이 맞습니다.`;
+            }
+
+            resultBox.classList.add('show');
+            caseCompleted = true;
+        }
+
+        function completeCase() {
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { cases: [false, false, false, false] };
+            progress.cases[2] = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+    </script>
+    <script src="../../../fact-check.js"></script>
+</body>
+</html>
