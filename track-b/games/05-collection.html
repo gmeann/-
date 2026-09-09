@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한가위 도감 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 50%, #2d5016 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-icon {
+            font-size: 1.3em;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .item {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .item.collected {
+            border-color: #5aa956;
+            background: rgba(90, 169, 86, 0.2);
+        }
+
+        .item.empty {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .item.empty:hover {
+            transform: scale(1);
+        }
+
+        .item-icon {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        .item-name {
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .item-info-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .item-info-box.show {
+            display: block;
+        }
+
+        .item-detail-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .item-detail-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .item-description {
+            font-size: 1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .completion-box {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.5s ease-out;
+            margin-top: 30px;
+        }
+
+        .completion-box.show {
+            display: block;
+        }
+
+        .completion-box h2 {
+            font-size: 2em;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+
+        .completion-box p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .next-button {
+            padding: 15px 40px;
+            background: #5aa956;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .next-button:hover {
+            background: #4a9744;
+            transform: scale(1.02);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>📖 한가위 도감</h1>
+            <p class="subtitle">게임에서 배운 모든 추석 문화를 확인하세요!</p>
+        </div>
+
+        <!-- 음식 카테고리 -->
+        <div class="category">
+            <div class="category-title">
+                <span class="category-icon">🍡</span>
+                <span>음식</span>
+            </div>
+            <div class="items-grid">
+                <div class="item" onclick="showItemInfo('songpyeon')">
+                    <div class="item-icon">🍡</div>
+                    <div class="item-name">송편</div>
+                </div>
+                <div class="item" onclick="showItemInfo('harvest')">
+                    <div class="item-icon">🌾</div>
+                    <div class="item-name">햇곡식</div>
+                </div>
+                <div class="item empty">
+                    <div class="item-icon">?</div>
+                    <div class="item-name">더보기</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 놀이 카테고리 -->
+        <div class="category">
+            <div class="category-title">
+                <span class="category-icon">🎲</span>
+                <span>놀이</span>
+            </div>
+            <div class="items-grid">
+                <div class="item" onclick="showItemInfo('yut')">
+                    <div class="item-icon">🎳</div>
+                    <div class="item-name">윷놀이</div>
+                </div>
+                <div class="item" onclick="showItemInfo('ganggang')">
+                    <div class="item-icon">💃</div>
+                    <div class="item-name">강강술래</div>
+                </div>
+                <div class="item" onclick="showItemInfo('jegi')">
+                    <div class="item-icon">🎯</div>
+                    <div class="item-name">제기차기</div>
+                </div>
+                <div class="item" onclick="showItemInfo('tug')">
+                    <div class="item-icon">🧗</div>
+                    <div class="item-name">줄다리기</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 역사 카테고리 -->
+        <div class="category">
+            <div class="category-title">
+                <span class="category-icon">🏺</span>
+                <span>역사</span>
+            </div>
+            <div class="items-grid">
+                <div class="item" onclick="showItemInfo('silla')">
+                    <div class="item-icon">🏺</div>
+                    <div class="item-name">신라의 가배</div>
+                </div>
+                <div class="item" onclick="showItemInfo('hanagawi')">
+                    <div class="item-icon">🌕</div>
+                    <div class="item-name">한가위</div>
+                </div>
+                <div class="item empty">
+                    <div class="item-icon">?</div>
+                    <div class="item-name">더보기</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 의례 카테고리 -->
+        <div class="category">
+            <div class="category-title">
+                <span class="category-icon">🏠</span>
+                <span>의례</span>
+            </div>
+            <div class="items-grid">
+                <div class="item" onclick="showItemInfo('charye')">
+                    <div class="item-icon">🏠</div>
+                    <div class="item-name">차례</div>
+                </div>
+                <div class="item" onclick="showItemInfo('seongmyo')">
+                    <div class="item-icon">🌳</div>
+                    <div class="item-name">성묘</div>
+                </div>
+                <div class="item empty">
+                    <div class="item-icon">?</div>
+                    <div class="item-name">더보기</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="item-info-box" id="itemInfoBox">
+            <div class="item-detail-icon" id="itemIcon">🍡</div>
+            <div class="item-detail-name" id="itemName">아이템 이름</div>
+            <div class="item-description" id="itemDesc">설명</div>
+            <button class="next-button" onclick="closeItemInfo()">닫기</button>
+        </div>
+
+        <div class="completion-box" id="completionBox">
+            <h2>🎉 도감을 확인했어요!</h2>
+            <p>이 도감에서 본 모든 것들이 우리의 소중한 추석 문화를 이루고 있어요.<br>이러한 전통을 알고 소중히 여기는 것이 우리 문화를 지켜가는 방법입니다!</p>
+            <button class="next-button" onclick="completeGame()">트랙 B 완료!</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-b-progress';
+
+        const itemData = {
+            songpyeon: {
+                name: '송편',
+                icon: '🍡',
+                desc: '송편은 추석을 대표하는 음식으로, 반달 모양이 보름달을 닮았습니다. 팥소나 밤을 넣어 만들며, 지역에 따라 다양한 모습으로 나타나요.'
+            },
+            harvest: {
+                name: '햇곡식',
+                icon: '🌾',
+                desc: '추석은 새로 난 곡식을 먹으며 풍요로움을 감사하는 명절입니다. 햇쌀, 햇보리, 햇콩 등 그해에 새로 난 곡식을 사용해요.'
+            },
+            yut: {
+                name: '윷놀이',
+                icon: '🎳',
+                desc: '네 개의 막대를 던져 나온 모양에 따라 말을 움직이는 전통 놀이입니다. 추석 때 가족과 함께 즐기는 대표 민속 놀이예요.'
+            },
+            ganggang: {
+                name: '강강술래',
+                icon: '💃',
+                desc: '손을 잡고 원을 그리며 노래하고 도는 여인들의 집단 놀이입니다. 주로 여성들이 달밤에 즐기는 전통 춤이에요.'
+            },
+            jegi: {
+                name: '제기차기',
+                icon: '🎯',
+                desc: '깃털이 달린 제기를 발로 차서 떨어뜨리지 않는 놀이입니다. 정교한 발끝의 감각을 기르는 전통 운동이에요.'
+            },
+            tug: {
+                name: '줄다리기',
+                icon: '🧗',
+                desc: '지역 주민들이 함께 참여하여 풍년을 기원하는 집단 놀이입니다. 우리 문화에서 매우 중요한 의미를 가지고 있어요.'
+            },
+            silla: {
+                name: '신라의 가배',
+                icon: '🏺',
+                desc: '신라 시대에 음력 8월 15일에 행했던 명절입니다. 여인들이 달맞이를 하며 길쌈 기술을 겨루던 행사로, 오늘날 추석의 뿌리가 되었어요.'
+            },
+            hanagawi: {
+                name: '한가위',
+                icon: '🌕',
+                desc: '음력 8월 15일을 부르는 명칭입니다. 하나(한) + 가위(제일 높은)라는 뜻으로, 가을의 가장 큰 명절을 의미해요.'
+            },
+            charye: {
+                name: '차례',
+                icon: '🏠',
+                desc: '조상을 모시는 의식으로, 추석 아침에 지냅니다. 지역과 가정에 따라 다양한 형태로 행해져요.'
+            },
+            seongmyo: {
+                name: '성묘',
+                icon: '🌳',
+                desc: '조상의 묘를 찾아가 성의를 표하고 풀을 제거하는 의식입니다. 조상을 추모하고 가족의 유대를 다지는 시간이에요.'
+            }
+        };
+
+        function showItemInfo(key) {
+            const item = itemData[key];
+            document.getElementById('itemIcon').textContent = item.icon;
+            document.getElementById('itemName').textContent = item.name;
+            document.getElementById('itemDesc').textContent = item.desc;
+            document.getElementById('itemInfoBox').classList.add('show');
+        }
+
+        function closeItemInfo() {
+            document.getElementById('itemInfoBox').classList.remove('show');
+        }
+
+        function completeGame() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false, false],
+                facts: []
+            };
+            progress.games[4] = true;
+            if (!progress.facts.includes('📚')) {
+                progress.facts.push('📚');
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            // Show completion after a short delay
+            setTimeout(() => {
+                window.location.href = '../';
+            }, 1000);
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        // Show completion message on first visit
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('completionBox').classList.add('show');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
