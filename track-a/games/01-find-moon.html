@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>달님을 찾아라 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .moon-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 4em;
+            position: relative;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .moon-option:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .moon-option.selected {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+            animation: pulse 0.5s ease-out;
+        }
+
+        .moon-option.correct {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.3);
+            animation: grow 0.6s ease-out;
+        }
+
+        .moon-option.incorrect {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.2);
+            animation: shake 0.5s ease-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes grow {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.15);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .result {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid rgba(76, 175, 80, 0.5);
+            border-radius: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #4caf50;
+        }
+
+        .result p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .next-btn {
+            padding: 15px 40px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .next-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .fact-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .question {
+                font-size: 1.2em;
+            }
+
+            .options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🌕 달님을 찾아라</h1>
+            <p class="question">추석에는 어떤 달을 볼까요?</p>
+        </div>
+
+        <div class="options" id="options"></div>
+
+        <div class="result" id="result">
+            <h2 id="resultTitle">정답입니다!</h2>
+            <p id="resultText"></p>
+            <div class="fact-box">
+                <strong>📚 추석 팩트:</strong>
+                <p>추석은 음력 8월 15일로, 이날 밤에는 가장 둥근 보름달을 볼 수 있어요!<br>달의 모양이 점점 커졌다가 이날 가장 크고 밝게 빛나는 거예요.</p>
+            </div>
+            <button class="next-btn" onclick="completeGame()">다음 게임으로</button>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'track-a-progress';
+        let gameCompleted = false;
+
+        const moons = [
+            { emoji: '🌕', name: '보름달', isCorrect: true },
+            { emoji: '🌙', name: '초승달', isCorrect: false },
+            { emoji: '🌗', name: '하현달', isCorrect: false },
+            { emoji: '🌓', name: '상현달', isCorrect: false }
+        ];
+
+        // Shuffle options
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function initGame() {
+            const shuffled = shuffle(moons);
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+
+            shuffled.forEach((moon, index) => {
+                const div = document.createElement('div');
+                div.className = 'moon-option';
+                div.textContent = moon.emoji;
+                div.onclick = () => selectMoon(div, moon);
+                optionsContainer.appendChild(div);
+            });
+        }
+
+        function selectMoon(element, moon) {
+            if (gameCompleted) return;
+
+            // Remove previous selections
+            document.querySelectorAll('.moon-option').forEach(el => {
+                el.classList.remove('selected', 'correct', 'incorrect');
+                el.style.pointerEvents = 'auto';
+            });
+
+            element.classList.add('selected');
+
+            setTimeout(() => {
+                if (moon.isCorrect) {
+                    element.classList.remove('selected');
+                    element.classList.add('correct');
+                    showResult(true);
+                    gameCompleted = true;
+                } else {
+                    element.classList.remove('selected');
+                    element.classList.add('incorrect');
+                    showResult(false);
+                }
+            }, 300);
+        }
+
+        function showResult(isCorrect) {
+            const resultEl = document.getElementById('result');
+            const titleEl = document.getElementById('resultTitle');
+            const textEl = document.getElementById('resultText');
+
+            if (isCorrect) {
+                titleEl.textContent = '✨ 정답입니다!';
+                textEl.textContent = '추석에는 가장 둥근 보름달을 볼 수 있어요!';
+                resultEl.style.display = 'block';
+                resultEl.classList.add('show');
+            } else {
+                titleEl.textContent = '다시 생각해 보세요!';
+                textEl.textContent = '추석에 볼 수 있는 달은 어느 것일까요?';
+                resultEl.style.display = 'block';
+                resultEl.classList.add('show');
+                gameCompleted = false;
+                setTimeout(() => {
+                    resultEl.classList.remove('show');
+                    resultEl.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        function completeGame() {
+            // Save progress
+            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+                games: [false, false, false, false]
+            };
+            progress.games[0] = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+            // Go back to main page
+            window.location.href = '../';
+        }
+
+        function goBack() {
+            window.location.href = '../';
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
