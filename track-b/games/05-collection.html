@@ -329,6 +329,7 @@
             <div class="item-detail-icon" id="itemIcon">🍡</div>
             <div class="item-detail-name" id="itemName">아이템 이름</div>
             <div class="item-description" id="itemDesc">설명</div>
+            <div id="learnMoreContainer"></div>
             <button class="next-button" onclick="closeItemInfo()">닫기</button>
         </div>
 
@@ -346,52 +347,62 @@
             songpyeon: {
                 name: '송편',
                 icon: '🍡',
-                desc: '송편은 추석을 대표하는 음식으로, 반달 모양이 보름달을 닮았습니다. 팥소나 밤을 넣어 만들며, 지역에 따라 다양한 모습으로 나타나요.'
+                desc: '송편은 추석을 대표하는 음식으로, 반달 모양이 보름달을 닮았습니다. 팥소나 밤을 넣어 만들며, 지역에 따라 다양한 모습으로 나타나요.',
+                factKey: 'songpyeon'
             },
             harvest: {
                 name: '햇곡식',
                 icon: '🌾',
-                desc: '추석은 새로 난 곡식을 먹으며 풍요로움을 감사하는 명절입니다. 햇쌀, 햇보리, 햇콩 등 그해에 새로 난 곡식을 사용해요.'
+                desc: '추석은 새로 난 곡식을 먹으며 풍요로움을 감사하는 명절입니다. 햇쌀, 햇보리, 햇콩 등 그해에 새로 난 곡식을 사용해요.',
+                factKey: 'newgrain'
             },
             yut: {
                 name: '윷놀이',
                 icon: '🎳',
-                desc: '네 개의 막대를 던져 나온 모양에 따라 말을 움직이는 전통 놀이입니다. 추석 때 가족과 함께 즐기는 대표 민속 놀이예요.'
+                desc: '네 개의 막대를 던져 나온 모양에 따라 말을 움직이는 전통 놀이입니다. 추석 때 가족과 함께 즐기는 대표 민속 놀이예요.',
+                factKey: 'yut'
             },
             ganggang: {
                 name: '강강술래',
                 icon: '💃',
-                desc: '손을 잡고 원을 그리며 노래하고 도는 여인들의 집단 놀이입니다. 주로 여성들이 달밤에 즐기는 전통 춤이에요.'
+                desc: '손을 잡고 원을 그리며 노래하고 도는 여인들의 집단 놀이입니다. 주로 여성들이 달밤에 즐기는 전통 춤이에요.',
+                factKey: 'ganggangsullae'
             },
             jegi: {
                 name: '제기차기',
                 icon: '🎯',
-                desc: '깃털이 달린 제기를 발로 차서 떨어뜨리지 않는 놀이입니다. 정교한 발끝의 감각을 기르는 전통 운동이에요.'
+                desc: '깃털이 달린 제기를 발로 차서 떨어뜨리지 않는 놀이입니다. 정교한 발끝의 감각을 기르는 전통 운동이에요.',
+                factKey: 'jegi'
             },
             tug: {
                 name: '줄다리기',
                 icon: '🧗',
-                desc: '지역 주민들이 함께 참여하여 풍년을 기원하는 집단 놀이입니다. 우리 문화에서 매우 중요한 의미를 가지고 있어요.'
+                desc: '지역 주민들이 함께 참여하여 풍년을 기원하는 집단 놀이입니다. 우리 문화에서 매우 중요한 의미를 가지고 있어요.',
+                factKey: 'tugging'
             },
             silla: {
                 name: '신라의 가배',
                 icon: '🏺',
-                desc: '신라 시대에 음력 8월 15일에 행했던 명절입니다. 여인들이 달맞이를 하며 길쌈 기술을 겨루던 행사로, 오늘날 추석의 뿌리가 되었어요.'
+                desc: '신라 시대에 음력 8월 15일에 행했던 명절입니다. 여인들이 달맞이를 하며 길쌈 기술을 겨루던 행사로, 오늘날 추석의 뿌리가 되었어요.',
+                factKey: 'gaebae'
             },
             hanagawi: {
                 name: '한가위',
                 icon: '🌕',
-                desc: '음력 8월 15일을 부르는 명칭입니다. 하나(한) + 가위(제일 높은)라는 뜻으로, 가을의 가장 큰 명절을 의미해요.'
+                desc: '음력 8월 15일을 부르는 명칭입니다. 하나(한) + 가위(제일 높은)라는 뜻으로, 가을의 가장 큰 명절을 의미해요.',
+                factKey: 'hanagawi'
             },
             charye: {
                 name: '차례',
                 icon: '🏠',
-                desc: '조상을 모시는 의식으로, 추석 아침에 지냅니다. 지역과 가정에 따라 다양한 형태로 행해져요.'
+                desc: '조상을 모시는 의식으로, 추석 아침에 지냅니다. 지역과 가정에 따라 다양한 형태로 행해져요.',
+                factKey: 'charye'
             },
             seongmyo: {
                 name: '성묘',
                 icon: '🌳',
-                desc: '조상의 묘를 찾아가 성의를 표하고 풀을 제거하는 의식입니다. 조상을 추모하고 가족의 유대를 다지는 시간이에요.'
+                desc: '조상의 묘를 찾아가 성의를 표하고 풀을 제거하는 의식입니다. 조상을 추모하고 가족의 유대를 다지는 시간이에요.',
+                factKey: 'seongmyo'
             }
         };
 
@@ -400,6 +411,14 @@
             document.getElementById('itemIcon').textContent = item.icon;
             document.getElementById('itemName').textContent = item.name;
             document.getElementById('itemDesc').textContent = item.desc;
+
+            const container = document.getElementById('learnMoreContainer');
+            if (item.factKey) {
+                container.innerHTML = `<button class="learn-more-btn" onclick="openFactCheck('${item.factKey}')" style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 20px; font-size: 0.85em; cursor: pointer; margin-top: 12px; display: block;">📖 더 알아보기</button>`;
+            } else {
+                container.innerHTML = '';
+            }
+
             document.getElementById('itemInfoBox').classList.add('show');
         }
 
@@ -436,5 +455,6 @@
             }, 1000);
         });
     </script>
+    <script src="../../../fact-check.js"></script>
 </body>
 </html>

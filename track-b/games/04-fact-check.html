@@ -262,27 +262,32 @@
             {
                 question: "차례상에는 반드시 정해진 순서대로 음식을 놓아야 한다.",
                 isTrue: false,
-                explanation: "차례상의 배치는 지역과 가정에 따라 다릅니다. 중요한 것은 정해진 규칙보다 함께 하는 마음이에요."
+                explanation: "차례상의 배치는 지역과 가정에 따라 다릅니다. 중요한 것은 정해진 규칙보다 함께 하는 마음이에요.",
+                factKey: 'charye'
             },
             {
                 question: "홍동백서는 모든 전통 제사에서 지켜야 하는 원칙이다.",
                 isTrue: false,
-                explanation: "홍동백서는 하나의 관례일 뿐, 모든 가정이 따르는 절대적 규칙은 아닙니다. 각 가정의 전통을 존중하는 것이 맞아요."
+                explanation: "홍동백서는 하나의 관례일 뿐, 모든 가정이 따르는 절대적 규칙은 아닙니다. 각 가정의 전통을 존중하는 것이 맞아요.",
+                factKey: 'hongdongbaekseo'
             },
             {
                 question: "추석에는 꼭 이웃과 성묘를 가야 한다.",
                 isTrue: false,
-                explanation: "성묘는 추석의 중요한 전통이지만, 상황에 따라 다른 형태로 조상을 추모할 수도 있습니다."
+                explanation: "성묘는 추석의 중요한 전통이지만, 상황에 따라 다른 형태로 조상을 추모할 수도 있습니다.",
+                factKey: 'seongmyo'
             },
             {
                 question: "송편의 반달 모양은 보름달을 닮기 위해 만들어졌다.",
                 isTrue: true,
-                explanation: "네, 송편의 반달 모양은 추석의 보름달을 상징합니다. 우리 조상들이 달에 대한 마음을 담아 만들었어요."
+                explanation: "네, 송편의 반달 모양은 추석의 보름달을 상징합니다. 우리 조상들이 달에 대한 마음을 담아 만들었어요.",
+                factKey: 'songpyeon'
             },
             {
                 question: "현대에는 전통적인 방식으로 차례를 지내는 것이 줄어들고 있다.",
                 isTrue: true,
-                explanation: "네, 현대 사회의 변화에 따라 차례의 형태도 다양해지고 있습니다. 이것은 자연스러운 문화의 발전이에요."
+                explanation: "네, 현대 사회의 변화에 따라 차례의 형태도 다양해지고 있습니다. 이것은 자연스러운 문화의 발전이에요.",
+                factKey: 'changing-chuseok'
             }
         ];
 
@@ -307,7 +312,7 @@
 
             resultTitle.textContent = isCorrect ? '✅ 맞았어요!' : '❌ 틀렸어요!';
             resultText.textContent = q.isTrue ? '네, 그것이 맞습니다!' : '아니요, 그것은 정답이 아닙니다.';
-            explanation.innerHTML = `<strong>📚 설명:</strong> ${q.explanation}`;
+            explanation.innerHTML = `<strong>📚 설명:</strong> ${q.explanation}<br><button class="learn-more-btn" onclick="openFactCheck('${q.factKey}')" style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 20px; font-size: 0.85em; cursor: pointer; margin-top: 12px; display: inline-block;">📖 더 알아보기</button></p>`;
 
             document.getElementById('questionBox').style.display = 'none';
             resultBox.classList.add('show');
@@ -346,5 +351,6 @@
 
         loadQuestion();
     </script>
+    <script src="../../../fact-check.js"></script>
 </body>
 </html>

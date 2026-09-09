@@ -207,6 +207,22 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+        .learn-more-btn {
+            padding: 10px 20px;
+            background: rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 25px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .learn-more-btn:hover {
+            background: rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
@@ -225,6 +241,7 @@
             <div class="fact-box">
                 <strong>📚 추석 팩트:</strong>
                 <p>추석은 음력 8월 15일로, 이날 밤에는 가장 둥근 보름달을 볼 수 있어요!<br>달의 모양이 점점 커졌다가 이날 가장 크고 밝게 빛나는 거예요.</p>
+                <button class="learn-more-btn" onclick="openFactCheck('chuseok')">📖 더 알아보기</button>
             </div>
             <button class="next-btn" onclick="completeGame()">다음 게임으로</button>
         </div>
@@ -331,5 +348,6 @@
 
         initGame();
     </script>
+    <script src="../../fact-check.js"></script>
 </body>
 </html>

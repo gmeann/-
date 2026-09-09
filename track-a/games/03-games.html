@@ -240,22 +240,26 @@
             {
                 emoji: '🎳',
                 name: '윷놀이',
-                fact: '윷놀이는 네 개의 막대를 던져서 나온 모양으로 말을 움직이는 게임이에요.'
+                fact: '윷놀이는 네 개의 막대를 던져서 나온 모양으로 말을 움직이는 게임이에요.',
+                factKey: 'yut'
             },
             {
                 emoji: '💃',
                 name: '강강술래',
-                fact: '강강술래는 손을 잡고 원을 그리며 도는 남녀 집단 놀이에요. 주로 여자들이 밤새도록 한답니다.'
+                fact: '강강술래는 손을 잡고 원을 그리며 도는 남녀 집단 놀이에요. 주로 여자들이 밤새도록 한답니다.',
+                factKey: 'ganggangsullae'
             },
             {
                 emoji: '🎯',
                 name: '제기차기',
-                fact: '제기차기는 깃털이 달린 제기를 발로 차서 떨어뜨리지 않는 놀이예요. 발끝의 감각이 중요해요!'
+                fact: '제기차기는 깃털이 달린 제기를 발로 차서 떨어뜨리지 않는 놀이예요. 발끝의 감각이 중요해요!',
+                factKey: 'jegi'
             },
             {
                 emoji: '🧗',
                 name: '줄다리기',
-                fact: '줄다리기는 지역사람들이 함께 참여하여 풍년을 기원하는 놀이예요.'
+                fact: '줄다리기는 지역사람들이 함께 참여하여 풍년을 기원하는 놀이예요.',
+                factKey: 'tugging'
             }
         ];
 
@@ -295,7 +299,7 @@
 
             titleEl.textContent = `✨ ${game.name}을 찾았어요!`;
             textEl.textContent = game.name + '은 추석에 하는 전통 놀이예요!';
-            factEl.innerHTML = `<strong>📚 알아보기:</strong><p>${game.fact}</p>`;
+            factEl.innerHTML = `<strong>📚 알아보기:</strong><p>${game.fact}</p><button class="learn-more-btn" onclick="openFactCheck('${game.factKey}')" style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 20px; font-size: 0.85em; cursor: pointer; margin-top: 12px;">📖 더 알아보기</button></p>`;
 
             resultEl.classList.add('show');
 
@@ -331,5 +335,6 @@
 
         initGame();
     </script>
+    <script src="../../fact-check.js"></script>
 </body>
 </html>
