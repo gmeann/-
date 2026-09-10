@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한가위 놀이마당 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #f5e6d3 0%, #e8d4b8 50%, #dfc39e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #3d2817;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(61, 40, 23, 0.2);
+            color: #3d2817;
+            border: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(61, 40, 23, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #8b4513;
+        }
+
+        /* Game Selection */
+        .game-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: white;
+            border: 3px solid #d4a574;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: #ffd700;
+        }
+
+        .game-card.active {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: #ffd700;
+        }
+
+        .game-icon {
+            font-size: 3em;
+        }
+
+        .game-name {
+            font-size: 1.3em;
+            color: #8b4513;
+            font-weight: 600;
+        }
+
+        .game-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Game Area */
+        .game-area {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step {
+            display: none;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dialogue {
+            font-size: 1.3em;
+            color: #3d2817;
+            margin-bottom: 30px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .character {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        /* Yut Game - Board */
+        .yut-board {
+            display: grid;
+            grid-template-columns: repeat(5, 60px);
+            gap: 10px;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        .yut-cell {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 2px solid #d4a574;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #8b4513;
+        }
+
+        .yut-cell.player {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4caf50;
+        }
+
+        .yut-cell.computer {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #f44336;
+        }
+
+        .yut-stats {
+            font-size: 1.2em;
+            color: #8b4513;
+            font-weight: 600;
+            margin: 20px 0;
+        }
+
+        /* Jegi Game - Timing */
+        .jegi-area {
+            position: relative;
+            width: 200px;
+            height: 300px;
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+            border: 2px dashed #d4a574;
+            border-radius: 20px;
+            margin: 30px auto;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .jegi-item {
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.1s;
+            user-select: none;
+        }
+
+        .jegi-item:hover {
+            transform: scale(1.1);
+        }
+
+        .jegi-meter {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .jegi-bar {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #4caf50;
+            top: 50%;
+        }
+
+        .jegi-stats {
+            font-size: 1.2em;
+            color: #8b4513;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Tug Game - Rope */
+        .tug-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px 0;
+            gap: 10px;
+        }
+
+        .tug-team-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tug-team-name {
+            font-size: 1em;
+            font-weight: 600;
+            color: #8b4513;
+        }
+
+        .tug-power-bar {
+            width: 100px;
+            height: 30px;
+            background: #ddd;
+            border: 2px solid #999;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #3d2817;
+        }
+
+        .tug-rope-display {
+            flex: 1;
+            height: 40px;
+            background: linear-gradient(90deg, #8b4513 0%, #d4a574 50%, #8b4513 100%);
+            border-radius: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .tug-knot {
+            width: 40px;
+            height: 40px;
+            background: #ffd700;
+            border: 3px solid #8b4513;
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #8b4513;
+        }
+
+        .tug-result {
+            font-size: 1.2em;
+            color: #8b4513;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* GangGang Game - Pattern */
+        .ganggang-circle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .ganggang-person {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border: 3px solid #8b4513;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ganggang-person:hover {
+            transform: scale(1.1);
+        }
+
+        .ganggang-person.active {
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            border-color: #c71585;
+        }
+
+        .ganggang-stats {
+            font-size: 1.2em;
+            color: #8b4513;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.05em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .game-btn {
+            background: #4caf50;
+            color: white;
+        }
+
+        .game-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .game-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Result Screen */
+        .result-screen {
+            display: none;
+            text-align: center;
+            width: 100%;
+        }
+
+        .result-screen.show {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-title {
+            font-size: 2.2em;
+            color: #4caf50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .result-emoji {
+            font-size: 5em;
+            margin: 20px 0;
+        }
+
+        .result-message {
+            font-size: 1.1em;
+            color: #3d2817;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .fact-box {
+            background: rgba(255, 215, 0, 0.15);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            text-align: left;
+            font-size: 1em;
+            color: #3d2817;
+        }
+
+        .fact-box strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .moon-fragment {
+            font-size: 3em;
+            animation: float 3s ease-in-out infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .game-area {
+                padding: 25px;
+            }
+
+            .game-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .dialogue {
+                font-size: 1.1em;
+            }
+
+            .tug-display {
+                flex-direction: column;
+                max-width: 100%;
+            }
+
+            .tug-rope-display {
+                width: 200px;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 돌아가기</button>
+            <h1>🎉 한가위 놀이마당</h1>
+        </div>
+
+        <!-- Game Selector -->
+        <div id="gameSelector" class="game-selector">
+            <div class="game-card" onclick="selectGame('yut')">
+                <div class="game-icon">🪵</div>
+                <div class="game-name">윷놀이</div>
+                <div class="game-desc">움직여 목표에 도달하기</div>
+            </div>
+            <div class="game-card" onclick="selectGame('jegi')">
+                <div class="game-icon">🪁</div>
+                <div class="game-name">제기차기</div>
+                <div class="game-desc">리듬에 맞춰 찰 준비!</div>
+            </div>
+            <div class="game-card" onclick="selectGame('tug')">
+                <div class="game-icon">🪢</div>
+                <div class="game-name">줄다리기</div>
+                <div class="game-desc">힘으로 상대를 이기기</div>
+            </div>
+            <div class="game-card" onclick="selectGame('ganggang')">
+                <div class="game-icon">👯</div>
+                <div class="game-name">강강술래</div>
+                <div class="game-desc">순서대로 손 잡기</div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <!-- Yut Game -->
+            <div class="step active" id="step-yut">
+                <div class="character">🪵</div>
+                <div class="dialogue">윷을 던져 목표(25칸)에 먼저 도달하세요!</div>
+
+                <div class="yut-stats">
+                    플레이어: <span id="yutPlayerPos">0</span>칸 | 컴퓨터: <span id="yutComputerPos">0</span>칸
+                </div>
+
+                <div class="yut-board" id="yutBoard"></div>
+
+                <div class="action-buttons">
+                    <button class="game-btn" id="yutThrowBtn" onclick="throwYut()">🪵 윷 던지기!</button>
+                    <button class="game-btn" id="yutGiveUpBtn" onclick="finishGame('yut')">포기하고 돌아가기</button>
+                </div>
+            </div>
+
+            <!-- Jegi Game -->
+            <div class="step" id="step-jegi">
+                <div class="character">🪁</div>
+                <div class="dialogue">초록 표시에 맞춰 제기를 차세요! 높이 5번 이상 차면 승리!</div>
+
+                <div class="jegi-area">
+                    <div class="jegi-meter">
+                        <div class="jegi-bar" id="jegiBar"></div>
+                    </div>
+                    <div class="jegi-item" onclick="kickJegi()">🪁</div>
+                </div>
+
+                <div class="jegi-stats">
+                    성공: <span id="jegiSuccess">0</span> | 실패: <span id="jegiFail">0</span>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="game-btn" id="jegiResetBtn" onclick="resetJegi()">🔄 다시 시작</button>
+                    <button class="game-btn" id="jegiCompleteBtn" onclick="finishGame('jegi')" disabled>완료! →</button>
+                </div>
+            </div>
+
+            <!-- Tug Game -->
+            <div class="step" id="step-tug">
+                <div class="character">💪</div>
+                <div class="dialogue">번갈아 줄을 당겨 상대를 중심선 너머로 밀어내세요!</div>
+
+                <div class="tug-display">
+                    <div class="tug-team-display">
+                        <div class="tug-team-name">우리팀 💪</div>
+                        <div class="tug-power-bar" id="playerPower">0%</div>
+                    </div>
+                    <div class="tug-rope-display">
+                        <div class="tug-knot" id="tugKnot">📍</div>
+                    </div>
+                    <div class="tug-team-display">
+                        <div class="tug-team-name">상대팀 💪</div>
+                        <div class="tug-power-bar" id="computerPower">0%</div>
+                    </div>
+                </div>
+
+                <div class="tug-result" id="tugResult">균형 상태</div>
+
+                <div class="action-buttons">
+                    <button class="game-btn" id="tugPlayBtn" onclick="tugTurn()">💪 우리 팀 당기기!</button>
+                    <button class="game-btn" id="tugGiveUpBtn" onclick="finishGame('tug')">포기하고 돌아가기</button>
+                </div>
+            </div>
+
+            <!-- GangGang Sullae -->
+            <div class="step" id="step-ganggang">
+                <div class="character">👯</div>
+                <div class="dialogue">모든 사람이 한 바퀴 돌 때까지 손을 잡아 순서대로 밝혀내세요!</div>
+
+                <div class="ganggang-circle" id="gangGangCircle"></div>
+
+                <div class="ganggang-stats">
+                    밝혀낸 사람: <span id="gangGangCount">0</span> / 8명
+                </div>
+
+                <div class="action-buttons">
+                    <button class="game-btn" id="gangGangPlayBtn" onclick="playGanggang()">🎵 강강술래 하기!</button>
+                    <button class="game-btn" id="gangGangGiveUpBtn" onclick="finishGame('ganggang')">포기하고 돌아가기</button>
+                </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div class="result-screen" id="resultScreen">
+                <div class="result-title">🎉 놀이 완료!</div>
+                <div class="result-emoji" id="resultEmoji">🎊</div>
+                <div class="result-message" id="resultMessage">
+                    추석에 하는 전통 놀이를 경험했어요!
+                </div>
+                <div class="fact-box">
+                    <strong>📚 한국의 전통 놀이</strong>
+                    <p id="resultFact">
+                        추석은 우리 조상들이 함께 모여 즐거운 시간을 보내는 명절이었어요.
+                        윷놀이, 제기차기, 줄다리기, 강강술래 같은 전통 놀이는 가족과 마을 사람들이 함께 즐기며 공동체 정신을 나누는 중요한 문화였답니다!
+                    </p>
+                </div>
+                <div class="moon-fragment">🌙</div>
+                <p style="font-size: 1.1em; color: #8b4513; margin-top: 20px; font-weight: 600;">달 조각을 획득했어요!</p>
+                <div class="action-buttons">
+                    <button class="game-btn" onclick="goToMenu()">기록실로 돌아가기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentGame = null;
+
+        // YUT GAME
+        let yutPlayerPos = 0;
+        let yutComputerPos = 0;
+        let yutRound = 0;
+
+        // JEGI GAME
+        let jegiSuccess = 0;
+        let jegiFail = 0;
+        let jegiBar = null;
+
+        // TUG GAME
+        let tugPlayerPower = 50;
+        let tugComputerPower = 50;
+
+        // GANGGANG GAME
+        let gangGangOrder = [];
+        let gangGangCurrent = 0;
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function goToMenu() {
+            localStorage.setItem('gameCompletionState', JSON.stringify({
+                'games': true,
+                ...(JSON.parse(localStorage.getItem('gameCompletionState') || '{}'))
+            }));
+            window.location.href = '../index.html';
+        }
+
+        function selectGame(game) {
+            currentGame = game;
+
+            document.querySelectorAll('#gameSelector .game-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            document.querySelectorAll('.game-area .step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById(`step-${game}`).classList.add('active');
+
+            if (game === 'yut') {
+                initYut();
+            } else if (game === 'jegi') {
+                initJegi();
+            } else if (game === 'tug') {
+                initTug();
+            } else if (game === 'ganggang') {
+                initGanggang();
+            }
+        }
+
+        // ===== YUT GAME =====
+        function initYut() {
+            yutPlayerPos = 0;
+            yutComputerPos = 0;
+            yutRound = 0;
+            updateYutBoard();
+        }
+
+        function throwYut() {
+            const result = Math.floor(Math.random() * 5) + 1;
+            yutPlayerPos = Math.min(yutPlayerPos + result, 25);
+            document.getElementById('yutPlayerPos').textContent = yutPlayerPos;
+            updateYutBoard();
+
+            if (yutPlayerPos >= 25) {
+                setTimeout(() => finishGame('yut'), 500);
+                return;
+            }
+
+            document.getElementById('yutThrowBtn').disabled = true;
+            setTimeout(() => {
+                const computerResult = Math.floor(Math.random() * 5) + 1;
+                yutComputerPos = Math.min(yutComputerPos + computerResult, 25);
+                document.getElementById('yutComputerPos').textContent = yutComputerPos;
+                updateYutBoard();
+
+                if (yutComputerPos >= 25) {
+                    setTimeout(() => finishGame('yut'), 500);
+                } else {
+                    document.getElementById('yutThrowBtn').disabled = false;
+                }
+            }, 1500);
+        }
+
+        function updateYutBoard() {
+            const board = document.getElementById('yutBoard');
+            board.innerHTML = '';
+            for (let i = 0; i < 25; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'yut-cell';
+                if (i === yutPlayerPos && yutPlayerPos > 0) {
+                    cell.classList.add('player');
+                    cell.textContent = '🟢';
+                } else if (i === yutComputerPos && yutComputerPos > 0) {
+                    cell.classList.add('computer');
+                    cell.textContent = '🔴';
+                } else {
+                    cell.textContent = i;
+                }
+                board.appendChild(cell);
+            }
+        }
+
+        // ===== JEGI GAME =====
+        function initJegi() {
+            jegiSuccess = 0;
+            jegiFail = 0;
+            document.getElementById('jegiSuccess').textContent = '0';
+            document.getElementById('jegiFail').textContent = '0';
+            document.getElementById('jegiCompleteBtn').disabled = true;
+            animateJegiBar();
+        }
+
+        function animateJegiBar() {
+            jegiBar = document.getElementById('jegiBar');
+            let position = 0;
+            const interval = setInterval(() => {
+                position += Math.random() * 80 + 10;
+                if (position > 100) {
+                    position = 0;
+                }
+                jegiBar.style.top = position + '%';
+            }, 500);
+            window.jegiInterval = interval;
+        }
+
+        function kickJegi() {
+            const bar = document.getElementById('jegiBar');
+            const barTop = parseFloat(bar.style.top || '50');
+
+            if (Math.abs(barTop - 50) < 15) {
+                jegiSuccess++;
+                document.getElementById('jegiSuccess').textContent = jegiSuccess;
+                if (jegiSuccess >= 5) {
+                    clearInterval(window.jegiInterval);
+                    document.getElementById('jegiCompleteBtn').disabled = false;
+                }
+            } else {
+                jegiFail++;
+                document.getElementById('jegiFail').textContent = jegiFail;
+            }
+        }
+
+        function resetJegi() {
+            clearInterval(window.jegiInterval);
+            initJegi();
+        }
+
+        // ===== TUG GAME =====
+        function initTug() {
+            tugPlayerPower = 50;
+            tugComputerPower = 50;
+            updateTugDisplay();
+        }
+
+        function tugTurn() {
+            tugPlayerPower = Math.min(tugPlayerPower + Math.floor(Math.random() * 20) + 10, 100);
+            document.getElementById('tugPlayBtn').disabled = true;
+            document.getElementById('tugPlayBtn').textContent = '상대팀이 당기는 중...';
+
+            setTimeout(() => {
+                if (tugPlayerPower >= 100) {
+                    setTimeout(() => finishGame('tug'), 500);
+                    return;
+                }
+
+                tugComputerPower = Math.min(tugComputerPower + Math.floor(Math.random() * 15) + 5, 100);
+                updateTugDisplay();
+
+                if (tugComputerPower >= 100) {
+                    setTimeout(() => finishGame('tug'), 500);
+                } else {
+                    document.getElementById('tugPlayBtn').disabled = false;
+                    document.getElementById('tugPlayBtn').textContent = '💪 우리 팀 당기기!';
+                }
+            }, 1500);
+
+            updateTugDisplay();
+        }
+
+        function updateTugDisplay() {
+            const knot = document.getElementById('tugKnot');
+            const balance = (tugPlayerPower - tugComputerPower);
+            knot.style.left = (50 + balance / 2) + '%';
+
+            document.getElementById('playerPower').textContent = tugPlayerPower + '%';
+            document.getElementById('computerPower').textContent = tugComputerPower + '%';
+
+            if (tugPlayerPower >= 100) {
+                document.getElementById('tugResult').textContent = '🎉 우리 팀 승리!';
+            } else if (tugComputerPower >= 100) {
+                document.getElementById('tugResult').textContent = '상대팀이 이겼어요';
+            } else {
+                document.getElementById('tugResult').textContent = '아직 진행 중...';
+            }
+        }
+
+        // ===== GANGGANG SULLAE =====
+        function initGanggang() {
+            gangGangCurrent = 0;
+            gangGangOrder = [0, 1, 2, 3, 4, 5, 6, 7];
+            document.getElementById('gangGangCount').textContent = '0';
+
+            const circle = document.getElementById('gangGangCircle');
+            circle.innerHTML = '';
+
+            for (let i = 0; i < 8; i++) {
+                const person = document.createElement('div');
+                person.className = 'ganggang-person';
+                person.textContent = ['👧', '👧', '👧', '👧', '👦', '👦', '👦', '👦'][i];
+                person.style.transform = `rotate(${i * 45}deg) translateY(-120px) rotate(${-i * 45}deg)`;
+                person.onclick = () => clickGanggang(i, person);
+                circle.appendChild(person);
+            }
+        }
+
+        function clickGanggang(index, element) {
+            if (gangGangOrder[gangGangCurrent] === index) {
+                gangGangCurrent++;
+                element.classList.add('active');
+                document.getElementById('gangGangCount').textContent = gangGangCurrent;
+
+                if (gangGangCurrent >= 8) {
+                    setTimeout(() => finishGame('ganggang'), 500);
+                }
+            }
+        }
+
+        function playGanggang() {
+            // Just a placeholder for future animation
+        }
+
+        function finishGame(game) {
+            clearInterval(window.jegiInterval);
+
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            const messages = {
+                'yut': '윷놀이를 끝냈어요! 옛날 사람들이 이렇게 즐거워했을 거예요.',
+                'jegi': '제기를 잘 찼어요! 리듬에 맞춰 계속 차는 신나는 놀이랍니다!',
+                'tug': '줄다리기를 했어요! 모두가 함께 힘을 모아서 하는 놀이예요.',
+                'ganggang': '강강술래를 완성했어요! 여럿이 손을 잡고 함께 즐기는 멋진 놀이랍니다!'
+            };
+
+            document.getElementById('resultMessage').textContent = messages[game];
+            document.getElementById('resultScreen').classList.add('show');
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            selectGame('yut');
+        });
+    </script>
+</body>
+</html>
