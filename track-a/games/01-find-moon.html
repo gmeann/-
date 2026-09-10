@@ -248,7 +248,7 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'track-a-progress';
+        const STORAGE_KEY = 'gameCompletionState';
         let gameCompleted = false;
 
         const moons = [
@@ -332,14 +332,12 @@
 
         function completeGame() {
             // Save progress
-            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-                games: [false, false, false, false]
-            };
-            progress.games[0] = true;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            state.findmoon = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 
             // Go back to main page
-            window.location.href = '../';
+            window.location.href = '../index.html';
         }
 
         function goBack() {
