@@ -833,6 +833,192 @@
             font-weight: 600;
         }
 
+        /* Record Card Section */
+        .record-card-section {
+            display: none;
+        }
+
+        .record-card-section.show {
+            display: block;
+        }
+
+        .record-card-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            animation: cardSlideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes cardSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .record-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 230, 211, 0.92));
+            border: 2px solid #dfc39e;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .record-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: cardShine 2s ease-out;
+        }
+
+        @keyframes cardShine {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .record-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .record-card-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #dfc39e;
+        }
+
+        .record-card-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            display: block;
+            animation: cardIconPulse 1.2s ease-in-out 0.5s;
+        }
+
+        @keyframes cardIconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .record-card-title {
+            font-size: 1.3em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .record-card-subtitle {
+            font-size: 0.95em;
+            color: #5d3a1a;
+            line-height: 1.6;
+        }
+
+        .record-card-section-item {
+            margin-bottom: 25px;
+        }
+
+        .record-card-section-label {
+            font-size: 0.95em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .record-card-section-icon {
+            font-size: 1.1em;
+        }
+
+        .record-card-text {
+            font-size: 1em;
+            color: #3d2817;
+            line-height: 1.7;
+            padding-left: 30px;
+        }
+
+        .record-card-source {
+            background: rgba(139, 69, 19, 0.05);
+            border-left: 3px solid #8b4513;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #5d3a1a;
+            line-height: 1.6;
+        }
+
+        .record-card-acquisition {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #dfc39e;
+            font-size: 1.1em;
+            color: #8b4513;
+            font-weight: bold;
+            animation: cardAcquisitionPulse 1.5s ease-in-out 0.8s infinite;
+        }
+
+        @keyframes cardAcquisitionPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        /* Record Card Buttons */
+        .record-card-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .record-card-button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .record-card-button.primary {
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            grid-column: 1 / -1;
+        }
+
+        .record-card-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        .record-card-button.secondary {
+            background: white;
+            color: #8b4513;
+            border: 2px solid #8b4513;
+        }
+
+        .record-card-button.secondary:hover {
+            background: rgba(139, 69, 19, 0.05);
+            transform: translateY(-2px);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-title {
@@ -927,6 +1113,22 @@
 
             .conclusion-title {
                 font-size: 1.2em;
+            }
+
+            .record-card {
+                padding: 25px;
+            }
+
+            .record-card-title {
+                font-size: 1.15em;
+            }
+
+            .record-card-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .record-card-button.primary {
+                grid-column: 1;
             }
         }
     </style>
@@ -1065,6 +1267,81 @@
                 </div>
             </div>
         </div>
+
+        <!-- Record Card Section -->
+        <div class="record-card-section" id="recordCardSection">
+            <div class="record-card-container">
+                <div class="record-card">
+                    <div class="record-card-content">
+                        <!-- Header -->
+                        <div class="record-card-header">
+                            <span class="record-card-icon">📚</span>
+                            <div class="record-card-title">한가위 기록 카드 01</div>
+                            <div class="record-card-subtitle">
+                                사건 01. 추석은 아주 오래전부터<br>
+                                지금과 같은 모습이었을까?
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">🔎</span>
+                                확인한 사실
+                            </div>
+                            <div class="record-card-text">
+                                신라 시대에는 음력 8월 15일과 관련된 '가배' 기록이 남아 있습니다.
+                            </div>
+                        </div>
+
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">⚠️</span>
+                                중요한 점
+                            </div>
+                            <div class="record-card-text">
+                                하지만 이 기록만으로 오늘날의 추석이 신라 시대부터 거의 같은 모습으로 이어졌다고 단정할 수는 없습니다.
+                            </div>
+                        </div>
+
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">💡</span>
+                                이번 조사에서 배운 것
+                            </div>
+                            <div class="record-card-text">
+                                자료에 있는 내용과 자료만으로는 알 수 없는 내용을 구분해야 합니다.
+                            </div>
+                        </div>
+
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">📖</span>
+                                출처
+                            </div>
+                            <div class="record-card-source">
+                                『삼국사기』 신라본기 유리이사금 9년
+                            </div>
+                        </div>
+
+                        <!-- Acquisition Message -->
+                        <div class="record-card-acquisition">
+                            ✨ 기록 획득! ✨
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="record-card-buttons">
+                            <button class="record-card-button primary" onclick="returnToArchive()">
+                                🗂️ 기록실로 돌아가기
+                            </button>
+                            <button class="record-card-button secondary" onclick="reExamineCase()">
+                                🔎 다시 살펴보기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal -->
@@ -1088,9 +1365,24 @@
         let currentCase = null;
         let viewedSources = [];
         let selectedSources = [];
-        let phase = 'reading'; // 'reading', 'selection', or 'judgment'
+        let phase = 'reading'; // 'reading', 'selection', 'judgment', or 'completion'
         let currentJudgmentIndex = 0;
         let judgmentResults = [];
+        let caseCompletionState = {};
+        let isFirstTimeCompletion = false;
+
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const saved = localStorage.getItem('caseCompletionState');
+            if (saved) {
+                caseCompletionState = JSON.parse(saved);
+            }
+        }
+
+        // Save completion state to localStorage
+        function saveCompletionState() {
+            localStorage.setItem('caseCompletionState', JSON.stringify(caseCompletionState));
+        }
 
         // Initialize
         function init() {
@@ -1100,6 +1392,9 @@
                 goBack();
                 return;
             }
+
+            // Load completion state
+            loadCompletionState();
 
             // Render claim
             document.getElementById('claimText').textContent = currentCase.claim;
@@ -1540,10 +1835,72 @@
             document.getElementById('judgmentSection').classList.remove('show');
             document.getElementById('conclusionSection').classList.add('show');
 
+            // Check if this is first completion
+            isFirstTimeCompletion = !caseCompletionState.case01;
+
+            // Mark case as completed
+            caseCompletionState.case01 = true;
+            saveCompletionState();
+
             // Scroll to conclusion
             setTimeout(() => {
                 document.getElementById('conclusionSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
+
+            // Show record card after a delay
+            setTimeout(() => {
+                showRecordCard();
+            }, 2000);
+        }
+
+        // Show record card
+        function showRecordCard() {
+            document.getElementById('conclusionSection').classList.remove('show');
+            document.getElementById('recordCardSection').classList.add('show');
+
+            // Scroll to record card
+            setTimeout(() => {
+                const recordCardSection = document.getElementById('recordCardSection');
+                if (recordCardSection) {
+                    recordCardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 200);
+        }
+
+        // Return to archive
+        function returnToArchive() {
+            window.location.href = '07-archive.html';
+        }
+
+        // Re-examine case
+        function reExamineCase() {
+            // Reset to reading phase but keep completion state
+            phase = 'reading';
+            viewedSources = [];
+            selectedSources = [];
+            currentJudgmentIndex = 0;
+            judgmentResults = [];
+
+            // Hide all sections
+            document.getElementById('recordCardSection').classList.remove('show');
+            document.getElementById('conclusionSection').classList.remove('show');
+            document.getElementById('judgmentSection').classList.remove('show');
+            document.getElementById('feedbackSection').classList.remove('show');
+            document.getElementById('nextButton').classList.remove('show');
+            document.getElementById('checkEvidenceBtn').classList.remove('show');
+
+            // Show main case UI
+            document.getElementById('sourcesLabel').style.display = 'block';
+            document.getElementById('sourcesGrid').style.display = 'grid';
+            document.getElementById('phaseLabel').style.display = 'none';
+            document.getElementById('evidenceInstruction').style.display = 'none';
+
+            // Render sources in reading mode
+            renderSources();
+            updateCompletion();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Go back to archive

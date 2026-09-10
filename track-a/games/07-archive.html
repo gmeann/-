@@ -158,6 +158,44 @@
             transform: translateY(-1px);
         }
 
+        /* Case Card (Completion Info) */
+        .case-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .case-card-title {
+            font-size: 1.1em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .case-card-description {
+            font-size: 0.95em;
+            color: #5d3a1a;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .case-card-completion {
+            font-size: 0.9em;
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .case-card-record {
+            font-size: 0.85em;
+            color: #8b4513;
+            margin-top: 8px;
+        }
+
         /* Guide Text */
         .guide-text {
             background: rgba(255, 255, 255, 0.7);
@@ -277,6 +315,21 @@
             <button class="case-button" onclick="startFirstCase()">🔎 첫 번째 사건 조사하기</button>
         </div>
 
+        <!-- Case Completion Card -->
+        <div class="case-card" id="caseCard" style="display: none;">
+            <div class="case-card-title">사건 01</div>
+            <div class="case-card-description">
+                추석은 아주 오래전부터<br>
+                지금과 같은 모습이었을까?
+            </div>
+            <div class="case-card-completion">
+                ✓ 조사 완료
+            </div>
+            <div class="case-card-record">
+                📚 기록 카드 획득
+            </div>
+        </div>
+
         <!-- Guide Text -->
         <div class="guide-text">
             <strong>💡 팁:</strong> 자료를 읽고, <strong>어떤 근거로 그렇게 말할 수 있는지</strong> 생각해 보세요.
@@ -284,14 +337,37 @@
     </div>
 
     <script>
+        // Load completion state
+        let caseCompletionState = {};
+
+        function loadCompletionState() {
+            const saved = localStorage.getItem('caseCompletionState');
+            if (saved) {
+                caseCompletionState = JSON.parse(saved);
+            }
+            updateCaseDisplay();
+        }
+
+        function updateCaseDisplay() {
+            const caseCard = document.getElementById('caseCard');
+            if (caseCompletionState.case01) {
+                // Show completion status
+                if (caseCard) {
+                    caseCard.style.display = 'block';
+                }
+            }
+        }
+
         function goBack() {
             window.location.href = '../';
         }
 
         function startFirstCase() {
-            // Route to first case (placeholder for Phase 7-2)
             window.location.href = 'case-01.html';
         }
+
+        // Load and update on page load
+        window.addEventListener('load', loadCompletionState);
     </script>
 </body>
 </html>
