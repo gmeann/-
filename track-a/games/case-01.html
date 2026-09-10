@@ -1142,7 +1142,7 @@
         </div>
 
         <!-- Claim Section -->
-        <div class="claim-section">
+        <div class="claim-section" id="claimSection">
             <div class="claim-label">🔎 조사할 주장</div>
             <div class="claim-text" id="claimText"></div>
             <div class="claim-instruction">이 주장을 자료를 통해 확인해 보세요.</div>
@@ -1395,6 +1395,30 @@
 
             // Load completion state
             loadCompletionState();
+
+            // Check if case is already completed
+            if (caseCompletionState.case01) {
+                // Show record card immediately for returning students
+                phase = 'completion';
+                document.getElementById('claimSection').style.display = 'block';
+                document.getElementById('sourcesLabel').style.display = 'none';
+                document.getElementById('sourcesGrid').style.display = 'none';
+                document.getElementById('phaseLabel').style.display = 'none';
+                document.getElementById('evidenceInstruction').style.display = 'none';
+                document.getElementById('checkEvidenceBtn').style.display = 'none';
+                document.getElementById('feedbackSection').style.display = 'none';
+                document.getElementById('conclusionSection').style.display = 'none';
+
+                // Show record card
+                setTimeout(() => {
+                    document.getElementById('recordCardSection').classList.add('show');
+                    const recordCardSection = document.getElementById('recordCardSection');
+                    if (recordCardSection) {
+                        recordCardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 300);
+                return;
+            }
 
             // Render claim
             document.getElementById('claimText').textContent = currentCase.claim;
