@@ -133,6 +133,39 @@
             box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
             border: 2px solid transparent;
             animation: slideUp 0.8s ease-out;
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
+        }
+
+        .source-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .source-summary {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .source-type-badge {
+            display: inline-block;
+            background: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .source-card:hover {
@@ -219,6 +252,151 @@
             font-size: 1.05em;
             color: #3d2817;
             line-height: 1.7;
+        }
+
+        /* Selection Mode */
+        .phase-label {
+            text-align: center;
+            font-size: 1.05em;
+            color: #5d3a1a;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .source-card.selection-mode {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .source-card.selection-mode:hover {
+            background: rgba(139, 69, 19, 0.05);
+        }
+
+        .source-card.selected {
+            border-color: #8b4513;
+            background: rgba(139, 69, 19, 0.08);
+        }
+
+        .selection-checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 28px;
+            height: 28px;
+            border: 2px solid #8b4513;
+            border-radius: 6px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.1em;
+        }
+
+        .source-card.selected .selection-checkbox {
+            background: #8b4513;
+            color: white;
+        }
+
+        /* Evidence Section */
+        .evidence-instruction {
+            background: rgba(139, 69, 19, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            border-left: 4px solid #8b4513;
+        }
+
+        .evidence-instruction-text {
+            font-size: 1em;
+            color: #3d2817;
+            line-height: 1.7;
+        }
+
+        /* Check Evidence Button */
+        .check-evidence-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .check-evidence-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            display: none;
+        }
+
+        .check-evidence-btn.show {
+            display: inline-block;
+        }
+
+        .check-evidence-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        .check-evidence-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            display: none;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08), rgba(160, 82, 45, 0.06));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-size: 1.2em;
+            color: #8b4513;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .feedback-message {
+            font-size: 1.05em;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .feedback-revelation {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8b4513;
+        }
+
+        .revelation-title {
+            font-size: 1em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .revelation-text {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
         }
 
         /* Next Button */
@@ -317,12 +495,24 @@
             font-size: 1.4em;
             color: #8b4513;
             font-weight: bold;
+            margin-bottom: 8px;
         }
 
         .modal-category {
             font-size: 0.9em;
             color: #666;
             display: block;
+        }
+
+        .modal-type-badge {
+            display: inline-block;
+            background: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-top: 8px;
+            font-weight: 600;
         }
 
         .modal-body {
@@ -431,7 +621,7 @@
 
         <!-- Sources Section -->
         <div class="sources-section">
-            <div class="sources-label">📚 추석에 관한 자료들</div>
+            <div class="sources-label" id="sourcesLabel">📚 추석에 관한 자료들</div>
             <div class="sources-grid" id="sourcesGrid"></div>
         </div>
 
@@ -443,9 +633,33 @@
             </div>
         </div>
 
+        <!-- Phase Indicator -->
+        <div class="phase-label" id="phaseLabel" style="display: none;">🔍 이 주장을 뒷받침하는 근거를 선택해 보세요</div>
+
+        <!-- Evidence Instruction -->
+        <div class="evidence-instruction" id="evidenceInstruction" style="display: none;">
+            <div class="evidence-instruction-text">
+                자료를 읽고, 어떤 근거로 그렇게 말할 수 있는지 생각해 보세요
+            </div>
+        </div>
+
+        <!-- Check Evidence Button -->
+        <div class="check-evidence-section">
+            <button class="check-evidence-btn" id="checkEvidenceBtn" onclick="showFeedback()">
+                근거 확인하기 →
+            </button>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section" id="feedbackSection">
+            <div class="feedback-title">📊 자료가 보여주는 것들</div>
+            <div class="feedback-message" id="feedbackMessage"></div>
+            <div id="feedbackRevelations"></div>
+        </div>
+
         <!-- Next Button -->
         <div class="next-button-section">
-            <button class="next-button" id="nextButton" onclick="proceedToEvidence()">근거 찾아보기 →</button>
+            <button class="next-button" id="nextButton" onclick="proceedToEvidence()">다음 단계 →</button>
         </div>
     </div>
 
@@ -469,6 +683,8 @@
     <script>
         let currentCase = null;
         let viewedSources = [];
+        let selectedSources = [];
+        let phase = 'reading'; // 'reading' or 'selection'
 
         // Initialize
         function init() {
@@ -494,19 +710,58 @@
             currentCase.sources.forEach(source => {
                 const card = document.createElement('div');
                 card.className = 'source-card';
-                if (viewedSources.includes(source.id)) {
-                    card.classList.add('viewed');
+
+                if (phase === 'selection') {
+                    card.classList.add('selection-mode');
+                    if (selectedSources.includes(source.id)) {
+                        card.classList.add('selected');
+                    }
+                } else {
+                    if (viewedSources.includes(source.id)) {
+                        card.classList.add('viewed');
+                    }
                 }
 
-                card.innerHTML = `
+                let cardContent = `
                     <span class="source-icon">${source.icon}</span>
-                    <div class="source-title">${source.title}</div>
-                    <div class="source-category">${source.category}</div>
-                    <button class="source-button" onclick="openSourceModal('${source.id}')">
-                        자료 열기
-                    </button>
-                    ${viewedSources.includes(source.id) ? '<div class="view-badge">✓ 확인함</div>' : ''}
+                    <div class="source-card-content">
+                        <div>
+                            <div class="source-title">${source.title}</div>
+                            <div class="source-category">${source.category}</div>
+                            ${source.type ? `<div class="source-type-badge">${source.type}</div>` : ''}
+                            <div class="source-summary">${source.summary || source.category}</div>
+                        </div>
+                        <div>`;
+
+                if (phase === 'selection') {
+                    cardContent += `
+                            <div class="selection-checkbox">
+                                ${selectedSources.includes(source.id) ? '✓' : ''}
+                            </div>
+                            <button class="source-button" onclick="openSourceModal('${source.id}')">
+                                자료 보기
+                            </button>`;
+                } else {
+                    cardContent += `
+                            <button class="source-button" onclick="openSourceModal('${source.id}')">
+                                자료 열기
+                            </button>
+                            ${viewedSources.includes(source.id) ? '<div class="view-badge">✓ 확인함</div>' : ''}`;
+                }
+
+                cardContent += `
+                        </div>
+                    </div>
                 `;
+
+                card.innerHTML = cardContent;
+
+                if (phase === 'selection') {
+                    card.addEventListener('click', (e) => {
+                        if (e.target.closest('.source-button') || e.target.closest('.selection-checkbox')) return;
+                        toggleSelection(source.id);
+                    });
+                }
 
                 grid.appendChild(card);
             });
@@ -518,12 +773,23 @@
             if (!source) return;
 
             document.getElementById('modalIcon').textContent = source.icon;
-            document.getElementById('modalTitle').textContent = source.title;
+            document.getElementById('modalTitle').textContent = source.detailTitle || source.title;
             document.getElementById('modalCategory').textContent = source.category;
             document.getElementById('modalBody').textContent = source.content;
 
             let sourceInfo = `출처: ${source.sourceName || source.sourceType || ''}`;
             document.getElementById('modalSource').textContent = sourceInfo;
+
+            let modalHeader = document.querySelector('.modal-header');
+            let typeBadge = modalHeader.querySelector('.modal-type-badge');
+            if (typeBadge) typeBadge.remove();
+
+            if (source.type) {
+                let badge = document.createElement('div');
+                badge.className = 'modal-type-badge';
+                badge.textContent = source.type;
+                modalHeader.appendChild(badge);
+            }
 
             // Mark as viewed
             if (!viewedSources.includes(sourceId)) {
@@ -547,22 +813,205 @@
 
         // Update completion status
         function updateCompletion() {
-            const allViewed = currentCase.sources.every(s => viewedSources.includes(s.id));
+            if (phase === 'reading') {
+                const allViewed = currentCase.sources.every(s => viewedSources.includes(s.id));
 
-            if (allViewed) {
-                document.getElementById('completionSection').classList.add('show');
-                document.getElementById('nextButton').classList.add('show');
+                if (allViewed) {
+                    document.getElementById('completionSection').classList.add('show');
+                    setTimeout(transitionToSelection, 1000);
+                } else {
+                    document.getElementById('completionSection').classList.remove('show');
+                }
             } else {
-                document.getElementById('completionSection').classList.remove('show');
-                document.getElementById('nextButton').classList.remove('show');
+                updateEvidenceButton();
             }
         }
 
-        // Proceed to evidence selection (Phase 7-3)
+        // Transition from reading to selection phase
+        function transitionToSelection() {
+            phase = 'selection';
+            selectedSources = [];
+
+            // Hide reading phase UI
+            document.getElementById('completionSection').classList.remove('show');
+            document.getElementById('sourcesLabel').style.display = 'none';
+
+            // Show selection phase UI
+            document.getElementById('phaseLabel').style.display = 'block';
+            document.getElementById('evidenceInstruction').style.display = 'block';
+
+            // Re-render with selection UI
+            renderSources();
+            updateEvidenceButton();
+        }
+
+        // Toggle source selection
+        function toggleSelection(sourceId) {
+            const index = selectedSources.indexOf(sourceId);
+            if (index > -1) {
+                selectedSources.splice(index, 1);
+            } else {
+                selectedSources.push(sourceId);
+            }
+            renderSources();
+            updateEvidenceButton();
+        }
+
+        // Update evidence button visibility and state
+        function updateEvidenceButton() {
+            const btn = document.getElementById('checkEvidenceBtn');
+            if (selectedSources.length > 0) {
+                btn.classList.add('show');
+                btn.disabled = false;
+            } else {
+                btn.classList.remove('show');
+            }
+        }
+
+        // Feedback messages for different selection combinations
+        const feedbackMessages = {
+            'source-a': {
+                title: '신라 시대의 기록만 선택한 경우',
+                message: '신라 시대 기록은 추석의 오래된 역사를 보여줍니다. 하지만 이것만으로는 지금의 추석과 얼마나 비슷한지 알기 어렵습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 추석',
+                        text: '음력 8월 15일에 길쌈의 결과를 살피고 노래와 춤을 즐겼다는 기록이 있습니다.'
+                    }
+                ]
+            },
+            'source-b': {
+                title: '박물관 자료만 선택한 경우',
+                message: '박물관 자료는 오늘날의 추석이 어떤 날인지 설명해줍니다. 하지만 이것이 옛날부터 이어진 것인지 알 수 없습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 오늘날의 추석',
+                        text: '음력 8월 15일로, 가을의 수확과 관련된 중요한 명절입니다.'
+                    }
+                ]
+            },
+            'source-c': {
+                title: '현대 자료만 선택한 경우',
+                message: '현대 자료는 지금 사람들이 어떻게 추석을 보내는지 보여줍니다. 하지만 이것이 옛날과 같은 모습인지는 알 수 없습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현재의 추석',
+                        text: '가족이 함께 명절을 보내고, 음식을 나누거나 성묘를 하는 모습으로 보냅니다.'
+                    }
+                ]
+            },
+            'source-a,source-b': {
+                title: '신라 시대 기록 + 박물관 자료',
+                message: '신라 시대부터 추석이 있었고, 오늘날도 음력 8월 15일에 명절을 보낸다는 것을 보여줍니다. 좋은 기초이지만, 정말 같은 모습인지 확인하기 위해서는 더 필요합니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 추석',
+                        text: '음력 8월 15일에 길쌈의 결과를 살피고 노래와 춤을 즐겼습니다.'
+                    },
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 오늘날의 추석',
+                        text: '여전히 음력 8월 15일이며, 가족과 함께 명절을 보냅니다.'
+                    }
+                ]
+            },
+            'source-a,source-c': {
+                title: '신라 시대 기록 + 현대 자료',
+                message: '신라 시대에는 음악과 춤을 즐겼고, 지금도 가족과 함께 명절을 보냅니다. 시간이 지나면서 어떻게 변했는지 보여줍니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 추석',
+                        text: '음력 8월 15일에 노래와 춤을 즐겼습니다.'
+                    },
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현재의 추석',
+                        text: '가족이 함께 시간을 보내며 명절을 즐깁니다.'
+                    }
+                ]
+            },
+            'source-b,source-c': {
+                title: '박물관 자료 + 현대 자료',
+                message: '박물관 자료와 현대 자료는 오늘날의 추석 모습을 설명합니다. 하지만 이것이 신라 시대부터 같은 모습이었는지는 알 수 없습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 박물관의 설명',
+                        text: '추석은 음력 8월 15일로, 가을의 수확과 관련된 명절입니다.'
+                    },
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현대의 모습',
+                        text: '가족이 함께 명절을 보내고, 음식을 나누며 성묘를 합니다.'
+                    }
+                ]
+            },
+            'source-a,source-b,source-c': {
+                title: '모든 자료를 선택한 경우',
+                message: '신라 시대부터 음력 8월 15일에 가족과 함께 즐기는 명절이었고, 오늘날도 비슷한 모습으로 이어지고 있습니다. 이것은 주장을 뒷받침하는 완전한 근거입니다!',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 기록',
+                        text: '음력 8월 15일에 길쌈의 결과를 살피고, 노래와 춤을 즐겼습니다.'
+                    },
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 박물관의 설명',
+                        text: '오늘날의 추석은 가을의 수확과 관련된 명절입니다.'
+                    },
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현대의 모습',
+                        text: '가족이 함께 명절을 보내고, 음식을 나누며 성묘를 합니다.'
+                    }
+                ]
+            }
+        };
+
+        // Show feedback
+        function showFeedback() {
+            if (selectedSources.length === 0) return;
+
+            const feedbackKey = selectedSources.sort().join(',');
+            const feedback = feedbackMessages[feedbackKey];
+
+            if (!feedback) return;
+
+            document.getElementById('feedbackMessage').textContent = feedback.message;
+
+            const revelationsContainer = document.getElementById('feedbackRevelations');
+            revelationsContainer.innerHTML = '';
+
+            feedback.revelations.forEach(revelation => {
+                const div = document.createElement('div');
+                div.className = 'feedback-revelation';
+                div.innerHTML = `
+                    <div class="revelation-title">${revelation.title}</div>
+                    <div class="revelation-text">${revelation.text}</div>
+                `;
+                revelationsContainer.appendChild(div);
+            });
+
+            document.getElementById('feedbackSection').classList.add('show');
+            document.getElementById('nextButton').classList.add('show');
+            document.getElementById('checkEvidenceBtn').classList.remove('show');
+
+            // Scroll to feedback
+            setTimeout(() => {
+                document.getElementById('feedbackSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Proceed to next phase
         function proceedToEvidence() {
-            // Placeholder for Phase 7-3
-            alert('근거 선택 화면은 다음 단계에서 준비될 예정입니다.');
-            // window.location.href = 'evidence-selection.html';
+            alert('다음 단계는 준비 중입니다.');
+            // window.location.href = 'phase-7-5.html';
         }
 
         // Go back to archive
