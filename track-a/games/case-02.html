@@ -1527,6 +1527,7 @@
             // Mark as viewed
             if (!viewedSources.includes(sourceId)) {
                 viewedSources.push(sourceId);
+                updateCompletion();
             }
 
             // Show modal
