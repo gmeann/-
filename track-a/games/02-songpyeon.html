@@ -421,6 +421,7 @@
                 <div class="dough-display" id="doughDisplay">⚪</div>
                 <div class="dialogue">이번에는 송편 속을 넣어 볼까요?</div>
                 <div class="filling-options">
+                    <button class="filling-btn" onclick="addFilling('redbean')">🫘</button>
                     <button class="filling-btn" onclick="addFilling('sesame')">🌰</button>
                 </div>
             </div>
@@ -458,6 +459,7 @@
                 </div>
                 <div class="action-buttons">
                     <button class="success-btn" onclick="completeGame()">🏘️ 마을로 돌아가기</button>
+                    <button class="success-btn" onclick="resetGame()">🔄 다시 해보기</button>
                 </div>
             </div>
         </div>
@@ -565,6 +567,14 @@
 
         function nextStep() {
             currentStep = 5;
+            showStep(currentStep);
+        }
+
+        function resetGame() {
+            // 게임 상태만 초기화 (보상 상태는 유지)
+            currentStep = 0;
+            selectedDough = null;
+            tapCount = 3;
             showStep(currentStep);
         }
 
