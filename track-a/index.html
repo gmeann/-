@@ -322,13 +322,13 @@
             </a>
 
             <!-- 놀이마당 -->
-            <div class="village-space locked">
-                <span class="lock-badge">🔒 준비 중</span>
+            <a href="games/03-games.html" class="village-space active" id="playSpace">
+                <div class="completed-indicator" id="playCompleted" style="display:none;">✓</div>
                 <span class="space-icon">🎲</span>
                 <div class="space-name">놀이마당</div>
                 <div class="space-description">추석 놀이를 즐기는 장소</div>
-                <span class="status-badge coming">곧 만나요!</span>
-            </div>
+                <span class="status-badge" id="playStatus">활성화</span>
+            </a>
 
             <!-- 풍년 들판 -->
             <div class="village-space locked">
@@ -404,6 +404,20 @@
             }
         }
 
+        // Update play space status
+        function updatePlayStatus() {
+            const moonPieces = initMoonPieces();
+            const playSpace = document.getElementById('playSpace');
+            const completedIndicator = document.getElementById('playCompleted');
+            const statusBadge = document.getElementById('playStatus');
+
+            if (moonPieces.play) {
+                completedIndicator.style.display = 'flex';
+                statusBadge.textContent = '완료!';
+                statusBadge.style.background = '#4caf50';
+            }
+        }
+
         // Save moon piece (called from game)
         function saveMoonPiece(spaceName) {
             const moonPieces = initMoonPieces();
@@ -412,12 +426,14 @@
                 localStorage.setItem(MOON_PIECES_KEY, JSON.stringify(moonPieces));
                 updateMoonDisplay();
                 updateSongpyeonStatus();
+                updatePlayStatus();
             }
         }
 
         // Initialize on load
         updateMoonDisplay();
         updateSongpyeonStatus();
+        updatePlayStatus();
 
         // Make saveMoonPiece globally available
         window.saveMoonPiece = saveMoonPiece;
