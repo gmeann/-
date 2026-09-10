@@ -68,6 +68,33 @@
             color: #7a4a2a;
         }
 
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            border: 2px solid #ffd700;
+        }
+
+        .progress-dot.completed {
+            background: #ffd700;
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            color: #5d3a1a;
+            text-align: center;
+            margin-top: 10px;
+        }
+
         /* Screen: Entry */
         .screen {
             display: none;
@@ -441,6 +468,64 @@
             box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
         }
 
+        /* Screen: Completion */
+        .completion-screen {
+            text-align: center;
+            background: white;
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .completion-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            display: block;
+            animation: celebrate 0.5s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .completion-title {
+            font-size: 2.2em;
+            color: #8b4513;
+            margin-bottom: 15px;
+        }
+
+        .completion-message {
+            font-size: 1.3em;
+            color: #5d3a1a;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .fact-count {
+            font-size: 1.2em;
+            color: #3d2817;
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .fact-count strong {
+            color: #8b4513;
+            font-size: 1.4em;
+        }
+
         @media (max-width: 768px) {
             .container {
                 max-width: 100%;
@@ -487,7 +572,8 @@
 
             .question-screen,
             .clue-screen,
-            .result-screen {
+            .result-screen,
+            .completion-screen {
                 padding: 25px 20px;
             }
 
@@ -502,6 +588,10 @@
             .result-text {
                 font-size: 1em;
             }
+
+            .completion-title {
+                font-size: 1.8em;
+            }
         }
     </style>
 </head>
@@ -512,6 +602,8 @@
             <button class="back-btn" onclick="goBack()">← 돌아가기</button>
             <h1>🔎 추석 팩트 탐정</h1>
             <p class="subtitle">이 말, 정말 맞을까요?</p>
+            <div class="progress-bar" id="progressBar"></div>
+            <p class="progress-text" id="progressText"></p>
         </div>
 
         <!-- Entry Screen -->
@@ -563,19 +655,48 @@
             <div class="hint-box" id="hintBox"></div>
             <div class="source-info" id="sourceInfo"></div>
             <div class="action-buttons">
-                <button class="next-btn" onclick="returnToVillage()">🏘️ 마을로 돌아가기</button>
+                <button class="next-btn" id="actionBtn" onclick="handleNextAction()">🔎 다음 문제</button>
             </div>
+        </div>
+
+        <!-- Completion Screen -->
+        <div id="completionScreen" class="screen completion-screen">
+            <span class="completion-icon">🎉</span>
+            <div class="completion-title">추석 팩트 탐정 완료!</div>
+            <p class="completion-message">
+                추석에 대한 이야기를 잘 살펴보았어요.<br>
+                <br>
+                다양한 관점에서 전통을 이해하는 시간이 되었길 바라요!
+            </p>
+            <div class="fact-count">
+                🔎 확인한 팩트: <strong>5개</strong>
+            </div>
+            <button class="next-btn" onclick="returnToVillage()">🏘️ 마을로 돌아가기</button>
         </div>
     </div>
 
     <script src="fact-questions.js"></script>
     <script>
-        let currentStep = 'entry'; // entry, question, clue, result
+        let currentStep = 'entry'; // entry, question, clue, result, completion
         let selectedAnswer = null;
         let currentQuestionIndex = 0;
 
         function getCurrentQuestion() {
             return FACT_QUESTIONS[currentQuestionIndex];
+        }
+
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            progressBar.innerHTML = '';
+            for (let i = 0; i < FACT_QUESTIONS.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot' + (i < currentQuestionIndex ? ' completed' : '');
+                progressBar.appendChild(dot);
+            }
+
+            progressText.textContent = `🔎 ${currentQuestionIndex + 1} / ${FACT_QUESTIONS.length}`;
         }
 
         function showScreen(screenName) {
@@ -586,9 +707,12 @@
                 screen.classList.add('active');
             }
             currentStep = screenName;
+            updateProgress();
         }
 
         function startInvestigation() {
+            currentQuestionIndex = 0;
+            selectedAnswer = null;
             const question = getCurrentQuestion();
             document.getElementById('statementText').textContent = question.statement;
             showScreen('question');
@@ -597,14 +721,6 @@
         function selectAnswer(answer) {
             selectedAnswer = answer;
             const question = getCurrentQuestion();
-
-            // 선택 피드백 (교육적 목적)
-            let feedbackText = '';
-            if (answer) {
-                feedbackText = "정말 그럴까요? 단서를 확인해 볼까요?";
-            } else {
-                feedbackText = "좋아요! 단서를 확인해 봐요!";
-            }
 
             // 단서 화면 구성
             const cluesGrid = document.getElementById('cluesGrid');
@@ -625,10 +741,10 @@
 
         function showResult() {
             const question = getCurrentQuestion();
-            const verdict = question.answer ? '맞아요!' : '❌ 아니에요!';
-            const verdictEmoji = question.answer ? '✅' : '❌';
 
-            document.getElementById('resultVerdict').textContent = `${verdictEmoji} ${verdict}`;
+            // 판정 표시 (정답의 판정을 항상 표시)
+            const verdict = question.answer ? '✅ 맞아요!' : '❌ 아니에요!';
+            document.getElementById('resultVerdict').textContent = verdict;
 
             // 결과 설명
             const resultText = question.explanation.join('<br>');
@@ -643,9 +759,32 @@
             document.getElementById('hintBox').innerHTML = hintHtml;
 
             // 출처 정보
-            document.getElementById('sourceInfo').innerHTML = `📖 확인한 자료: ${question.source}`;
+            const sourceEmoji = question.source === '유네스코' ? '🌏' : '📖';
+            document.getElementById('sourceInfo').innerHTML = `${sourceEmoji} 확인한 자료: ${question.source}`;
+
+            // 다음 버튼 설정
+            const actionBtn = document.getElementById('actionBtn');
+            if (currentQuestionIndex < FACT_QUESTIONS.length - 1) {
+                actionBtn.textContent = '🔎 다음 문제';
+            } else {
+                actionBtn.textContent = '🎉 완료!';
+            }
 
             showScreen('result');
+        }
+
+        function handleNextAction() {
+            if (currentQuestionIndex < FACT_QUESTIONS.length - 1) {
+                // 다음 문제로
+                currentQuestionIndex++;
+                selectedAnswer = null;
+                const question = getCurrentQuestion();
+                document.getElementById('statementText').textContent = question.statement;
+                showScreen('question');
+            } else {
+                // 완료 화면
+                showScreen('completion');
+            }
         }
 
         function goBack() {
@@ -658,7 +797,7 @@
 
         // 초기화
         document.addEventListener('DOMContentLoaded', function() {
-            // 초기 화면은 entry로 유지
+            updateProgress();
         });
     </script>
 </body>
