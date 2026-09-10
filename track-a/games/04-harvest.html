@@ -418,8 +418,15 @@
             progress.games[3] = true;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 
+            // Save moon piece (call parent window function)
+            if (window.parent && window.parent.saveMoonPiece) {
+                window.parent.saveMoonPiece('harvest');
+            }
+
             // Go back to main page
-            window.location.href = '../';
+            setTimeout(() => {
+                window.location.href = '../';
+            }, 500);
         }
 
         function goBack() {

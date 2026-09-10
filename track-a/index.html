@@ -331,13 +331,13 @@
             </a>
 
             <!-- 풍년 들판 -->
-            <div class="village-space locked">
-                <span class="lock-badge">🔒 준비 중</span>
+            <a href="games/04-harvest.html" class="village-space active" id="harvestSpace">
+                <div class="completed-indicator" id="harvestCompleted" style="display:none;">✓</div>
                 <span class="space-icon">🌾</span>
                 <div class="space-name">풍년 들판</div>
                 <div class="space-description">새로 난 곡식을 담는 들판</div>
-                <span class="status-badge coming">곧 만나요!</span>
-            </div>
+                <span class="status-badge" id="harvestStatus">활성화</span>
+            </a>
 
             <!-- 가족의 집 -->
             <div class="village-space locked">
@@ -353,6 +353,25 @@
         <div class="info-box">
             <strong>💡 팁:</strong> 각 활동 공간에서 게임을 완료하면 달 조각을 얻을 수 있습니다.
             모든 달 조각을 모으면 보름달을 완성할 수 있어요!
+        </div>
+
+        <!-- Encyclopedia Link -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="encyclopedia.html" style="
+                display: inline-block;
+                padding: 12px 30px;
+                background: linear-gradient(135deg, #ffd700, #ffed4e);
+                color: #3d2817;
+                text-decoration: none;
+                border-radius: 25px;
+                font-size: 1.05em;
+                font-weight: bold;
+                box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+                transition: all 0.3s;
+                border: 2px solid #b8860b;
+            " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(255, 215, 0, 0.4)';" onmouseout="this.style.transform='none'; this.style.boxShadow='0 5px 15px rgba(255, 215, 0, 0.3)';">
+                📚 한가위 도감 보기
+            </a>
         </div>
     </div>
 
@@ -418,6 +437,140 @@
             }
         }
 
+        // Update harvest space status
+        function updateHarvestStatus() {
+            const moonPieces = initMoonPieces();
+            const harvestSpace = document.getElementById('harvestSpace');
+            const completedIndicator = document.getElementById('harvestCompleted');
+            const statusBadge = document.getElementById('harvestStatus');
+
+            if (moonPieces.harvest) {
+                completedIndicator.style.display = 'flex';
+                statusBadge.textContent = '완료!';
+                statusBadge.style.background = '#4caf50';
+            }
+        }
+
+        // Check if all activities are complete and show ending
+        function checkGameCompletion() {
+            const moonPieces = initMoonPieces();
+            if (moonPieces.songpyeon && moonPieces.play && moonPieces.harvest) {
+                showEnding();
+            }
+        }
+
+        // Show ending screen
+        function showEnding() {
+            const endingOverlay = document.getElementById('endingOverlay');
+            if (!endingOverlay) {
+                createEndingScreen();
+            } else {
+                endingOverlay.style.display = 'flex';
+            }
+        }
+
+        // Create ending screen
+        function createEndingScreen() {
+            const overlay = document.createElement('div');
+            overlay.id = 'endingOverlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                animation: fadeIn 0.5s ease-out;
+            `;
+
+            const endingContent = document.createElement('div');
+            endingContent.style.cssText = `
+                background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+                border-radius: 30px;
+                padding: 40px;
+                max-width: 600px;
+                text-align: center;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                animation: popUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            `;
+
+            endingContent.innerHTML = `
+                <div style="font-size: 5em; margin-bottom: 20px; animation: bounce 1s infinite;">🌕</div>
+                <h2 style="font-size: 2.5em; color: #8b4513; margin-bottom: 20px; font-weight: bold;">보름달이 떴어요!</h2>
+                <p style="font-size: 1.3em; color: #5d3a1a; margin-bottom: 10px;">한가위 마을 탐험 완료!</p>
+                <p style="font-size: 1.1em; color: #3d2817; margin-bottom: 30px; line-height: 1.6;">
+                    추석에는 가족과 함께 맛있는 음식을 나누고,<br>
+                    즐거운 놀이를 하며 가을을 맞이해요.
+                </p>
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="location.reload()" style="
+                        padding: 12px 30px;
+                        background: #8b4513;
+                        color: white;
+                        border: none;
+                        border-radius: 25px;
+                        font-size: 1.1em;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    " onmouseover="this.style.background='#a0522d'" onmouseout="this.style.background='#8b4513'">
+                        🔄 처음부터 다시
+                    </button>
+                    <button onclick="closeEnding()" style="
+                        padding: 12px 30px;
+                        background: #4caf50;
+                        color: white;
+                        border: none;
+                        border-radius: 25px;
+                        font-size: 1.1em;
+                        font-weight: bold;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    " onmouseover="this.style.background='#45a049'" onmouseout="this.style.background='#4caf50'">
+                        🏘️ 마을로 돌아가기
+                    </button>
+                </div>
+            `;
+
+            overlay.appendChild(endingContent);
+            document.body.appendChild(overlay);
+
+            // Add animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes popUp {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.5);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-20px); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        function closeEnding() {
+            const endingOverlay = document.getElementById('endingOverlay');
+            if (endingOverlay) {
+                endingOverlay.style.display = 'none';
+            }
+        }
+
         // Save moon piece (called from game)
         function saveMoonPiece(spaceName) {
             const moonPieces = initMoonPieces();
@@ -427,16 +580,31 @@
                 updateMoonDisplay();
                 updateSongpyeonStatus();
                 updatePlayStatus();
+                updateHarvestStatus();
+                checkGameCompletion();
             }
+        }
+
+        // Reset all game progress
+        function resetGameProgress() {
+            localStorage.removeItem(MOON_PIECES_KEY);
+            // Also clear game-specific keys if needed
+            localStorage.removeItem('track-a-game-1-complete');
+            localStorage.removeItem('track-a-game-3-complete');
+            location.reload();
         }
 
         // Initialize on load
         updateMoonDisplay();
         updateSongpyeonStatus();
         updatePlayStatus();
+        updateHarvestStatus();
+        checkGameCompletion();
 
-        // Make saveMoonPiece globally available
+        // Make functions globally available
         window.saveMoonPiece = saveMoonPiece;
+        window.resetGameProgress = resetGameProgress;
+        window.closeEnding = closeEnding;
     </script>
 </body>
 </html>
