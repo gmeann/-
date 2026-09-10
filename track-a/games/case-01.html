@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사건 01 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #f5e6d3 0%, #e8d4b8 50%, #dfc39e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #3d2817;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(139, 69, 19, 0.2);
+            color: #3d2817;
+            text-decoration: none;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 69, 19, 0.3);
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #8b4513;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #5d3a1a;
+            margin-bottom: 30px;
+        }
+
+        .placeholder-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(245, 230, 211, 0.8));
+            border-radius: 30px;
+            padding: 60px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .case-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .case-title {
+            font-size: 1.8em;
+            color: #8b4513;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .case-description {
+            font-size: 1.1em;
+            color: #5d3a1a;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .coming-soon {
+            font-size: 1.3em;
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+            background: rgba(200, 200, 200, 0.1);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #8b4513;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: #a0522d;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .placeholder-box {
+                padding: 40px 25px;
+            }
+
+            .case-icon {
+                font-size: 3.5em;
+            }
+
+            .case-title {
+                font-size: 1.5em;
+            }
+
+            .case-description {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <button class="back-btn" onclick="goBack()">← 기록실로 돌아가기</button>
+
+        <!-- Placeholder Content -->
+        <div class="placeholder-box">
+            <div class="case-icon">🔍</div>
+            <h2 class="case-title">사건 01</h2>
+            <p class="case-description">추석에 대한 기록을 살펴봅니다.</p>
+            <div class="coming-soon">⏳ 다음 단계에서 준비될 예정입니다.</div>
+            <button class="back-link" onclick="goBack()">🗂️ 기록실로 돌아가기</button>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = '07-archive.html';
+        }
+    </script>
+</body>
+</html>
