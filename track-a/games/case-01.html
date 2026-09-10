@@ -548,6 +548,291 @@
             background: #a0522d;
         }
 
+        /* Judgment Phase */
+        .judgment-section {
+            display: none;
+        }
+
+        .judgment-section.show {
+            display: block;
+        }
+
+        .judgment-question-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .judgment-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .judgment-main-question {
+            font-size: 1.4em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .judgment-sub-instruction {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .judgment-progress {
+            text-align: center;
+            font-size: 0.9em;
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        .judgment-statement-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e0e0e0;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .judgment-statement-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .judgment-statement {
+            font-size: 1.2em;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .judgment-button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .judgment-button {
+            padding: 15px 20px;
+            background: white;
+            color: #8b4513;
+            border: 2px solid #8b4513;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .judgment-button:hover {
+            background: rgba(139, 69, 19, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .judgment-button:active {
+            transform: translateY(0);
+        }
+
+        .judgment-button.supported {
+            grid-column: 1;
+        }
+
+        .judgment-button.not-supported {
+            grid-column: 2;
+        }
+
+        /* Judgment Feedback */
+        .judgment-feedback-section {
+            display: none;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08), rgba(160, 82, 45, 0.06));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .judgment-feedback-section.show {
+            display: block;
+        }
+
+        .judgment-feedback-title {
+            font-size: 1.05em;
+            color: #8b4513;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-icon {
+            font-size: 1.3em;
+        }
+
+        .judgment-feedback-text {
+            font-size: 1em;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .judgment-source-review {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8b4513;
+        }
+
+        .source-review-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .source-review-button {
+            padding: 10px 20px;
+            background: #f5e6d3;
+            color: #8b4513;
+            border: 1px solid #8b4513;
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .source-review-button:hover {
+            background: #e8d4b8;
+            transform: translateY(-2px);
+        }
+
+        .judgment-action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .judgment-next-button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .judgment-next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        /* Conclusion Section */
+        .conclusion-section {
+            display: none;
+        }
+
+        .conclusion-section.show {
+            display: block;
+        }
+
+        .conclusion-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .conclusion-title {
+            font-size: 1.5em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .conclusion-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #dfc39e;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .conclusion-label {
+            font-size: 0.95em;
+            color: #5d3a1a;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .conclusion-text {
+            font-size: 1.1em;
+            color: #3d2817;
+            line-height: 1.9;
+            margin-bottom: 15px;
+        }
+
+        .conclusion-learning {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08), rgba(160, 82, 45, 0.06));
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 4px solid #8b4513;
+        }
+
+        .learning-icon {
+            font-size: 1.2em;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .learning-title {
+            font-size: 1em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .learning-content {
+            font-size: 0.95em;
+            color: #3d2817;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .learning-emphasis {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 12px;
+            border-left: 3px solid #8b4513;
+            font-size: 0.95em;
+            color: #3d2817;
+            font-weight: 600;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-title {
@@ -573,6 +858,19 @@
             .modal-content {
                 margin: 20px;
                 max-height: 90vh;
+            }
+
+            .judgment-statement {
+                font-size: 1.05em;
+            }
+
+            .judgment-button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .judgment-button.supported,
+            .judgment-button.not-supported {
+                grid-column: 1;
             }
         }
 
@@ -600,6 +898,35 @@
 
             .modal-content {
                 padding: 25px;
+            }
+
+            .judgment-main-question {
+                font-size: 1.2em;
+            }
+
+            .judgment-statement {
+                font-size: 1em;
+            }
+
+            .judgment-statement-card {
+                padding: 20px;
+            }
+
+            .judgment-button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .judgment-button.supported,
+            .judgment-button.not-supported {
+                grid-column: 1;
+            }
+
+            .conclusion-card {
+                padding: 20px;
+            }
+
+            .conclusion-title {
+                font-size: 1.2em;
             }
         }
     </style>
@@ -659,7 +986,84 @@
 
         <!-- Next Button -->
         <div class="next-button-section">
-            <button class="next-button" id="nextButton" onclick="proceedToEvidence()">다음 단계 →</button>
+            <button class="next-button" id="nextButton" onclick="proceedToJudgment()">다음 단계 →</button>
+        </div>
+
+        <!-- Judgment Phase -->
+        <div class="judgment-section" id="judgmentSection">
+            <!-- Question Header -->
+            <div class="judgment-question-header">
+                <span class="judgment-icon">⚖️</span>
+                <div class="judgment-main-question">그렇다면, 이 자료로 어디까지 말할 수 있을까요?</div>
+                <div class="judgment-sub-instruction">자료가 알려 주는 범위를 넘어서 생각하고 있지는 않은지 살펴보세요.</div>
+            </div>
+
+            <!-- Progress -->
+            <div class="judgment-progress" id="judgmentProgress"></div>
+
+            <!-- Statement Card -->
+            <div class="judgment-statement-card" id="judgmentCard">
+                <div class="judgment-statement-label">판단해 보세요</div>
+                <div class="judgment-statement" id="judgmentStatement"></div>
+                <div class="judgment-button-group">
+                    <button class="judgment-button supported" onclick="answerJudgment('supported')">
+                        ✓ 자료로 뒷받침할 수 있어요
+                    </button>
+                    <button class="judgment-button not-supported" onclick="answerJudgment('not-supported')">
+                        △ 자료만으로는 말하기 어려워요
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="judgment-feedback-section" id="judgmentFeedback">
+                <div class="judgment-feedback-title">
+                    <span class="feedback-icon" id="feedbackIcon"></span>
+                    <span id="feedbackTitle"></span>
+                </div>
+                <div class="judgment-feedback-text" id="feedbackText"></div>
+                <div id="sourceReviewContainer"></div>
+                <div class="judgment-action-buttons">
+                    <button class="judgment-next-button" onclick="nextJudgmentQuestion()">다음 →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion Section -->
+        <div class="conclusion-section" id="conclusionSection">
+            <div class="conclusion-header">
+                <span class="judgment-icon">📋</span>
+                <div class="conclusion-title">조사 결과</div>
+            </div>
+
+            <div class="conclusion-card">
+                <div class="conclusion-label">처음의 주장</div>
+                <div class="conclusion-text" id="originalClaim"></div>
+            </div>
+
+            <div class="conclusion-card">
+                <div class="conclusion-label">조사를 통해 확인한 것</div>
+                <div class="conclusion-text">
+                    신라 시대에는 8월 15일과 관련된 가배 기록이 남아 있습니다.
+                </div>
+                <div class="conclusion-text">
+                    하지만 이 기록만으로 오늘날의 추석이 신라 시대부터 거의 같은 모습으로 이어졌다고 단정할 수는 없습니다.
+                </div>
+            </div>
+
+            <div class="conclusion-learning">
+                <div class="learning-title">
+                    <span class="learning-icon">💡</span>
+                    자료를 잘 읽는다는 것은
+                </div>
+                <div class="learning-content">
+                    자료에 있는 내용을 그대로 찾는 것뿐만 아니라,<br>
+                    자료가 말할 수 있는 범위를 구분하는 것이기도 해요.
+                </div>
+                <div class="learning-emphasis">
+                    "자료에 없는 내용까지 사실이라고 단정하지 않아요."
+                </div>
+            </div>
         </div>
     </div>
 
@@ -684,7 +1088,9 @@
         let currentCase = null;
         let viewedSources = [];
         let selectedSources = [];
-        let phase = 'reading'; // 'reading' or 'selection'
+        let phase = 'reading'; // 'reading', 'selection', or 'judgment'
+        let currentJudgmentIndex = 0;
+        let judgmentResults = [];
 
         // Initialize
         function init() {
@@ -1008,10 +1414,136 @@
             }, 100);
         }
 
-        // Proceed to next phase
-        function proceedToEvidence() {
-            alert('다음 단계는 준비 중입니다.');
-            // window.location.href = 'phase-7-5.html';
+        // Proceed to judgment phase
+        function proceedToJudgment() {
+            phase = 'judgment';
+            currentJudgmentIndex = 0;
+            judgmentResults = [];
+
+            // Hide evidence phase UI
+            document.getElementById('feedbackSection').classList.remove('show');
+            document.getElementById('nextButton').classList.remove('show');
+            document.getElementById('checkEvidenceBtn').classList.remove('show');
+            document.getElementById('phaseLabel').style.display = 'none';
+            document.getElementById('evidenceInstruction').style.display = 'none';
+            document.getElementById('sourcesLabel').style.display = 'none';
+            document.getElementById('sourcesGrid').style.display = 'none';
+
+            // Show judgment phase UI
+            document.getElementById('judgmentSection').classList.add('show');
+            document.getElementById('originalClaim').textContent = currentCase.claim;
+
+            // Display first judgment
+            displayJudgmentQuestion();
+
+            // Scroll to judgment section
+            setTimeout(() => {
+                document.getElementById('judgmentSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Display judgment question
+        function displayJudgmentQuestion() {
+            if (currentJudgmentIndex >= currentCase.judgments.length) {
+                showConclusion();
+                return;
+            }
+
+            const judgment = currentCase.judgments[currentJudgmentIndex];
+
+            // Update progress
+            document.getElementById('judgmentProgress').textContent = `판단 ${currentJudgmentIndex + 1} / ${currentCase.judgments.length}`;
+
+            // Display statement
+            document.getElementById('judgmentStatement').textContent = judgment.statement;
+
+            // Hide feedback
+            document.getElementById('judgmentFeedback').classList.remove('show');
+            document.getElementById('judgmentCard').style.display = 'block';
+        }
+
+        // Answer judgment question
+        function answerJudgment(answer) {
+            const judgment = currentCase.judgments[currentJudgmentIndex];
+            const isCorrect = answer === judgment.correctAnswer;
+
+            // Store result
+            judgmentResults.push({
+                questionId: judgment.id,
+                selectedAnswer: answer,
+                correct: isCorrect
+            });
+
+            // Hide statement card
+            document.getElementById('judgmentCard').style.display = 'none';
+
+            // Show feedback
+            showJudgmentFeedback(judgment, answer, isCorrect);
+        }
+
+        // Show judgment feedback
+        function showJudgmentFeedback(judgment, answer, isCorrect) {
+            const feedbackSection = document.getElementById('judgmentFeedback');
+
+            if (isCorrect) {
+                // Correct answer
+                document.getElementById('feedbackIcon').textContent = '✓';
+                document.getElementById('feedbackTitle').textContent = '자료로 확인할 수 있어요';
+                document.getElementById('feedbackText').textContent = judgment.supportedExplanation || judgment.notSupportedExplanation;
+                document.getElementById('sourceReviewContainer').innerHTML = '';
+            } else {
+                // Incorrect answer
+                document.getElementById('feedbackIcon').textContent = '🤔';
+                document.getElementById('feedbackTitle').textContent = '다시 생각해 볼까요?';
+                document.getElementById('feedbackText').textContent = judgment.supportedFeedback || judgment.notSupportedFeedback;
+
+                // Add source review option
+                let sourceReview = '<div style="margin-top: 20px;">';
+                judgment.relatedSources.forEach(sourceId => {
+                    const source = currentCase.sources.find(s => s.id === sourceId);
+                    if (source) {
+                        sourceReview += `
+                            <div class="judgment-source-review">
+                                <div class="source-review-label">${source.icon} ${source.title}</div>
+                                <button class="source-review-button" onclick="openSourceModal('${sourceId}')">
+                                    📖 자료 다시 보기
+                                </button>
+                            </div>
+                        `;
+                    }
+                });
+                sourceReview += '</div>';
+                document.getElementById('sourceReviewContainer').innerHTML = sourceReview;
+            }
+
+            feedbackSection.classList.add('show');
+
+            // Scroll to feedback
+            setTimeout(() => {
+                feedbackSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Move to next judgment question
+        function nextJudgmentQuestion() {
+            currentJudgmentIndex++;
+            displayJudgmentQuestion();
+
+            // Scroll to question
+            setTimeout(() => {
+                document.getElementById('judgmentCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Show conclusion
+        function showConclusion() {
+            document.getElementById('judgmentSection').classList.remove('show');
+            document.getElementById('conclusionSection').classList.add('show');
+
+            // Scroll to conclusion
+            setTimeout(() => {
+                document.getElementById('conclusionSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
 
         // Go back to archive

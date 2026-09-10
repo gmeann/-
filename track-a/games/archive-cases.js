@@ -57,6 +57,32 @@ const ARCHIVE_CASES = {
 추석을 보내는 모습은 서로 다를 수 있습니다.`,
         sourceName: "현대의 추석 모습"
       }
+    ],
+    judgments: [
+      {
+        id: "judgment-01",
+        statement: "신라 시대에 8월 15일과 관련된 가배 기록이 있었다.",
+        correctAnswer: "supported",
+        relatedSources: ["source-a"],
+        supportedExplanation: "자료 A의 기록에서 신라 유리왕 때 8월 15일에 가배와 관련된 일이 있었다는 내용을 확인할 수 있습니다.",
+        notSupportedFeedback: "자료 A를 다시 살펴보세요. 신라 시대의 기록에 무엇이 있었나요?"
+      },
+      {
+        id: "judgment-02",
+        statement: "오늘날의 추석은 가족과 함께 보내는 경우가 있다.",
+        correctAnswer: "supported",
+        relatedSources: ["source-c"],
+        supportedExplanation: "자료 C에서 오늘날 사람들이 가족과 함께 명절을 보내는 모습을 확인할 수 있습니다.",
+        notSupportedFeedback: "자료 C를 다시 살펴보세요. 현대의 추석 모습에 무엇이 있었나요?"
+      },
+      {
+        id: "judgment-03",
+        statement: "신라 시대의 가배와 오늘날의 추석은 모든 면에서 거의 같았다.",
+        correctAnswer: "not-supported",
+        relatedSources: ["source-a", "source-c"],
+        supportedFeedback: "자료들을 다시 살펴보세요. 신라 시대와 오늘날의 추석이 정말 모든 면에서 같다고 확실히 말할 수 있을까요?",
+        notSupportedExplanation: "자료 A에서는 신라 시대의 기록을 확인할 수 있고, 자료 C에서는 오늘날의 추석 모습을 확인할 수 있습니다. 하지만 두 자료만으로 신라 시대와 오늘날의 추석이 모든 면에서 거의 같았다고 단정할 수는 없습니다."
+      }
     ]
   }
 
