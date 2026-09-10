@@ -158,6 +158,21 @@
             transform: translateY(-1px);
         }
 
+        /* Case Card Grid Container */
+        .case-card-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .case-card-front,
+        .case-card-completed {
+            display: none;
+        }
+
         /* Case Card (Completion Info) */
         .case-card {
             background: white;
@@ -312,21 +327,58 @@
             <span class="archive-icon">🗂️</span>
             <h2 class="archive-title">한가위 기록실</h2>
             <p class="archive-welcome">추석에 대한 이야기를<br>자료로 확인해 볼까요?</p>
-            <button class="case-button" onclick="startFirstCase()">🔎 첫 번째 사건 조사하기</button>
         </div>
 
-        <!-- Case Completion Card -->
-        <div class="case-card" id="caseCard" style="display: none;">
-            <div class="case-card-title">사건 01</div>
-            <div class="case-card-description">
-                추석은 아주 오래전부터<br>
-                지금과 같은 모습이었을까?
+        <!-- Cases Grid -->
+        <div class="village-grid">
+            <!-- Case 01 -->
+            <div class="case-card-container">
+                <div class="case-card-front" id="caseCard01Front">
+                    <div class="case-card-title">사건 01</div>
+                    <div class="case-card-description">
+                        추석은 아주 오래전부터<br>
+                        지금과 같은 모습이었을까?
+                    </div>
+                    <button class="case-button" onclick="startCase('case-01.html')">🔎 조사하기</button>
+                </div>
+                <div class="case-card-completed" id="caseCard01Completed" style="display: none;">
+                    <div class="case-card-title">사건 01</div>
+                    <div class="case-card-description">
+                        추석은 아주 오래전부터<br>
+                        지금과 같은 모습이었을까?
+                    </div>
+                    <div class="case-card-completion">
+                        ✓ 조사 완료
+                    </div>
+                    <div class="case-card-record">
+                        📚 기록 카드 획득
+                    </div>
+                </div>
             </div>
-            <div class="case-card-completion">
-                ✓ 조사 완료
-            </div>
-            <div class="case-card-record">
-                📚 기록 카드 획득
+
+            <!-- Case 02 -->
+            <div class="case-card-container">
+                <div class="case-card-front" id="caseCard02Front">
+                    <div class="case-card-title">사건 02</div>
+                    <div class="case-card-description">
+                        차례상에는 반드시<br>
+                        정해진 규칙이 있을까?
+                    </div>
+                    <button class="case-button" onclick="startCase('case-02.html')">🔎 조사하기</button>
+                </div>
+                <div class="case-card-completed" id="caseCard02Completed" style="display: none;">
+                    <div class="case-card-title">사건 02</div>
+                    <div class="case-card-description">
+                        차례상에는 반드시<br>
+                        정해진 규칙이 있을까?
+                    </div>
+                    <div class="case-card-completion">
+                        ✓ 조사 완료
+                    </div>
+                    <div class="case-card-record">
+                        📚 기록 카드 획득
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -349,12 +401,26 @@
         }
 
         function updateCaseDisplay() {
-            const caseCard = document.getElementById('caseCard');
+            // Update case 01 display
+            const case01Front = document.getElementById('caseCard01Front');
+            const case01Completed = document.getElementById('caseCard01Completed');
             if (caseCompletionState.case01) {
-                // Show completion status
-                if (caseCard) {
-                    caseCard.style.display = 'block';
-                }
+                if (case01Front) case01Front.style.display = 'none';
+                if (case01Completed) case01Completed.style.display = 'block';
+            } else {
+                if (case01Front) case01Front.style.display = 'block';
+                if (case01Completed) case01Completed.style.display = 'none';
+            }
+
+            // Update case 02 display
+            const case02Front = document.getElementById('caseCard02Front');
+            const case02Completed = document.getElementById('caseCard02Completed');
+            if (caseCompletionState.case02) {
+                if (case02Front) case02Front.style.display = 'none';
+                if (case02Completed) case02Completed.style.display = 'block';
+            } else {
+                if (case02Front) case02Front.style.display = 'block';
+                if (case02Completed) case02Completed.style.display = 'none';
             }
         }
 
@@ -362,8 +428,8 @@
             window.location.href = '../';
         }
 
-        function startFirstCase() {
-            window.location.href = 'case-01.html';
+        function startCase(caseFile) {
+            window.location.href = caseFile;
         }
 
         // Load and update on page load
