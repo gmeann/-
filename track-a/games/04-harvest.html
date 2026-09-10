@@ -13,13 +13,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(180deg, #f5e6d3 0%, #e8d4b8 50%, #dfc39e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            color: white;
+            color: #3d2817;
         }
 
         .container {
@@ -27,221 +27,310 @@
             width: 100%;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
         .back-btn {
             display: inline-block;
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-decoration: none;
+            background: rgba(61, 40, 23, 0.2);
+            color: #3d2817;
+            border: none;
             border-radius: 50px;
             margin-bottom: 20px;
             font-size: 0.95em;
-            transition: all 0.3s;
-            border: none;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(61, 40, 23, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         h1 {
             font-size: 2.5em;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            color: #8b4513;
         }
 
-        .question {
+        /* Concept Box */
+        .concept-box {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .concept-title {
             font-size: 1.3em;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 40px;
+            color: #8b4513;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
+        .concept-description {
+            font-size: 1.05em;
+            color: #3d2817;
+            line-height: 1.6;
+        }
+
+        .concept-highlight {
+            font-weight: 600;
+            color: #d2691e;
+            background: rgba(255, 215, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        /* Game Area */
         .game-area {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            padding: 40px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            min-height: 500px;
         }
 
+        .instruction {
+            font-size: 1.3em;
+            color: #3d2817;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        /* Items Grid */
         .items-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
+            margin-bottom: 40px;
         }
 
         .item-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
+            background: white;
+            border: 3px solid #d4a574;
+            border-radius: 20px;
             padding: 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
             user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
         }
 
         .item-card:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 215, 0, 0.6);
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .item-card.new-harvest {
-            cursor: grab;
+        .item-card.selected {
+            background: rgba(76, 175, 80, 0.15);
+            border-color: #4caf50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
         }
 
-        .item-card.new-harvest:active {
-            cursor: grabbing;
+        .item-card.wrong {
+            background: rgba(244, 67, 54, 0.15);
+            border-color: #f44336;
+            box-shadow: 0 0 15px rgba(244, 67, 54, 0.3);
         }
 
         .item-emoji {
             font-size: 2.5em;
-            margin-bottom: 8px;
-            display: block;
         }
 
         .item-name {
-            font-size: 0.95em;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 1em;
+            font-weight: 600;
+            color: #3d2817;
         }
 
-        .item-label {
-            font-size: 0.75em;
-            color: rgba(255, 255, 255, 0.6);
+        .item-hint {
+            font-size: 0.8em;
+            color: #999;
+            font-weight: 500;
         }
 
-        .basket {
-            background: rgba(255, 215, 0, 0.15);
-            border: 3px dashed rgba(255, 215, 0, 0.6);
-            border-radius: 20px;
-            padding: 30px;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        /* Basket */
+        .basket-area {
             text-align: center;
-        }
-
-        .basket-icon {
-            font-size: 4em;
-            margin-bottom: 15px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #d4a574;
         }
 
         .basket-title {
             font-size: 1.3em;
-            font-weight: bold;
+            color: #8b4513;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .basket {
+            background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
+            border: 3px solid #8b4513;
+            border-radius: 20px;
+            padding: 30px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(139, 69, 19, 0.2);
+        }
+
+        .basket-icon {
+            font-size: 3em;
             margin-bottom: 10px;
         }
 
         .basket-items {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 20px;
-            min-height: 50px;
-            width: 100%;
+            margin-top: 15px;
+            min-height: 60px;
         }
 
         .basket-item {
             font-size: 2em;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 12px;
-            border-radius: 10px;
-            animation: drop 0.5s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
 
-        @keyframes drop {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .basket-item-label {
+            font-size: 0.5em;
+            color: #3d2817;
+            font-weight: 600;
         }
 
-        .result {
-            background: rgba(76, 175, 80, 0.2);
-            border: 2px solid rgba(76, 175, 80, 0.5);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
+        .count-display {
+            font-size: 1.2em;
+            color: #8b4513;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        /* Result */
+        .result-area {
             display: none;
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 20px;
+            border: 2px solid rgba(76, 175, 80, 0.5);
         }
 
-        .result.show {
+        .result-area.show {
             display: block;
             animation: slideUp 0.5s ease-out;
-        }
-
-        .result h2 {
-            font-size: 2em;
-            margin-bottom: 15px;
-            color: #4caf50;
-        }
-
-        .result p {
-            font-size: 1.1em;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
-
-        .fact-box {
-            background: rgba(255, 215, 0, 0.1);
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 0.95em;
-            text-align: left;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
-
-        button {
-            padding: 15px 35px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
-
-        .next-btn {
-            background: #4caf50;
-            color: white;
-        }
-
-        .next-btn:hover {
-            background: #45a049;
-            transform: scale(1.05);
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .result-title {
+            font-size: 2em;
+            color: #4caf50;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .result-emoji {
+            font-size: 4em;
+            margin: 15px 0;
+        }
+
+        .result-message {
+            font-size: 1.1em;
+            color: #3d2817;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .fact-box {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+            font-size: 1em;
+            color: #3d2817;
+        }
+
+        .fact-box strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .moon-fragment {
+            font-size: 3em;
+            animation: float 3s ease-in-out infinite;
+            margin-top: 15px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.05em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .game-btn {
+            background: #4caf50;
+            color: white;
+        }
+
+        .game-btn:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+
+        .game-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
 
         @media (max-width: 768px) {
@@ -250,11 +339,15 @@
             }
 
             .game-area {
-                grid-template-columns: 1fr;
+                padding: 25px;
             }
 
             .items-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .instruction {
+                font-size: 1.1em;
             }
         }
     </style>
@@ -264,177 +357,163 @@
         <div class="header">
             <button class="back-btn" onclick="goBack()">← 돌아가기</button>
             <h1>🌾 풍년 바구니</h1>
-            <p class="question">새로 난 음식을 바구니에 담아보세요!</p>
         </div>
 
-        <div class="game-area">
-            <div class="items-grid" id="itemsList"></div>
-            <div class="basket" id="basket">
-                <div class="basket-icon">🧺</div>
-                <div class="basket-title">바구니</div>
-                <p style="font-size: 0.9em; color: rgba(255, 255, 255, 0.7);">새로 난 음식을 여기에 끌어다 놓으세요!</p>
-                <div class="basket-items" id="basketItems"></div>
+        <!-- Concept Box -->
+        <div class="concept-box">
+            <div class="concept-title">🌾 햇곡식이란?</div>
+            <div class="concept-description">
+                <div style="margin: 10px 0;">그 해에 <span class="concept-highlight">새로 난 곡식</span>을 말해요!</div>
+                <div style="margin: 10px 0;">예: 올해 처음 나온 쌀, 보리, 옥수수 등</div>
             </div>
         </div>
 
-        <div class="result" id="result">
-            <h2 id="resultTitle">좋아요!</h2>
-            <p id="resultText"></p>
-            <div class="fact-box" id="factBox"></div>
-        </div>
+        <!-- Game Area -->
+        <div class="game-area">
+            <div class="instruction">📌 그 해에 새로 난 음식을 고르세요!</div>
 
-        <div id="completionMessage" style="text-align: center; margin-top: 40px; display: none;">
-            <div class="result show">
-                <h2>🎉 풍년 바구니를 완성했어요!</h2>
-                <p>모든 새로 난 음식을 찾았어요!</p>
-                <div class="fact-box">
-                    <strong>📚 추석 팩트:</strong>
-                    <p>햇곡식은 그해에 새로 난 곡식을 뜻해요. 추석은 새로 난 곡식을 먹으며 풍요로움을 감사하는 명절이에요!</p>
-                    <button class="learn-more-btn" onclick="openFactCheck('newgrain')" style="padding: 8px 16px; background: rgba(255, 215, 0, 0.3); color: #ffd700; border: 2px solid rgba(255, 215, 0, 0.6); border-radius: 20px; font-size: 0.85em; cursor: pointer; margin-top: 12px; display: block;">📖 더 알아보기</button>
+            <!-- Items Grid -->
+            <div class="items-grid" id="itemsGrid"></div>
+
+            <!-- Basket -->
+            <div class="basket-area">
+                <div class="basket-title">✨ 고른 음식들</div>
+                <div class="basket">
+                    <div class="basket-icon">🧺</div>
+                    <div class="basket-items" id="basketItems">
+                        <div style="color: #3d2817; font-size: 1em;">아직 아무것도 없어요</div>
+                    </div>
+                    <div class="count-display">선택: <span id="selectedCount">0</span>/5개</div>
                 </div>
+            </div>
+
+            <!-- Result Area -->
+            <div class="result-area" id="resultArea">
+                <div class="result-title">🎉 완료!</div>
+                <div class="result-emoji">🌾</div>
+                <div class="result-message">
+                    추석에는 그해에 새로 난 곡식과 과일을 차례상에 올렸어요!<br>
+                    우리가 고른 음식들이 모두 가을에 수확하는 햇곡식이었어요!
+                </div>
+                <div class="fact-box">
+                    <strong>📚 추석과 햇곡식</strong>
+                    <p>추석은 새로 나온 곡식을 하늘과 조상께 감사하는 명절이에요. 쌀, 보리, 옥수수, 밤, 대추 등이 가을에 수확되는 햇곡식이랍니다!</p>
+                </div>
+                <div class="moon-fragment">🌙</div>
+                <p style="font-size: 1.1em; color: #8b4513; margin-top: 20px; font-weight: 600;">달 조각을 획득했어요!</p>
                 <div class="action-buttons">
-                    <button class="next-btn" onclick="completeGame()">다음 게임으로</button>
+                    <button class="game-btn" onclick="goToMenu()">기록실로 돌아가기</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const STORAGE_KEY = 'track-a-progress';
-
         const items = [
-            { emoji: '🌾', name: '쌀', isNewHarvest: true, fact: '쌀은 그해에 새로 난 곡식이에요. 추석에 밥을 지어 먹으며 풍요로움을 감사해요.' },
-            { emoji: '🥔', name: '감자', isNewHarvest: true, fact: '감자도 새로 나온 햇감자로 추석 음식을 만들어요.' },
-            { emoji: '🫘', name: '팥', isNewHarvest: true, fact: '팥은 송편의 속으로 쓰는 새로 난 햇팥이에요.' },
-            { emoji: '🌽', name: '옥수수', isNewHarvest: true, fact: '옥수수도 추석 때 새로 난 것을 먹으며 감사해요.' },
-            { emoji: '🍎', name: '사과', isNewHarvest: false, fact: '사과는 추석 때 나오지만, 새로 난 음식만 찾는 거예요!' },
-            { emoji: '🍊', name: '귤', isNewHarvest: false, fact: '귤은 겨울에 나와요. 지금은 찾지 말아야 해요!' },
-            { emoji: '🍌', name: '바나나', isNewHarvest: false, fact: '바나나는 추석과 관계없는 음식이에요!' },
-            { emoji: '🥒', name: '무', isNewHarvest: false, fact: '무는 가을이 지난 후에 나와요. 추석에는 아직 일찍 나온 거예요!' }
+            { emoji: '🌾', name: '쌀', hint: '새 음식 ✓', isNew: true },
+            { emoji: '🍚', name: '보리', hint: '새 음식 ✓', isNew: true },
+            { emoji: '🌽', name: '옥수수', hint: '새 음식 ✓', isNew: true },
+            { emoji: '밤', name: '밤', hint: '새 음식 ✓', isNew: true },
+            { emoji: '🔴', name: '대추', hint: '새 음식 ✓', isNew: true },
+            { emoji: '🍎', name: '사과', hint: '아닌 음식 ✗', isNew: false },
+            { emoji: '🍌', name: '바나나', hint: '아닌 음식 ✗', isNew: false },
+            { emoji: '🥕', name: '당근', hint: '아닌 음식 ✗', isNew: false }
         ];
 
-        let collectedCount = 0;
-        let collectedItems = new Set();
-
-        function initGame() {
-            const itemsList = document.getElementById('itemsList');
-            itemsList.innerHTML = '';
-
-            // Shuffle items
-            const shuffled = [...items].sort(() => Math.random() - 0.5);
-
-            shuffled.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'item-card' + (item.isNewHarvest ? ' new-harvest' : '');
-                card.draggable = item.isNewHarvest;
-                card.innerHTML = `
-                    <span class="item-emoji">${item.emoji}</span>
-                    <div class="item-name">${item.name}</div>
-                    <div class="item-label">${item.isNewHarvest ? '🆕 새로 난 것' : '❌ 아닌 것'}</div>
-                `;
-
-                if (item.isNewHarvest) {
-                    card.ondragstart = (e) => {
-                        e.dataTransfer.effectAllowed = 'move';
-                        e.dataTransfer.setData('text/plain', index);
-                    };
-                } else {
-                    card.onclick = () => {
-                        showFeedback(item, false);
-                        card.style.opacity = '0.5';
-                    };
-                }
-
-                itemsList.appendChild(card);
-            });
-
-            // Setup basket
-            const basket = document.getElementById('basket');
-            basket.ondragover = (e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                basket.style.background = 'rgba(76, 175, 80, 0.3)';
-            };
-            basket.ondragleave = () => {
-                basket.style.background = 'rgba(255, 215, 0, 0.15)';
-            };
-            basket.ondrop = (e) => {
-                e.preventDefault();
-                basket.style.background = 'rgba(255, 215, 0, 0.15)';
-                const index = parseInt(e.dataTransfer.getData('text/plain'));
-                const item = items[index];
-                collectItem(item, index);
-            };
-        }
-
-        function collectItem(item, index) {
-            if (collectedItems.has(index)) return;
-
-            collectedItems.add(index);
-            collectedCount++;
-
-            // Add to basket
-            const basketItems = document.getElementById('basketItems');
-            const itemEl = document.createElement('div');
-            itemEl.className = 'basket-item';
-            itemEl.textContent = item.emoji;
-            basketItems.appendChild(itemEl);
-
-            showFeedback(item, true);
-
-            if (collectedCount === 4) {
-                setTimeout(() => {
-                    document.getElementById('completionMessage').style.display = 'block';
-                }, 1000);
-            }
-        }
-
-        function showFeedback(item, isCorrect) {
-            const resultEl = document.getElementById('result');
-            const titleEl = document.getElementById('resultTitle');
-            const textEl = document.getElementById('resultText');
-            const factEl = document.getElementById('factBox');
-
-            if (isCorrect) {
-                titleEl.textContent = `✨ ${item.name}을 넣었어요!`;
-                textEl.textContent = '좋은 선택이에요!';
-            } else {
-                titleEl.textContent = `음... ${item.name}은요?`;
-                textEl.textContent = '다시 생각해 보세요!';
-            }
-            factEl.innerHTML = `<strong>📚 알아보기:</strong><p>${item.fact}</p>`;
-
-            resultEl.classList.add('show');
-            setTimeout(() => {
-                resultEl.classList.remove('show');
-            }, 2500);
-        }
-
-        function completeGame() {
-            // Save progress
-            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-                games: [false, false, false, false]
-            };
-            progress.games[3] = true;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-
-            // Save moon piece (call parent window function)
-            if (window.parent && window.parent.saveMoonPiece) {
-                window.parent.saveMoonPiece('harvest');
-            }
-
-            // Go back to main page
-            setTimeout(() => {
-                window.location.href = '../';
-            }, 500);
-        }
+        let selectedItems = [];
 
         function goBack() {
-            window.location.href = '../';
+            window.history.back();
         }
 
-        initGame();
+        function goToMenu() {
+            localStorage.setItem('gameCompletionState', JSON.stringify({
+                'harvest': true,
+                ...(JSON.parse(localStorage.getItem('gameCompletionState') || '{}'))
+            }));
+            window.location.href = '../index.html';
+        }
+
+        function renderItems() {
+            const grid = document.getElementById('itemsGrid');
+            grid.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <div class="item-emoji">${item.emoji}</div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-hint">${item.hint}</div>
+                `;
+
+                card.addEventListener('click', () => selectItem(index, card));
+                grid.appendChild(card);
+            });
+        }
+
+        function selectItem(index, cardElement) {
+            const item = items[index];
+
+            if (selectedItems.includes(index)) {
+                // 이미 선택된 경우 제거
+                selectedItems = selectedItems.filter(i => i !== index);
+                cardElement.classList.remove('selected');
+                updateBasket();
+                return;
+            }
+
+            if (item.isNew) {
+                // 올바른 선택
+                selectedItems.push(index);
+                cardElement.classList.add('selected');
+                cardElement.classList.remove('wrong');
+
+                // 5개 다 선택하면 완료
+                if (selectedItems.length === 5) {
+                    setTimeout(() => finishGame(), 500);
+                }
+            } else {
+                // 틀린 선택
+                cardElement.classList.add('wrong');
+                setTimeout(() => {
+                    cardElement.classList.remove('wrong');
+                }, 1000);
+            }
+
+            updateBasket();
+        }
+
+        function updateBasket() {
+            const basketItems = document.getElementById('basketItems');
+            const selectedCount = document.getElementById('selectedCount');
+
+            if (selectedItems.length === 0) {
+                basketItems.innerHTML = '<div style="color: #3d2817; font-size: 1em;">아직 아무것도 없어요</div>';
+            } else {
+                basketItems.innerHTML = selectedItems.map(idx => {
+                    const item = items[idx];
+                    return `
+                        <div class="basket-item">
+                            <div>${item.emoji}</div>
+                            <div class="basket-item-label">${item.name}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            selectedCount.textContent = selectedItems.length;
+        }
+
+        function finishGame() {
+            document.querySelector('.game-area').style.opacity = '0.5';
+            document.getElementById('resultArea').classList.add('show');
+        }
+
+        // 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            renderItems();
+        });
     </script>
-    <script src="../../fact-check.js"></script>
 </body>
 </html>
