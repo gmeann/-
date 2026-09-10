@@ -773,6 +773,189 @@
             font-size: 1.4em;
         }
 
+        /* Screen: Detective Report */
+        .detective-report-screen {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .report-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        .report-title {
+            font-size: 2em;
+            color: #8b4513;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .report-subtitle {
+            font-size: 1.1em;
+            color: #5d3a1a;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .facts-container {
+            margin-bottom: 30px;
+        }
+
+        .fact-item {
+            background: rgba(255, 215, 0, 0.08);
+            border-left: 4px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .fact-item:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .fact-item:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .fact-item:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .fact-item:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .fact-item-icon {
+            display: inline-block;
+            font-size: 1.6em;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        .fact-item-category {
+            display: inline-block;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.05em;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .fact-item-text {
+            display: block;
+            color: #3d2817;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-top: 8px;
+        }
+
+        .detective-secret {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(76, 175, 80, 0.05));
+            border-left: 4px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .detective-secret-icon {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .detective-secret-text {
+            color: #2e7d32;
+            font-size: 1.1em;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .detective-badge {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 215, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        .badge-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .badge-text {
+            font-size: 1.2em;
+            color: #8b4513;
+            font-weight: bold;
+        }
+
+        .sources-container {
+            background: rgba(255, 215, 0, 0.08);
+            border: 1px solid #ffd700;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .sources-title {
+            font-size: 1.05em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .sources-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sources-list li {
+            color: #5d3a1a;
+            font-size: 0.95em;
+            padding: 5px 0;
+        }
+
+        .sources-list li:before {
+            content: "📚 ";
+            margin-right: 8px;
+        }
+
+        .return-btn {
+            display: block;
+            width: 100%;
+            padding: 20px 50px;
+            font-size: 1.1em;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .return-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.3);
+        }
+
         @media (max-width: 768px) {
             .container {
                 max-width: 100%;
@@ -843,6 +1026,48 @@
 
             .completion-title {
                 font-size: 1.8em;
+            }
+
+            .detective-report-screen {
+                padding: 25px 20px;
+            }
+
+            .report-title {
+                font-size: 1.6em;
+            }
+
+            .report-subtitle {
+                font-size: 1em;
+            }
+
+            .fact-item {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            .fact-item-icon {
+                font-size: 1.4em;
+            }
+
+            .fact-item-category {
+                font-size: 1em;
+            }
+
+            .fact-item-text {
+                font-size: 0.95em;
+            }
+
+            .badge-icon {
+                font-size: 2.5em;
+            }
+
+            .badge-text {
+                font-size: 1.1em;
+            }
+
+            .return-btn {
+                padding: 15px 30px;
+                font-size: 1em;
             }
         }
     </style>
@@ -938,6 +1163,35 @@
                 🔎 확인한 팩트: <strong>5개</strong>
             </div>
             <button class="next-btn" onclick="returnToVillage()">🏘️ 마을로 돌아가기</button>
+        </div>
+
+        <!-- Detective Report Screen -->
+        <div id="detectiveReportScreen" class="screen detective-report-screen">
+            <div class="report-header">
+                <span class="report-icon">🔎</span>
+                <div class="report-title">나의 추석 팩트 탐정 리포트</div>
+                <p class="report-subtitle">5개의 이야기를 단서와 함께 살펴보았어요.</p>
+            </div>
+
+            <div class="facts-container" id="factsContainer"></div>
+
+            <div class="detective-secret">
+                <span class="detective-secret-icon">💡</span>
+                <div class="detective-secret-text">탐정의 비밀</div>
+                <p style="color: #2e7d32; margin-top: 8px;">당연해 보이는 말도 단서를 확인하면 더 정확하게 알 수 있어요.</p>
+            </div>
+
+            <div class="detective-badge">
+                <span class="badge-icon">🔎</span>
+                <div class="badge-text">한가위 탐정</div>
+            </div>
+
+            <div class="sources-container">
+                <div class="sources-title">📚 이번 탐험에서 살펴본 자료</div>
+                <ul class="sources-list" id="sourcesList"></ul>
+            </div>
+
+            <button class="return-btn" onclick="returnToVillage()">🏘️ 마을로 돌아가기</button>
         </div>
     </div>
 
@@ -1368,12 +1622,23 @@
             const sourceEmoji = question.source === '유네스코' ? '🌏' : '📖';
             document.getElementById('sourceInfo').innerHTML = `${sourceEmoji} 확인한 자료: ${question.source}`;
 
-            // 다음 버튼 설정
-            const actionBtn = document.getElementById('actionBtn');
+            // 다음 버튼 설정 및 리포트 버튼 추가
+            const actionButtonsDiv = document.querySelector('.action-buttons');
+            actionButtonsDiv.innerHTML = '';
+
             if (currentQuestionIndex < FACT_QUESTIONS.length - 1) {
-                actionBtn.textContent = '🔎 다음 문제';
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'next-btn';
+                nextBtn.textContent = '🔎 다음 문제';
+                nextBtn.onclick = handleNextAction;
+                actionButtonsDiv.appendChild(nextBtn);
             } else {
-                actionBtn.textContent = '🎉 완료!';
+                // 마지막 문제 (문제 5)
+                const reportBtn = document.createElement('button');
+                reportBtn.className = 'next-btn';
+                reportBtn.textContent = '🔎 탐정 리포트 보기';
+                reportBtn.onclick = showDetectiveReport;
+                actionButtonsDiv.appendChild(reportBtn);
             }
 
             showScreen('result');
@@ -1392,6 +1657,46 @@
                 // 완료 화면
                 showScreen('completion');
             }
+        }
+
+        function showDetectiveReport() {
+            // 팩트 컨테이너에 5개 팩트 추가
+            const factsContainer = document.getElementById('factsContainer');
+            factsContainer.innerHTML = '';
+
+            // 각 문제의 summary와 카테고리 아이콘으로 팩트 표시
+            const categoryIcons = ['🍡', '🌾', '🏠', '📜', '🌕'];
+
+            FACT_QUESTIONS.forEach((question, index) => {
+                const factItem = document.createElement('div');
+                factItem.className = 'fact-item';
+
+                const summary = question.summary || question.explanation[0];
+                factItem.innerHTML = `
+                    <span class="fact-item-icon">${categoryIcons[index]}</span>
+                    <span class="fact-item-category">${question.category}</span>
+                    <span class="fact-item-text">${summary}</span>
+                `;
+
+                factsContainer.appendChild(factItem);
+            });
+
+            // 출처 목록 생성 (중복 제거)
+            const sourcesList = document.getElementById('sourcesList');
+            sourcesList.innerHTML = '';
+
+            const sources = new Set();
+            FACT_QUESTIONS.forEach(question => {
+                sources.add(question.source);
+            });
+
+            sources.forEach(source => {
+                const li = document.createElement('li');
+                li.textContent = source;
+                sourcesList.appendChild(li);
+            });
+
+            showScreen('detectiveReport');
         }
 
         function goBack() {
