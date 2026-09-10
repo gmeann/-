@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한가위 모험 - Track B (초등 고학년)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #f5e6d3 0%, #e8d4b8 50%, #dfc39e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #3d2817;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(139, 69, 19, 0.2);
+            color: #3d2817;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 69, 19, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .progress-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .progress-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            border: 2px solid #d4a574;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            color: #8b4513;
+            font-weight: bold;
+        }
+
+        .progress-dot.completed {
+            background: #ffd700;
+            border-color: #b8860b;
+            color: #8b4513;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #8b4513;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #5d3a1a;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 1em;
+            color: #7a4a2a;
+            opacity: 0.9;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #ffd700;
+        }
+
+        .game-card.active {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+        }
+
+        .completed-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #4caf50;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .game-icon {
+            font-size: 4em;
+            display: block;
+        }
+
+        .game-name {
+            font-size: 1.4em;
+            color: #3d2817;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .game-description {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .game-number {
+            font-size: 0.85em;
+            color: #999;
+            font-style: italic;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #4caf50;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .locked-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #999;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.8);
+            border-left: 4px solid #8b4513;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            font-size: 0.95em;
+            color: #3d2817;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #8b4513;
+        }
+
+        .encyclopedia-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .encyclopedia-link a {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #3d2817;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.05em;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s;
+            border: 2px solid #b8860b;
+        }
+
+        .encyclopedia-link a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .top-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .progress-display {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .game-icon {
+                font-size: 3em;
+            }
+
+            .progress-dot {
+                width: 25px;
+                height: 25px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <a href="index.html" class="back-btn">← 돌아가기</a>
+            <div class="progress-display">
+                <span>🌙 달 조각</span>
+                <div class="progress-dots" id="progressDots">
+                    <div class="progress-dot">○</div>
+                    <div class="progress-dot">○</div>
+                    <div class="progress-dot">○</div>
+                    <div class="progress-dot">○</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>🧵 한가위 모험 - Track B</h1>
+            <p class="subtitle">초등학교 고학년을 위한 더 깊이 있는 추석 문화 탐험</p>
+            <p class="description">전통 놀이의 실제 게임을 경험하고 추석의 참의미를 알아보세요</p>
+        </div>
+
+        <!-- Games Grid -->
+        <div class="games-grid">
+            <!-- Game 01: 길쌈 -->
+            <a href="games/b-01-ancient-festival.html" class="game-card active" id="game01">
+                <div class="completed-indicator" id="game01Completed" style="display:none;">✓</div>
+                <span class="game-icon">🧵</span>
+                <div class="game-name">신라의 한가위</div>
+                <div class="game-description">길쌈 게임으로 팀워크 경험</div>
+                <div class="game-number">Game 01 - 턴제 게임</div>
+                <span class="status-badge" id="game01Status">활성화</span>
+            </a>
+
+            <!-- Game 03: 놀이마당 -->
+            <a href="games/b-03-games.html" class="game-card active" id="game03">
+                <div class="completed-indicator" id="game03Completed" style="display:none;">✓</div>
+                <span class="game-icon">🎲</span>
+                <div class="game-name">한가위 놀이마당</div>
+                <div class="game-description">4가지 전통 미니게임</div>
+                <div class="game-number">Game 03 - 미니게임 모음</div>
+                <span class="status-badge" id="game03Status">활성화</span>
+            </a>
+
+            <!-- Game 04: 팩트체크 -->
+            <a href="games/b-04-factcheck.html" class="game-card active" id="game04">
+                <div class="completed-indicator" id="game04Completed" style="display:none;">✓</div>
+                <span class="game-icon">🔍</span>
+                <div class="game-name">진짜일까? 가짜일까?</div>
+                <div class="game-description">추석 문화 상식 퀴즈</div>
+                <div class="game-number">Game 04 - 참/거짓 판정</div>
+                <span class="status-badge" id="game04Status">활성화</span>
+            </a>
+
+            <!-- Game 05: 도감 -->
+            <a href="games/b-05-encyclopedia.html" class="game-card active" id="game05">
+                <div class="completed-indicator" id="game05Completed" style="display:none;">✓</div>
+                <span class="game-icon">📚</span>
+                <div class="game-name">한가위 도감</div>
+                <div class="game-description">추석 문화 백과사전</div>
+                <div class="game-number">Game 05 - 수집형 참고서</div>
+                <span class="status-badge" id="game05Status">도감</span>
+            </a>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <strong>📖 Track B에 대해</strong><br>
+            Track B는 초등학교 고학년(3학년~6학년)을 대상으로 한 심화 콘텐츠입니다.
+            단순한 클릭이 아닌 실제 게임 규칙을 경험하고, 추석의 전통 놀이와 문화를 더욱 깊이 있게 배워요.
+        </div>
+
+        <!-- Encyclopedia Link -->
+        <div class="encyclopedia-link">
+            <a href="games/b-05-encyclopedia.html">📚 한가위 도감 보기</a>
+        </div>
+    </div>
+
+    <script>
+        const GAME_STATE_KEY = 'trackb-game-state';
+
+        function initGameState() {
+            const state = JSON.parse(localStorage.getItem(GAME_STATE_KEY) || '{}');
+            return {
+                'game01': state.game01 || false,
+                'game03': state.game03 || false,
+                'game04': state.game04 || false,
+                'game05': state.game05 || false
+            };
+        }
+
+        function updateProgressDisplay() {
+            const state = initGameState();
+            const completed = Object.values(state).filter(v => v).length;
+            const dots = document.querySelectorAll('.progress-dot');
+
+            dots.forEach((dot, index) => {
+                if (index < completed) {
+                    dot.classList.add('completed');
+                    dot.textContent = '●';
+                } else {
+                    dot.classList.remove('completed');
+                    dot.textContent = '○';
+                }
+            });
+
+            // Update status badges
+            if (state.game01) {
+                document.getElementById('game01Completed').style.display = 'flex';
+                document.getElementById('game01Status').textContent = '완료!';
+                document.getElementById('game01Status').style.background = '#4caf50';
+            }
+            if (state.game03) {
+                document.getElementById('game03Completed').style.display = 'flex';
+                document.getElementById('game03Status').textContent = '완료!';
+                document.getElementById('game03Status').style.background = '#4caf50';
+            }
+            if (state.game04) {
+                document.getElementById('game04Completed').style.display = 'flex';
+                document.getElementById('game04Status').textContent = '완료!';
+                document.getElementById('game04Status').style.background = '#4caf50';
+            }
+        }
+
+        // Initialize on load
+        updateProgressDisplay();
+    </script>
+</body>
+</html>

@@ -656,11 +656,11 @@
         }
 
         function goToMenu() {
-            localStorage.setItem('gameCompletionState', JSON.stringify({
-                'games': true,
-                ...(JSON.parse(localStorage.getItem('gameCompletionState') || '{}'))
+            localStorage.setItem('trackb-game-state', JSON.stringify({
+                'game03': true,
+                ...(JSON.parse(localStorage.getItem('trackb-game-state') || '{}'))
             }));
-            window.location.href = '../index.html';
+            window.location.href = '../track-b-index.html';
         }
 
         function selectGame(game) {

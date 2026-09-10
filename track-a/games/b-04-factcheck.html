@@ -436,11 +436,11 @@
         }
 
         function goToMenu() {
-            localStorage.setItem('gameCompletionState', JSON.stringify({
-                'factcheck': true,
-                ...(JSON.parse(localStorage.getItem('gameCompletionState') || '{}'))
+            localStorage.setItem('trackb-game-state', JSON.stringify({
+                'game04': true,
+                ...(JSON.parse(localStorage.getItem('trackb-game-state') || '{}'))
             }));
-            window.location.href = '../index.html';
+            window.location.href = '../track-b-index.html';
         }
 
         function loadQuestion() {

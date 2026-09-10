@@ -385,42 +385,42 @@
                     emoji: '🍡',
                     desc: '찹쌀로 만든\n전통 음식',
                     detail: '송편은 찹쌀가루로 만든 반죽에 깨, 팥, 밤 등의 소를 넣고 반달 모양으로 빚어서, 솔잎을 깔고 찐 전통 음식입니다. 추석에 함께 만들며 가족의 화목을 도모해요.',
-                    game: 'songpyeon'
+                    game: 'all'
                 },
                 {
                     name: '소주',
                     emoji: '🍶',
                     desc: '추석의\n전통 술',
                     detail: '추석에는 새로 지은 쌀로 만든 술을 조상께 올렸어요. 이를 신주라고 하며, 가족과 함께 나누며 새 harvest를 축하했습니다.',
-                    game: 'harvest'
+                    game: 'all'
                 },
                 {
                     name: '탕국',
                     emoji: '🍲',
                     desc: '소를 넣은\n국물 음식',
                     detail: '추석 차례에 올리는 탕국은 고기를 넣어 우린 국입니다. 대대손손 이어지는 가족의 번영을 기원하는 의미를 담고 있어요.',
-                    game: 'harvest'
+                    game: 'all'
                 },
                 {
                     name: '과일',
                     emoji: '🍎',
                     desc: '그해 첫\n수확 과일',
                     detail: '추석에는 그해에 새로 나온 과일들, 특히 배와 포도, 사과 같은 제철 과일을 차례상에 올립니다. 새로운 계절의 풍요로움을 나누는 의미가 있어요.',
-                    game: 'harvest'
+                    game: 'all'
                 },
                 {
                     name: '밤',
                     emoji: '🌰',
                     desc: '가을의\n대표 음식',
                     detail: '밤은 가을에 수확하는 대표 음식으로, 송편의 소로도 쓰이고 그대로 구워 먹기도 합니다. 추석 차례에 빼놓을 수 없는 음식이에요.',
-                    game: 'harvest'
+                    game: 'all'
                 },
                 {
                     name: '대추',
                     emoji: '🔴',
                     desc: '빨간 과일\n가을 선물',
                     detail: '대추는 가을에 수확하는 과일로, 추석 차례상에 올리는 중요한 음식입니다. 달콤한 맛과 붉은 색이 특징이에요.',
-                    game: 'harvest'
+                    game: 'all'
                 }
             ],
             games: [
@@ -539,12 +539,12 @@
         }
 
         function loadGameState() {
-            const state = JSON.parse(localStorage.getItem('gameCompletionState') || '{}');
-            gameState.songpyeon = state.songpyeon || false;
-            gameState.games = state.games || false;
-            gameState.harvest = state.harvest || false;
-            gameState.find_moon = state.findmoon || false;
-            gameState.ancient_festival = state['trackb-game01'] || false;
+            const state = JSON.parse(localStorage.getItem('trackb-game-state') || '{}');
+            gameState.songpyeon = false;
+            gameState.games = state.game03 || false;
+            gameState.harvest = false;
+            gameState.find_moon = false;
+            gameState.ancient_festival = state.game01 || false;
         }
 
         function renderAllSections() {
