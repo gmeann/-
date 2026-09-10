@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>트랙 A - 달님과 함께하는 한가위</title>
+    <title>한가위 마을 - 한가위 어드벤처</title>
     <style>
         * {
             margin: 0;
@@ -13,224 +13,414 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(180deg, #f5e6d3 0%, #e8d4b8 50%, #dfc39e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            color: white;
+            color: #3d2817;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
         }
 
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(139, 69, 19, 0.2);
+            color: #3d2817;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 69, 19, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .moon-pieces {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .moon-pieces-display {
+            display: flex;
+            gap: 10px;
+            font-size: 1.5em;
+        }
+
+        .moon-piece {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ffd700;
+            border: 2px solid #b8860b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+
+        .moon-piece.empty {
+            background: rgba(255, 215, 0, 0.3);
+            color: #999;
+        }
+
+        /* Header */
         .header {
             text-align: center;
             margin-bottom: 50px;
         }
 
-        .back-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            margin-bottom: 20px;
-            font-size: 1em;
-            transition: all 0.3s;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
         h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #8b4513;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .subtitle {
-            font-size: 1.2em;
-            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.3em;
+            color: #5d3a1a;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            font-size: 1em;
+            color: #7a4a2a;
+            opacity: 0.9;
+        }
+
+        /* Village Spaces Grid */
+        .village-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
             margin-bottom: 30px;
         }
 
-        .moon-progress {
-            text-align: center;
-            margin-bottom: 50px;
-            font-size: 2em;
-            letter-spacing: 10px;
-        }
-
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 25px;
-        }
-
-        .game-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+        .village-space {
+            background: white;
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
-            text-decoration: none;
-            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
+            border: 3px solid transparent;
         }
 
-        .game-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(-100%);
-            transition: transform 0.3s;
-            z-index: 0;
-        }
-
-        .game-card:hover::before {
-            transform: translateX(0);
-        }
-
-        .game-card:hover {
+        .village-space:hover {
             transform: translateY(-10px);
-            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
 
-        .game-content {
-            position: relative;
-            z-index: 1;
+        /* Active space (Songpyeon) */
+        .village-space.active {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
         }
 
-        .game-icon {
-            font-size: 3.5em;
+        .village-space.active:hover {
+            border-color: #b8860b;
+        }
+
+        /* Locked/Coming Soon spaces */
+        .village-space.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .village-space.locked:hover {
+            transform: none;
+        }
+
+        .lock-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            color: white;
+        }
+
+        .space-icon {
+            font-size: 4em;
             margin-bottom: 15px;
             display: block;
         }
 
-        .game-card h3 {
+        .space-name {
             font-size: 1.4em;
+            color: #3d2817;
             margin-bottom: 10px;
+            font-weight: bold;
         }
 
-        .game-card p {
+        .space-description {
             font-size: 0.9em;
-            opacity: 0.9;
+            color: #666;
+            margin-bottom: 15px;
         }
 
-        .completed {
+        .space-status {
+            font-size: 0.85em;
+            color: #999;
+            font-style: italic;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #4caf50;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .status-badge.coming {
+            background: #999;
+        }
+
+        .completed-indicator {
             position: absolute;
             top: 10px;
-            right: 10px;
+            left: 10px;
             background: #4caf50;
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2em;
-            z-index: 2;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        /* Info Section */
+        .info-box {
+            background: rgba(255, 255, 255, 0.8);
+            border-left: 4px solid #8b4513;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            font-size: 0.95em;
+            color: #3d2817;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            color: #8b4513;
         }
 
         @media (max-width: 768px) {
             h1 {
-                font-size: 1.8em;
+                font-size: 2em;
             }
 
-            .games-grid {
+            .top-nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .village-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .moon-pieces {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .village-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .space-icon {
+                font-size: 3em;
+            }
+
+            .moon-piece {
+                width: 35px;
+                height: 35px;
+                font-size: 1em;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <!-- Top Navigation -->
+        <div class="top-nav">
             <a href="../" class="back-btn">← 돌아가기</a>
-            <h1>🧸 트랙 A</h1>
-            <p class="subtitle">달님과 함께하는 한가위</p>
+            <div class="moon-pieces">
+                <span>🌕 달 조각</span>
+                <div class="moon-pieces-display" id="moonPiecesDisplay">
+                    <div class="moon-piece empty">○</div>
+                    <div class="moon-piece empty">○</div>
+                    <div class="moon-piece empty">○</div>
+                </div>
+            </div>
         </div>
 
-        <div class="moon-progress">
-            <span id="moonPhase">🌑</span>
+        <!-- Header -->
+        <div class="header">
+            <h1>🏘️ 한가위 마을</h1>
+            <p class="subtitle">추석의 따뜻한 마을을 탐험하세요</p>
+            <p class="description">여러 활동을 완료하면 달 조각을 모을 수 있어요</p>
         </div>
 
-        <div class="games-grid">
-            <a href="games/01-find-moon.html" class="game-card">
-                <div class="game-content">
-                    <span class="game-icon">🌕</span>
-                    <h3>달님을 찾아라</h3>
-                    <p>추석에 보는 달을 찾아보세요</p>
-                </div>
-                <div class="completed" id="completed-1" style="display:none;">✓</div>
+        <!-- Village Spaces -->
+        <div class="village-grid">
+            <!-- 달맞이 언덕 -->
+            <div class="village-space locked">
+                <span class="lock-badge">🔒 준비 중</span>
+                <span class="space-icon">🌕</span>
+                <div class="space-name">달맞이 언덕</div>
+                <div class="space-description">달과 함께 마을을 내려다보는 언덕</div>
+                <span class="status-badge coming">곧 만나요!</span>
+            </div>
+
+            <!-- 송편 공방 -->
+            <a href="games/02-songpyeon.html" class="village-space active" id="songpyeonSpace">
+                <div class="completed-indicator" id="songpyeonCompleted" style="display:none;">✓</div>
+                <span class="space-icon">🍡</span>
+                <div class="space-name">송편 공방</div>
+                <div class="space-description">송편을 직접 만들어 보세요</div>
+                <span class="status-badge" id="songpyeonStatus">활성화</span>
             </a>
 
-            <a href="games/02-songpyeon.html" class="game-card">
-                <div class="game-content">
-                    <span class="game-icon">🍡</span>
-                    <h3>송편 공방</h3>
-                    <p>송편을 직접 만들어 보세요</p>
-                </div>
-                <div class="completed" id="completed-2" style="display:none;">✓</div>
-            </a>
+            <!-- 놀이마당 -->
+            <div class="village-space locked">
+                <span class="lock-badge">🔒 준비 중</span>
+                <span class="space-icon">🎲</span>
+                <div class="space-name">놀이마당</div>
+                <div class="space-description">추석 놀이를 즐기는 장소</div>
+                <span class="status-badge coming">곧 만나요!</span>
+            </div>
 
-            <a href="games/03-games.html" class="game-card">
-                <div class="game-content">
-                    <span class="game-icon">🎲</span>
-                    <h3>한가위 놀이마당</h3>
-                    <p>추석 놀이를 찾아보세요</p>
-                </div>
-                <div class="completed" id="completed-3" style="display:none;">✓</div>
-            </a>
+            <!-- 풍년 들판 -->
+            <div class="village-space locked">
+                <span class="lock-badge">🔒 준비 중</span>
+                <span class="space-icon">🌾</span>
+                <div class="space-name">풍년 들판</div>
+                <div class="space-description">새로 난 곡식을 담는 들판</div>
+                <span class="status-badge coming">곧 만나요!</span>
+            </div>
 
-            <a href="games/04-harvest.html" class="game-card">
-                <div class="game-content">
-                    <span class="game-icon">🌾</span>
-                    <h3>풍년 바구니</h3>
-                    <p>새로 난 음식을 담아보세요</p>
-                </div>
-                <div class="completed" id="completed-4" style="display:none;">✓</div>
-            </a>
+            <!-- 가족의 집 -->
+            <div class="village-space locked">
+                <span class="lock-badge">🔒 준비 중</span>
+                <span class="space-icon">🏠</span>
+                <div class="space-name">가족의 집</div>
+                <div class="space-description">마을 중심의 따뜻한 집</div>
+                <span class="status-badge coming">곧 만나요!</span>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <strong>💡 팁:</strong> 각 활동 공간에서 게임을 완료하면 달 조각을 얻을 수 있습니다.
+            모든 달 조각을 모으면 보름달을 완성할 수 있어요!
         </div>
     </div>
 
     <script>
-        const STORAGE_KEY = 'track-a-progress';
+        const MOON_PIECES_KEY = 'track-a-moon-pieces';
 
-        function loadProgress() {
-            const progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-                games: [false, false, false, false]
+        // Initialize moon pieces
+        function initMoonPieces() {
+            const moonPieces = JSON.parse(localStorage.getItem(MOON_PIECES_KEY)) || {
+                songpyeon: false,
+                play: false,
+                harvest: false
             };
-            return progress;
+            return moonPieces;
         }
 
-        function updateMoon() {
-            const progress = loadProgress();
-            const completedCount = progress.games.filter(Boolean).length;
-            const moonPhases = ['🌑', '🌒', '🌓', '🌔', '🌕'];
-            document.getElementById('moonPhase').textContent = moonPhases[completedCount];
+        // Update moon pieces display
+        function updateMoonDisplay() {
+            const moonPieces = initMoonPieces();
+            const display = document.getElementById('moonPiecesDisplay');
 
-            // Show completed badges
-            progress.games.forEach((completed, index) => {
-                if (completed) {
-                    document.getElementById(`completed-${index + 1}`).style.display = 'flex';
+            display.innerHTML = '';
+            const pieces = [moonPieces.songpyeon, moonPieces.play, moonPieces.harvest];
+
+            pieces.forEach(piece => {
+                const div = document.createElement('div');
+                if (piece) {
+                    div.className = 'moon-piece';
+                    div.innerHTML = '●';
+                } else {
+                    div.className = 'moon-piece empty';
+                    div.innerHTML = '○';
                 }
+                display.appendChild(div);
             });
         }
 
-        updateMoon();
+        // Update songpyeon space status
+        function updateSongpyeonStatus() {
+            const moonPieces = initMoonPieces();
+            const songpyeonSpace = document.getElementById('songpyeonSpace');
+            const completedIndicator = document.getElementById('songpyeonCompleted');
+            const statusBadge = document.getElementById('songpyeonStatus');
+
+            if (moonPieces.songpyeon) {
+                completedIndicator.style.display = 'flex';
+                statusBadge.textContent = '완료!';
+                statusBadge.style.background = '#4caf50';
+            }
+        }
+
+        // Save moon piece (called from game)
+        function saveMoonPiece(spaceName) {
+            const moonPieces = initMoonPieces();
+            if (!moonPieces[spaceName]) {
+                moonPieces[spaceName] = true;
+                localStorage.setItem(MOON_PIECES_KEY, JSON.stringify(moonPieces));
+                updateMoonDisplay();
+                updateSongpyeonStatus();
+            }
+        }
+
+        // Initialize on load
+        updateMoonDisplay();
+        updateSongpyeonStatus();
+
+        // Make saveMoonPiece globally available
+        window.saveMoonPiece = saveMoonPiece;
     </script>
 </body>
 </html>

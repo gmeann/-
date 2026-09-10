@@ -598,6 +598,18 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
             localStorage.setItem(GAME_COMPLETE_KEY, 'true');
 
+            // Award moon piece
+            const MOON_PIECES_KEY = 'track-a-moon-pieces';
+            const moonPieces = JSON.parse(localStorage.getItem(MOON_PIECES_KEY)) || {
+                songpyeon: false,
+                play: false,
+                harvest: false
+            };
+            if (!moonPieces.songpyeon) {
+                moonPieces.songpyeon = true;
+                localStorage.setItem(MOON_PIECES_KEY, JSON.stringify(moonPieces));
+            }
+
             gameAlreadyCompleted = true;
             window.location.href = '../';
         }
