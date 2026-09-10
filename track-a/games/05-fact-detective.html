@@ -527,6 +527,82 @@
             cursor: not-allowed;
         }
 
+        /* Observe Type (Problem 2) */
+        .observe-card {
+            min-height: 150px;
+            padding: 15px;
+        }
+
+        .observe-card .card-description {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Compare Type (Problem 3) */
+        .compare-card {
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .compare-card.viewed {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(76, 175, 80, 0.05));
+            border-color: #4caf50;
+        }
+
+        /* Keyword Type (Problem 4) */
+        .keyword-card {
+            min-height: 120px;
+            padding: 20px;
+            background: white;
+            margin-bottom: 15px;
+        }
+
+        .keyword-card .card-icon {
+            font-size: 2.5em;
+        }
+
+        .keyword-card .card-title {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .keyword-card .card-description {
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        /* Image Type (Problem 5) */
+        .image-card {
+            min-height: 300px;
+            padding: 25px;
+            cursor: pointer;
+            border: 2px solid #ffd700;
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .image-card:hover {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #ffa500;
+        }
+
+        .image-card.viewed {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4caf50;
+        }
+
+        .card-caption {
+            font-size: 1.05em;
+            color: #3d2817;
+            font-weight: 500;
+            margin: 15px 0;
+        }
+
+        .card-guide {
+            color: #666;
+            font-style: italic;
+        }
+
         /* Screen: Result */
         .result-screen {
             background: white;
@@ -914,12 +990,12 @@
             selectedAnswer = answer;
             const question = getCurrentQuestion();
 
-            // 문제 1에서는 단서 탐색 화면으로, 나머지는 기존 단서 화면으로
-            if (question.clueExploration && question.clueExploration.length > 0) {
+            // 단서 탐색 기능이 있는지 확인
+            if (question.clueExploration) {
                 initializeClueExploration();
                 showScreen('clueExploration');
             } else {
-                // 단서 화면 구성 (문제 2-5)
+                // 기존 단서 화면 (clueExploration 없는 경우)
                 const cluesGrid = document.getElementById('cluesGrid');
                 cluesGrid.innerHTML = '';
                 question.clues.forEach((clue, index) => {
@@ -939,8 +1015,28 @@
 
         function initializeClueExploration() {
             const question = getCurrentQuestion();
+            const clueType = question.clueType || 'cards';
+
             explorationViewedClues.clear();
 
+            // 클루 타입에 따라 다른 방식으로 초기화
+            if (clueType === 'cards') {
+                renderCardsType(question);
+            } else if (clueType === 'observe') {
+                renderObserveType(question);
+            } else if (clueType === 'compare') {
+                renderCompareType(question);
+            } else if (clueType === 'keyword') {
+                renderKeywordType(question);
+            } else if (clueType === 'image') {
+                renderImageType(question);
+            }
+
+            updateExplorationProgress();
+        }
+
+        function renderCardsType(question) {
+            // 카드 클릭형 (문제 1)
             const explorationCards = document.getElementById('explorationCards');
             explorationCards.innerHTML = '';
 
@@ -966,11 +1062,144 @@
                 `;
                 explorationCards.appendChild(card);
             });
+        }
 
-            updateExplorationProgress();
+        function renderObserveType(question) {
+            // 관찰형 (문제 2)
+            const instruction = document.querySelector('.clue-exploration-instruction');
+            instruction.textContent = question.clueInstruction || '자료를 살펴보세요.';
+
+            const explorationCards = document.getElementById('explorationCards');
+            explorationCards.innerHTML = '';
+            explorationCards.style.gridTemplateColumns = 'repeat(auto-fit, minmax(150px, 1fr))';
+
+            question.clueExploration.forEach((clueData, index) => {
+                const card = document.createElement('div');
+                card.className = 'exploration-card observe-card';
+                card.id = `exploration-card-${index}`;
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.onclick = () => handleObserveCardClick(index);
+                card.onkeypress = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleObserveCardClick(index);
+                    }
+                };
+
+                card.innerHTML = `
+                    <span class="card-icon">${clueData.icon}</span>
+                    <div class="card-title">${clueData.title}</div>
+                    <div class="card-description" style="display: none;">${clueData.description}</div>
+                `;
+                explorationCards.appendChild(card);
+            });
+        }
+
+        function renderCompareType(question) {
+            // 비교형 (문제 3)
+            const instruction = document.querySelector('.clue-exploration-instruction');
+            instruction.textContent = question.clueInstruction || '차례상은 정말 모두 같은 모습일까요?';
+
+            const explorationCards = document.getElementById('explorationCards');
+            explorationCards.innerHTML = '';
+            explorationCards.style.gridTemplateColumns = '1fr 1fr';
+
+            question.clueExploration.forEach((clueData, index) => {
+                const card = document.createElement('div');
+                card.className = 'exploration-card compare-card';
+                card.id = `exploration-card-${index}`;
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.onclick = () => handleCompareCardClick(index);
+                card.onkeypress = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleCompareCardClick(index);
+                    }
+                };
+
+                card.innerHTML = `
+                    <div style="font-size: 0.9em; color: #999; margin-bottom: 10px;">${clueData.label}</div>
+                    <div style="padding: 20px; background: #f0f0f0; border-radius: 5px; margin-bottom: 10px;">${clueData.image}</div>
+                    <div class="card-description" style="font-size: 0.95em; color: #666; text-align: center; display: none;">${clueData.description}</div>
+                `;
+                explorationCards.appendChild(card);
+            });
+        }
+
+        function renderKeywordType(question) {
+            // 핵심단어 (문제 4)
+            const instruction = document.querySelector('.clue-exploration-instruction');
+
+            // 핵심 단어를 강조하여 표시
+            const keywordHtml = question.keywordToHighlight
+                ? `강조: "<span style="color: #f44336; font-weight: bold;">${question.keywordToHighlight}</span>"<br><br>`
+                : '';
+
+            instruction.innerHTML = keywordHtml + (question.clueInstruction || '반드시라는 표현을 의심해 보세요.');
+            instruction.style.color = '#5d3a1a';
+
+            const explorationCards = document.getElementById('explorationCards');
+            explorationCards.innerHTML = '';
+            explorationCards.style.gridTemplateColumns = '1fr';
+
+            question.clueExploration.forEach((clueData, index) => {
+                const card = document.createElement('div');
+                card.className = 'exploration-card keyword-card';
+                card.id = `exploration-card-${index}`;
+                card.setAttribute('role', 'button');
+                card.setAttribute('tabindex', '0');
+                card.onclick = () => handleKeywordCardClick(index);
+                card.onkeypress = (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleKeywordCardClick(index);
+                    }
+                };
+
+                card.innerHTML = `
+                    <span class="card-icon">${clueData.icon}</span>
+                    <div class="card-title">${clueData.title}</div>
+                    <div class="card-description">${clueData.description}</div>
+                `;
+                explorationCards.appendChild(card);
+            });
+        }
+
+        function renderImageType(question) {
+            // 이미지 관찰형 (문제 5)
+            const instruction = document.querySelector('.clue-exploration-instruction');
+            instruction.textContent = question.clueInstruction || '강강술래의 모습을 살펴보세요.';
+
+            const explorationCards = document.getElementById('explorationCards');
+            explorationCards.innerHTML = '';
+            explorationCards.style.gridTemplateColumns = '1fr';
+            explorationCards.style.textAlign = 'center';
+
+            const imageCard = document.createElement('div');
+            imageCard.className = 'exploration-card image-card';
+            imageCard.id = `exploration-card-0`;
+            imageCard.setAttribute('role', 'button');
+            imageCard.setAttribute('tabindex', '0');
+            imageCard.onclick = () => handleImageCardClick(0);
+            imageCard.onkeypress = (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleImageCardClick(0);
+                }
+            };
+
+            imageCard.innerHTML = `
+                <div style="padding: 30px; background: #f5f5f5; border-radius: 10px; margin-bottom: 15px;">${question.clueExploration.image}</div>
+                <div class="card-caption">${question.clueExploration.caption}</div>
+                <div class="card-guide" style="margin-top: 15px; color: #666; font-size: 0.9em;">${question.clueExploration.guideQuestion}</div>
+            `;
+            explorationCards.appendChild(imageCard);
         }
 
         function handleClueCardClick(cardIndex) {
+            // 카드형 (문제 1)
             const card = document.getElementById(`exploration-card-${cardIndex}`);
             const isExpanded = card.classList.contains('expanded');
 
@@ -990,25 +1219,120 @@
             }
         }
 
+        function handleObserveCardClick(cardIndex) {
+            // 관찰형 (문제 2)
+            const card = document.getElementById(`exploration-card-${cardIndex}`);
+            const description = card.querySelector('.card-description');
+            const isViewed = card.classList.contains('viewed');
+
+            if (!isViewed) {
+                card.classList.add('viewed');
+                description.style.display = 'block';
+
+                // 반짝임 효과
+                const shine = document.createElement('span');
+                shine.className = 'card-shine';
+                shine.textContent = '✨';
+                card.appendChild(shine);
+                setTimeout(() => shine.remove(), 600);
+
+                explorationViewedClues.add(cardIndex);
+                updateExplorationProgress();
+            }
+        }
+
+        function handleCompareCardClick(cardIndex) {
+            // 비교형 (문제 3)
+            const card = document.getElementById(`exploration-card-${cardIndex}`);
+            const description = card.querySelector('.card-description');
+            const isViewed = card.classList.contains('viewed');
+
+            if (!isViewed) {
+                card.classList.add('viewed');
+                description.style.display = 'block';
+
+                // 반짝임 효과
+                const shine = document.createElement('span');
+                shine.className = 'card-shine';
+                shine.textContent = '✨';
+                card.appendChild(shine);
+                setTimeout(() => shine.remove(), 600);
+
+                explorationViewedClues.add(cardIndex);
+                updateExplorationProgress();
+            }
+        }
+
+        function handleKeywordCardClick(cardIndex) {
+            // 핵심단어형 (문제 4)
+            const card = document.getElementById(`exploration-card-${cardIndex}`);
+            const isViewed = card.classList.contains('viewed');
+
+            if (!isViewed) {
+                card.classList.add('viewed');
+
+                // 반짝임 효과
+                const shine = document.createElement('span');
+                shine.className = 'card-shine';
+                shine.textContent = '✨';
+                card.appendChild(shine);
+                setTimeout(() => shine.remove(), 600);
+
+                explorationViewedClues.add(cardIndex);
+                updateExplorationProgress();
+            }
+        }
+
+        function handleImageCardClick(cardIndex) {
+            // 이미지 관찰형 (문제 5)
+            const card = document.getElementById(`exploration-card-${cardIndex}`);
+            const isViewed = card.classList.contains('viewed');
+
+            if (!isViewed) {
+                card.classList.add('viewed');
+
+                // 반짝임 효과
+                const shine = document.createElement('span');
+                shine.className = 'card-shine';
+                shine.textContent = '✨';
+                card.appendChild(shine);
+                setTimeout(() => shine.remove(), 600);
+
+                explorationViewedClues.add(cardIndex);
+                updateExplorationProgress();
+            }
+        }
+
         function updateExplorationProgress() {
             const question = getCurrentQuestion();
-            const totalClues = question.clueExploration.length;
+            const clueType = question.clueType || 'cards';
+
+            // 클루 타입에 따라 총 개수 결정
+            let totalClues;
+            if (clueType === 'image') {
+                totalClues = 1; // 이미지 타입은 1개
+            } else {
+                totalClues = Array.isArray(question.clueExploration) ? question.clueExploration.length : 0;
+            }
+
             const viewedCount = explorationViewedClues.size;
 
-            // 진행 표시 업데이트
+            // 진행 표시 업데이트 (image 타입은 표시하지 않거나 1개만)
             const progressDots = document.getElementById('explorationProgressDots');
-            progressDots.innerHTML = '';
-            for (let i = 0; i < totalClues; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'progress-dot-exploration' + (explorationViewedClues.has(i) ? ' checked' : '');
-                progressDots.appendChild(dot);
+            if (totalClues > 0) {
+                progressDots.innerHTML = '';
+                for (let i = 0; i < totalClues; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = 'progress-dot-exploration' + (explorationViewedClues.has(i) ? ' checked' : '');
+                    progressDots.appendChild(dot);
+                }
             }
 
             // 확인 메시지 표시
             const confirmMessage = document.getElementById('confirmMessage');
             const factConfirmBtn = document.getElementById('factConfirmBtn');
 
-            if (viewedCount === totalClues) {
+            if (viewedCount === totalClues && totalClues > 0) {
                 confirmMessage.classList.add('show');
                 factConfirmBtn.disabled = false;
             } else {
