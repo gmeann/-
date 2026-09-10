@@ -159,6 +159,13 @@
         }
 
         /* Case Card Grid Container */
+        .village-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
         .case-card-container {
             background: white;
             border-radius: 15px;
@@ -380,6 +387,31 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Case 03 -->
+            <div class="case-card-container">
+                <div class="case-card-front" id="caseCard03Front">
+                    <div class="case-card-title">사건 03</div>
+                    <div class="case-card-description">
+                        추석의 모습은<br>
+                        어느 지역에서나 같았을까?
+                    </div>
+                    <button class="case-button" onclick="startCase('case-03.html')">🔎 조사하기</button>
+                </div>
+                <div class="case-card-completed" id="caseCard03Completed" style="display: none;">
+                    <div class="case-card-title">사건 03</div>
+                    <div class="case-card-description">
+                        추석의 모습은<br>
+                        어느 지역에서나 같았을까?
+                    </div>
+                    <div class="case-card-completion">
+                        ✓ 조사 완료
+                    </div>
+                    <div class="case-card-record">
+                        📚 기록 카드 획득
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Guide Text -->
@@ -421,6 +453,17 @@
             } else {
                 if (case02Front) case02Front.style.display = 'block';
                 if (case02Completed) case02Completed.style.display = 'none';
+            }
+
+            // Update case 03 display
+            const case03Front = document.getElementById('caseCard03Front');
+            const case03Completed = document.getElementById('caseCard03Completed');
+            if (caseCompletionState.case03) {
+                if (case03Front) case03Front.style.display = 'none';
+                if (case03Completed) case03Completed.style.display = 'block';
+            } else {
+                if (case03Front) case03Front.style.display = 'block';
+                if (case03Completed) case03Completed.style.display = 'none';
             }
         }
 

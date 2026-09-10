@@ -171,10 +171,84 @@ const ARCHIVE_CASES = {
         notSupportedFeedback: "자료 B와 C를 다시 살펴보세요. 현대의 차례 모습은 어떤가요?"
       }
     ]
+  },
+
+  case_03: {
+    id: "case-03",
+    number: "03",
+    title: "추석의 모습은 어느 지역에서나 같았을까?",
+    claim: "추석에는 전국의 모든 지역에서 비슷한 음식을 준비하고 같은 방식으로 명절을 보냈다.",
+    sources: [
+      {
+        id: "source-a",
+        icon: "🏛️",
+        title: "자료 A",
+        category: "박물관 자료",
+        type: "박물관 자료",
+        summary: "지역에 따른\n송편의 모습을\n살펴봅니다.",
+        detailTitle: "지역에 따른 송편",
+        content: `추석에 먹는 대표적인 음식 가운데 하나가 송편입니다.
+송편은 지역에 따라 모양이나 재료, 크기 등이
+다양하게 나타나기도 합니다.`,
+        sourceName: "국립민속박물관"
+      },
+      {
+        id: "source-b",
+        icon: "📜",
+        title: "자료 B",
+        category: "민속 자료",
+        type: "민속 자료",
+        summary: "지역에 따른\n명절 모습을\n살펴봅니다.",
+        detailTitle: "지역과 가정에 따른 명절 모습",
+        content: `명절에 준비하는 음식이나 명절을 보내는 방법은
+지역과 가정에 따라
+서로 다른 모습을 보일 수 있습니다.`,
+        sourceName: "민속 기록"
+      },
+      {
+        id: "source-c",
+        icon: "📷",
+        title: "자료 C",
+        category: "현대 생활",
+        type: "현대 자료",
+        summary: "오늘날 가족의\n추석 모습을\n살펴봅니다.",
+        detailTitle: "오늘날의 추석",
+        content: `오늘날에도 가족의 상황과 생활 방식에 따라
+추석을 보내는 모습이 다양합니다.
+어떤 가족은 차례를 지내고,
+어떤 가족은 가족과 함께 음식을 나누거나
+다른 방식으로 명절을 보내기도 합니다.`,
+        sourceName: "현대의 추석 모습"
+      }
+    ],
+    explanations: [
+      {
+        id: "explanation-a",
+        text: "추석은 전국에서 거의 같은 방식으로 보내는 명절이다.",
+        supportedAnswer: false,
+        relatedSources: ["source-a", "source-b", "source-c"],
+        supportedFeedback: "세 자료를 비교해 보세요. 모든 자료에서 지역과 가정에 따른 차이를 보여주지 않나요?",
+        notSupportedExplanation: "자료 A에서는 지역에 따라 송편의 모습이 달라질 수 있음을, 자료 B에서는 지역과 가정에 따라 명절을 보내는 모습이 다를 수 있음을, 자료 C에서도 가족마다 추석을 보내는 방식이 다양함을 확인할 수 있습니다."
+      },
+      {
+        id: "explanation-b",
+        text: "추석은 지역과 가정에 따라 음식과 명절을 보내는 모습이 다를 수 있다.",
+        supportedAnswer: true,
+        relatedSources: ["source-a", "source-b", "source-c"],
+        supportedExplanation: "맞습니다. 세 자료를 비교하면 지역과 가정에 따른 다양한 추석의 모습을 확인할 수 있습니다.",
+        notSupportedFeedback: "세 자료를 다시 살펴보세요. 각 자료가 무엇을 보여주고 있나요?"
+      }
+    ],
+    finalJudgment: {
+      statement: "우리나라의 모든 지역에서는 추석에 서로 다른 송편을 먹었다.",
+      correctAnswer: "not-supported",
+      supportedFeedback: "자료만으로는 단정하기 어려워요. 자료는 지역에 따라 송편의 모습이 다양할 수 있다는 점을 보여주지만, 모든 지역이 서로 다른 송편을 먹었다고 말할 정도의 자료는 아닙니다.",
+      notSupportedExplanation: "정확합니다. 자료는 지역에 따라 송편이 다양하다는 점을 보여주지만, 우리나라의 '모든' 지역에서 '서로 다른' 송편을 먹었다고 단정할 정도의 자료는 아닙니다. '차이가 있다'는 사실과 '모든 지역이 다 다르다'는 주장을 구분하는 것이 중요합니다."
+    }
   }
 
   // 향후 추가될 사건들을 위한 구조 예시:
-  // case_03: { id: "case-03", ... }
+  // case_04: { id: "case-04", ... }
 };
 
 // 특정 사건 데이터 가져오기
@@ -182,7 +256,7 @@ function getArchiveCase(caseId) {
   return ARCHIVE_CASES[caseId];
 }
 
-// 현재는 case-01, case-02 제공
+// 현재는 case-01, case-02, case-03 제공
 function getCurrentCase() {
   return ARCHIVE_CASES.case_01;
 }

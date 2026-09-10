@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사건 03 - 한가위 어드벤처</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #f5e6d3 0%, #e8d4b8 50%, #dfc39e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #3d2817;
+            animation: fadeInBody 0.8s ease-out;
+        }
+
+        @keyframes fadeInBody {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(139, 69, 19, 0.2);
+            color: #3d2817;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 69, 19, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .header-title {
+            font-size: 2em;
+            color: #8b4513;
+            font-weight: bold;
+        }
+
+        /* Claim Card */
+        .claim-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 230, 211, 0.9));
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .claim-label {
+            font-size: 0.95em;
+            color: #5d3a1a;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .claim-text {
+            font-size: 1.3em;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .claim-instruction {
+            font-size: 0.95em;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        /* Sources Grid */
+        .sources-section {
+            margin-bottom: 40px;
+        }
+
+        .sources-label {
+            font-size: 1.1em;
+            color: #5d3a1a;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .sources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Source Card */
+        .source-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            animation: slideUp 0.8s ease-out;
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
+        }
+
+        .source-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .source-summary {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .source-type-badge {
+            display: inline-block;
+            background: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .source-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .source-card.viewed {
+            border-color: #4caf50;
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .source-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .source-title {
+            font-size: 1.1em;
+            color: #8b4513;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .source-category {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .source-button {
+            padding: 10px 20px;
+            background: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .source-button:hover {
+            background: #a0522d;
+        }
+
+        .view-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Completion Message */
+        .completion-section {
+            display: none;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(100, 200, 100, 0.08));
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 2px solid #4caf50;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .completion-section.show {
+            display: block;
+        }
+
+        .completion-title {
+            font-size: 1.2em;
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .completion-text {
+            font-size: 1.05em;
+            color: #3d2817;
+            line-height: 1.7;
+        }
+
+        /* Selection Mode */
+        .phase-label {
+            text-align: center;
+            font-size: 1.05em;
+            color: #5d3a1a;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .source-card.selection-mode {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .source-card.selection-mode:hover {
+            background: rgba(139, 69, 19, 0.05);
+        }
+
+        .source-card.selected {
+            border-color: #8b4513;
+            background: rgba(139, 69, 19, 0.08);
+        }
+
+        .selection-checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 28px;
+            height: 28px;
+            border: 2px solid #8b4513;
+            border-radius: 6px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 1.1em;
+        }
+
+        .source-card.selected .selection-checkbox {
+            background: #8b4513;
+            color: white;
+        }
+
+        /* Evidence Section */
+        .evidence-instruction {
+            background: rgba(139, 69, 19, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            border-left: 4px solid #8b4513;
+        }
+
+        .evidence-instruction-text {
+            font-size: 1em;
+            color: #3d2817;
+            line-height: 1.7;
+        }
+
+        /* Check Evidence Button */
+        .check-evidence-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .check-evidence-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            display: none;
+        }
+
+        .check-evidence-btn.show {
+            display: inline-block;
+        }
+
+        .check-evidence-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        .check-evidence-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            display: none;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08), rgba(160, 82, 45, 0.06));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .feedback-section.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-size: 1.2em;
+            color: #8b4513;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .feedback-message {
+            font-size: 1.05em;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .feedback-revelation {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8b4513;
+        }
+
+        .revelation-title {
+            font-size: 1em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .revelation-text {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Next Button */
+        .next-button-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .next-button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            display: none;
+        }
+
+        .next-button.show {
+            display: inline-block;
+        }
+
+        .next-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        .next-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-icon {
+            font-size: 2.5em;
+        }
+
+        .modal-title {
+            font-size: 1.4em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .modal-category {
+            font-size: 0.9em;
+            color: #666;
+            display: block;
+        }
+
+        .modal-type-badge {
+            display: inline-block;
+            background: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .modal-body {
+            margin-bottom: 25px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            color: #3d2817;
+            font-size: 1em;
+        }
+
+        .modal-source {
+            font-size: 0.9em;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            padding: 12px 30px;
+            background: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        .modal-close:hover {
+            background: #a0522d;
+        }
+
+        /* Judgment Phase */
+        .judgment-section {
+            display: none;
+        }
+
+        .judgment-section.show {
+            display: block;
+        }
+
+        /* Explanation Comparison Styles */
+        .explanations-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .explanation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            min-height: 250px;
+        }
+
+        .explanation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #8b4513;
+        }
+
+        .explanation-label {
+            font-size: 1.1em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .explanation-text {
+            font-size: 1em;
+            color: #3d2817;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .explanation-button {
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+
+        .explanation-card:hover .explanation-button {
+            background: linear-gradient(135deg, #a0522d, #8b4513);
+            transform: scale(1.05);
+        }
+
+        .judgment-question-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .judgment-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .judgment-main-question {
+            font-size: 1.4em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .judgment-sub-instruction {
+            font-size: 0.95em;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .judgment-progress {
+            text-align: center;
+            font-size: 0.9em;
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        .judgment-statement-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e0e0e0;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .judgment-statement-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .judgment-statement {
+            font-size: 1.2em;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .judgment-button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .judgment-button {
+            padding: 15px 20px;
+            background: white;
+            color: #8b4513;
+            border: 2px solid #8b4513;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .judgment-button:hover {
+            background: rgba(139, 69, 19, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .judgment-button:active {
+            transform: translateY(0);
+        }
+
+        .judgment-button.supported {
+            grid-column: 1;
+        }
+
+        .judgment-button.not-supported {
+            grid-column: 2;
+        }
+
+        /* Judgment Feedback */
+        .judgment-feedback-section {
+            display: none;
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08), rgba(160, 82, 45, 0.06));
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .judgment-feedback-section.show {
+            display: block;
+        }
+
+        .judgment-feedback-title {
+            font-size: 1.05em;
+            color: #8b4513;
+            margin-bottom: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback-icon {
+            font-size: 1.3em;
+        }
+
+        .judgment-feedback-text {
+            font-size: 1em;
+            color: #3d2817;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .judgment-source-review {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #8b4513;
+        }
+
+        .source-review-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .source-review-button {
+            padding: 10px 20px;
+            background: #f5e6d3;
+            color: #8b4513;
+            border: 1px solid #8b4513;
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .source-review-button:hover {
+            background: #e8d4b8;
+            transform: translateY(-2px);
+        }
+
+        .judgment-action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .judgment-next-button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .judgment-next-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        /* Conclusion Section */
+        .conclusion-section {
+            display: none;
+        }
+
+        .conclusion-section.show {
+            display: block;
+        }
+
+        .conclusion-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .conclusion-title {
+            font-size: 1.5em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .conclusion-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #dfc39e;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .conclusion-label {
+            font-size: 0.95em;
+            color: #5d3a1a;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .conclusion-text {
+            font-size: 1.1em;
+            color: #3d2817;
+            line-height: 1.9;
+            margin-bottom: 15px;
+        }
+
+        .conclusion-learning {
+            background: linear-gradient(135deg, rgba(139, 69, 19, 0.08), rgba(160, 82, 45, 0.06));
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            border-left: 4px solid #8b4513;
+        }
+
+        .learning-icon {
+            font-size: 1.2em;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .learning-title {
+            font-size: 1em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .learning-content {
+            font-size: 0.95em;
+            color: #3d2817;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .learning-emphasis {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 12px;
+            border-left: 3px solid #8b4513;
+            font-size: 0.95em;
+            color: #3d2817;
+            font-weight: 600;
+        }
+
+        /* Record Card Section */
+        .record-card-section {
+            display: none;
+        }
+
+        .record-card-section.show {
+            display: block;
+        }
+
+        .record-card-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            animation: cardSlideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes cardSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .record-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 230, 211, 0.92));
+            border: 2px solid #dfc39e;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .record-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            animation: cardShine 2s ease-out;
+        }
+
+        @keyframes cardShine {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .record-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .record-card-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #dfc39e;
+        }
+
+        .record-card-icon {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            display: block;
+            animation: cardIconPulse 1.2s ease-in-out 0.5s;
+        }
+
+        @keyframes cardIconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .record-card-title {
+            font-size: 1.3em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .record-card-subtitle {
+            font-size: 0.95em;
+            color: #5d3a1a;
+            line-height: 1.6;
+        }
+
+        .record-card-section-item {
+            margin-bottom: 25px;
+        }
+
+        .record-card-section-label {
+            font-size: 0.95em;
+            color: #8b4513;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .record-card-section-icon {
+            font-size: 1.1em;
+        }
+
+        .record-card-text {
+            font-size: 1em;
+            color: #3d2817;
+            line-height: 1.7;
+            padding-left: 30px;
+        }
+
+        .record-card-source {
+            background: rgba(139, 69, 19, 0.05);
+            border-left: 3px solid #8b4513;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            color: #5d3a1a;
+            line-height: 1.6;
+        }
+
+        .record-card-acquisition {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #dfc39e;
+            font-size: 1.1em;
+            color: #8b4513;
+            font-weight: bold;
+            animation: cardAcquisitionPulse 1.5s ease-in-out 0.8s infinite;
+        }
+
+        @keyframes cardAcquisitionPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+
+        /* Record Card Buttons */
+        .record-card-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .record-card-button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .record-card-button.primary {
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+            grid-column: 1 / -1;
+        }
+
+        .record-card-button.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
+        }
+
+        .record-card-button.secondary {
+            background: white;
+            color: #8b4513;
+            border: 2px solid #8b4513;
+        }
+
+        .record-card-button.secondary:hover {
+            background: rgba(139, 69, 19, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.5em;
+            }
+
+            .sources-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .source-card {
+                padding: 20px;
+            }
+
+            .claim-section {
+                padding: 20px;
+            }
+
+            .claim-text {
+                font-size: 1.1em;
+            }
+
+            .modal-content {
+                margin: 20px;
+                max-height: 90vh;
+            }
+
+            .judgment-statement {
+                font-size: 1.05em;
+            }
+
+            .judgment-button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .judgment-button.supported,
+            .judgment-button.not-supported {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 1.3em;
+            }
+
+            .claim-text {
+                font-size: 1em;
+            }
+
+            .source-icon {
+                font-size: 2.5em;
+            }
+
+            .source-card {
+                padding: 15px;
+            }
+
+            .next-button {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+
+            .modal-content {
+                padding: 25px;
+            }
+
+            .judgment-main-question {
+                font-size: 1.2em;
+            }
+
+            .judgment-statement {
+                font-size: 1em;
+            }
+
+            .judgment-statement-card {
+                padding: 20px;
+            }
+
+            .judgment-button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .judgment-button.supported,
+            .judgment-button.not-supported {
+                grid-column: 1;
+            }
+
+            .conclusion-card {
+                padding: 20px;
+            }
+
+            .conclusion-title {
+                font-size: 1.2em;
+            }
+
+            .record-card {
+                padding: 25px;
+            }
+
+            .record-card-title {
+                font-size: 1.15em;
+            }
+
+            .record-card-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .record-card-button.primary {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">← 기록실</button>
+            <h1 class="header-title">🗂️ 사건 03</h1>
+        </div>
+
+        <!-- Claim Section -->
+        <div class="claim-section" id="claimSection">
+            <div class="claim-label">🔎 조사할 주장</div>
+            <div class="claim-text" id="claimText"></div>
+            <div class="claim-instruction">이 주장을 자료를 통해 확인해 보세요.</div>
+        </div>
+
+        <!-- Sources Section -->
+        <div class="sources-section">
+            <div class="sources-label" id="sourcesLabel">📚 추석에 관한 자료들</div>
+            <div class="sources-grid" id="sourcesGrid"></div>
+        </div>
+
+        <!-- Completion Section -->
+        <div class="completion-section" id="completionSection">
+            <div class="completion-title">✓ 자료를 모두 살펴보았어요.</div>
+            <div class="completion-text">
+                이제 어떤 자료가 이 주장을 뒷받침하는지 생각해 볼까요?
+            </div>
+        </div>
+
+        <!-- Phase Indicator -->
+        <div class="phase-label" id="phaseLabel" style="display: none;">🔍 이 주장을 뒷받침하는 근거를 선택해 보세요</div>
+
+        <!-- Evidence Instruction -->
+        <div class="evidence-instruction" id="evidenceInstruction" style="display: none;">
+            <div class="evidence-instruction-text">
+                자료를 읽고, 어떤 근거로 그렇게 말할 수 있는지 생각해 보세요
+            </div>
+        </div>
+
+        <!-- Check Evidence Button -->
+        <div class="check-evidence-section">
+            <button class="check-evidence-btn" id="checkEvidenceBtn" onclick="showFeedback()">
+                근거 확인하기 →
+            </button>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section" id="feedbackSection">
+            <div class="feedback-title">📊 자료가 보여주는 것들</div>
+            <div class="feedback-message" id="feedbackMessage"></div>
+            <div id="feedbackRevelations"></div>
+        </div>
+
+        <!-- Next Button -->
+        <div class="next-button-section">
+            <button class="next-button" id="nextButton" onclick="proceedToJudgment()">다음 단계 →</button>
+        </div>
+
+        <!-- Judgment Phase -->
+        <div class="judgment-section" id="judgmentSection">
+            <!-- Explanation Comparison Phase -->
+            <div id="explanationPhase">
+                <!-- Question Header -->
+                <div class="judgment-question-header">
+                    <span class="judgment-icon">🔎</span>
+                    <div class="judgment-main-question">세 자료를 비교했을 때, 어느 설명이 자료에 더 잘 맞을까요?</div>
+                </div>
+
+                <!-- Explanations -->
+                <div class="explanations-container" id="explanationsContainer">
+                    <div class="explanation-card" onclick="selectExplanation('explanation-a')">
+                        <div class="explanation-label">설명 A</div>
+                        <div class="explanation-text" id="explanationAText"></div>
+                        <div class="explanation-button">선택하기</div>
+                    </div>
+                    <div class="explanation-card" onclick="selectExplanation('explanation-b')">
+                        <div class="explanation-label">설명 B</div>
+                        <div class="explanation-text" id="explanationBText"></div>
+                        <div class="explanation-button">선택하기</div>
+                    </div>
+                </div>
+
+                <!-- Feedback Section -->
+                <div class="judgment-feedback-section" id="explanationFeedback" style="display: none;">
+                    <div class="judgment-feedback-title">
+                        <span class="feedback-icon" id="explanationFeedbackIcon"></span>
+                        <span id="explanationFeedbackTitle"></span>
+                    </div>
+                    <div class="judgment-feedback-text" id="explanationFeedbackText"></div>
+                    <div class="judgment-action-buttons">
+                        <button class="judgment-next-button" onclick="proceedToFinalJudgment()">계속 →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Range Judgment Phase -->
+            <div id="finalJudgmentPhase" style="display: none;">
+                <div class="judgment-question-header">
+                    <span class="judgment-icon">⚖️</span>
+                    <div class="judgment-main-question">그렇다면, 이 자료로 어디까지 말할 수 있을까요?</div>
+                    <div class="judgment-sub-instruction">자료가 알려 주는 범위를 넘어서 생각하고 있지는 않은지 살펴보세요.</div>
+                </div>
+
+                <!-- Statement Card -->
+                <div class="judgment-statement-card" id="judgmentCard">
+                    <div class="judgment-statement-label">판단해 보세요</div>
+                    <div class="judgment-statement" id="finalJudgmentStatement"></div>
+                    <div class="judgment-button-group">
+                        <button class="judgment-button supported" onclick="answerFinalJudgment('supported')">
+                            ✓ 자료로 뒷받침할 수 있어요
+                        </button>
+                        <button class="judgment-button not-supported" onclick="answerFinalJudgment('not-supported')">
+                            △ 자료만으로는 말하기 어려워요
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feedback Section -->
+                <div class="judgment-feedback-section" id="finalJudgmentFeedback">
+                    <div class="judgment-feedback-title">
+                        <span class="feedback-icon" id="finalFeedbackIcon"></span>
+                        <span id="finalFeedbackTitle"></span>
+                    </div>
+                    <div class="judgment-feedback-text" id="finalFeedbackText"></div>
+                    <div class="judgment-action-buttons">
+                        <button class="judgment-next-button" onclick="completeCase()">완료 →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion Section -->
+        <div class="conclusion-section" id="conclusionSection">
+            <div class="conclusion-header">
+                <span class="judgment-icon">📋</span>
+                <div class="conclusion-title">조사 결과</div>
+            </div>
+
+            <div class="conclusion-card">
+                <div class="conclusion-label">처음의 주장</div>
+                <div class="conclusion-text" id="originalClaim"></div>
+            </div>
+
+            <div class="conclusion-card">
+                <div class="conclusion-label">조사를 통해 확인한 것</div>
+                <div class="conclusion-text">
+                    추석은 우리나라의 중요한 명절이지만,
+                </div>
+                <div class="conclusion-text">
+                    모든 지역과 가정에서 똑같은 모습으로 보내는 것은 아닙니다.
+                </div>
+                <div class="conclusion-text" style="margin-top: 15px; border-top: 1px solid #e0e0e0; padding-top: 15px;">
+                    음식과 명절을 보내는 방법은 지역과 가정, 시대에 따라
+                </div>
+                <div class="conclusion-text">
+                    다양하게 나타날 수 있습니다.
+                </div>
+            </div>
+
+            <div class="conclusion-learning">
+                <div class="learning-title">
+                    <span class="learning-icon">💡</span>
+                    이번 조사에서 배운 것
+                </div>
+                <div class="learning-content">
+                    서로 다른 자료를 비교하면<br>
+                    하나의 자료만 볼 때 보이지 않던 차이를 발견할 수 있어요.
+                </div>
+                <div class="learning-emphasis">
+                    "서로 다른 자료를 비교하면 더 깊이 있는 이해가 가능합니다."
+                </div>
+            </div>
+        </div>
+
+        <!-- Record Card Section -->
+        <div class="record-card-section" id="recordCardSection">
+            <div class="record-card-container">
+                <div class="record-card">
+                    <div class="record-card-content">
+                        <!-- Header -->
+                        <div class="record-card-header">
+                            <span class="record-card-icon">📚</span>
+                            <div class="record-card-title">한가위 기록 카드 03</div>
+                            <div class="record-card-subtitle">
+                                사건 03. 추석의 모습은<br>
+                                어느 지역에서나 같았을까?
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">🔎</span>
+                                확인한 사실
+                            </div>
+                            <div class="record-card-text">
+                                추석의 음식과 명절을 보내는 방법은 지역에 따라 다를 수 있습니다. 송편의 모양과 재료, 추석을 보내는 방식이 지역과 가정에 따라 달라집니다.
+                            </div>
+                        </div>
+
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">⚠️</span>
+                                중요한 점
+                            </div>
+                            <div class="record-card-text">
+                                몇 가지 예시로 "모든 지역이 다 다르다"고 말할 수는 없습니다. 차이가 있다는 것과 완전히 다르다는 것은 다릅니다.
+                            </div>
+                        </div>
+
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">💡</span>
+                                이번 조사에서 배운 것
+                            </div>
+                            <div class="record-card-text">
+                                여러 자료를 비교하면 한 가지 패턴이나 차이를 발견할 수 있습니다. 하지만 그것이 "모든" 경우에 해당하는지는 신중하게 판단해야 합니다.
+                            </div>
+                        </div>
+
+                        <div class="record-card-section-item">
+                            <div class="record-card-section-label">
+                                <span class="record-card-section-icon">📖</span>
+                                출처
+                            </div>
+                            <div class="record-card-source">
+                                자료 A: 박물관 자료 (지역에 따른 송편)<br>
+                                자료 B: 민속 자료 (지역과 가정에 따른 명절)<br>
+                                자료 C: 현대 자료 (오늘날의 추석)
+                            </div>
+                        </div>
+
+                        <!-- Acquisition Message -->
+                        <div class="record-card-acquisition">
+                            ✨ 기록 획득! ✨
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="record-card-buttons">
+                            <button class="record-card-button primary" onclick="returnToArchive()">
+                                🗂️ 기록실로 돌아가기
+                            </button>
+                            <button class="record-card-button secondary" onclick="reExamineCase()">
+                                🔎 다시 살펴보기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-icon" id="modalIcon"></span>
+                <div>
+                    <div class="modal-title" id="modalTitle"></div>
+                    <span class="modal-category" id="modalCategory"></span>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-source" id="modalSource"></div>
+            <button class="modal-close" onclick="closeModal()">닫기</button>
+        </div>
+    </div>
+
+    <script src="archive-cases.js"></script>
+    <script>
+        let currentCase = null;
+        let viewedSources = [];
+        let selectedSources = [];
+        let phase = 'reading'; // 'reading', 'selection', 'judgment', or 'completion'
+        let currentJudgmentIndex = 0;
+        let judgmentResults = [];
+        let caseCompletionState = {};
+        let isFirstTimeCompletion = false;
+
+        // Load completion state from localStorage
+        function loadCompletionState() {
+            const saved = localStorage.getItem('caseCompletionState');
+            if (saved) {
+                caseCompletionState = JSON.parse(saved);
+            }
+        }
+
+        // Save completion state to localStorage
+        function saveCompletionState() {
+            localStorage.setItem('caseCompletionState', JSON.stringify(caseCompletionState));
+        }
+
+        // Initialize
+        function init() {
+            currentCase = getCurrentCase();
+            if (!currentCase) {
+                alert('사건 정보를 불러올 수 없습니다.');
+                goBack();
+                return;
+            }
+
+            // Load completion state
+            loadCompletionState();
+
+            // Check if case is already completed
+            if (caseCompletionState.case03) {
+                // Show record card immediately for returning students
+                phase = 'completion';
+                document.getElementById('claimSection').style.display = 'block';
+                document.getElementById('sourcesLabel').style.display = 'none';
+                document.getElementById('sourcesGrid').style.display = 'none';
+                document.getElementById('phaseLabel').style.display = 'none';
+                document.getElementById('evidenceInstruction').style.display = 'none';
+                document.getElementById('checkEvidenceBtn').style.display = 'none';
+                document.getElementById('feedbackSection').style.display = 'none';
+                document.getElementById('conclusionSection').style.display = 'none';
+
+                // Show record card
+                setTimeout(() => {
+                    document.getElementById('recordCardSection').classList.add('show');
+                    const recordCardSection = document.getElementById('recordCardSection');
+                    if (recordCardSection) {
+                        recordCardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 300);
+                return;
+            }
+
+            // Render claim
+            document.getElementById('claimText').textContent = currentCase.claim;
+
+            // Render sources
+            renderSources();
+        }
+
+        // Render source cards
+        function renderSources() {
+            const grid = document.getElementById('sourcesGrid');
+            grid.innerHTML = '';
+
+            currentCase.sources.forEach(source => {
+                const card = document.createElement('div');
+                card.className = 'source-card';
+
+                if (phase === 'selection') {
+                    card.classList.add('selection-mode');
+                    if (selectedSources.includes(source.id)) {
+                        card.classList.add('selected');
+                    }
+                } else {
+                    if (viewedSources.includes(source.id)) {
+                        card.classList.add('viewed');
+                    }
+                }
+
+                let cardContent = `
+                    <span class="source-icon">${source.icon}</span>
+                    <div class="source-card-content">
+                        <div>
+                            <div class="source-title">${source.title}</div>
+                            <div class="source-category">${source.category}</div>
+                            ${source.type ? `<div class="source-type-badge">${source.type}</div>` : ''}
+                            <div class="source-summary">${source.summary || source.category}</div>
+                        </div>
+                        <div>`;
+
+                if (phase === 'selection') {
+                    cardContent += `
+                            <div class="selection-checkbox">
+                                ${selectedSources.includes(source.id) ? '✓' : ''}
+                            </div>
+                            <button class="source-button" onclick="openSourceModal('${source.id}')">
+                                자료 보기
+                            </button>`;
+                } else {
+                    cardContent += `
+                            <button class="source-button" onclick="openSourceModal('${source.id}')">
+                                자료 열기
+                            </button>
+                            ${viewedSources.includes(source.id) ? '<div class="view-badge">✓ 확인함</div>' : ''}`;
+                }
+
+                cardContent += `
+                        </div>
+                    </div>
+                `;
+
+                card.innerHTML = cardContent;
+
+                if (phase === 'selection') {
+                    card.addEventListener('click', (e) => {
+                        if (e.target.closest('.source-button') || e.target.closest('.selection-checkbox')) return;
+                        toggleSelection(source.id);
+                    });
+                }
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Open source modal
+        function openSourceModal(sourceId) {
+            const source = currentCase.sources.find(s => s.id === sourceId);
+            if (!source) return;
+
+            document.getElementById('modalIcon').textContent = source.icon;
+            document.getElementById('modalTitle').textContent = source.detailTitle || source.title;
+            document.getElementById('modalCategory').textContent = source.category;
+            document.getElementById('modalBody').textContent = source.content;
+
+            let sourceInfo = `출처: ${source.sourceName || source.sourceType || ''}`;
+            document.getElementById('modalSource').textContent = sourceInfo;
+
+            let modalHeader = document.querySelector('.modal-header');
+            let typeBadge = modalHeader.querySelector('.modal-type-badge');
+            if (typeBadge) typeBadge.remove();
+
+            if (source.type) {
+                let badge = document.createElement('div');
+                badge.className = 'modal-type-badge';
+                badge.textContent = source.type;
+                modalHeader.appendChild(badge);
+            }
+
+            // Mark as viewed
+            if (!viewedSources.includes(sourceId)) {
+                viewedSources.push(sourceId);
+            }
+
+            // Show modal
+            document.getElementById('modalOverlay').classList.add('show');
+        }
+
+        // Close modal
+        function closeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+
+            document.getElementById('modalOverlay').classList.remove('show');
+
+            // Update UI
+            renderSources();
+            updateCompletion();
+        }
+
+        // Update completion status
+        function updateCompletion() {
+            if (phase === 'reading') {
+                const allViewed = currentCase.sources.every(s => viewedSources.includes(s.id));
+
+                if (allViewed) {
+                    document.getElementById('completionSection').classList.add('show');
+                    setTimeout(transitionToSelection, 1000);
+                } else {
+                    document.getElementById('completionSection').classList.remove('show');
+                }
+            } else {
+                updateEvidenceButton();
+            }
+        }
+
+        // Transition from reading to selection phase
+        function transitionToSelection() {
+            phase = 'selection';
+            selectedSources = [];
+
+            // Hide reading phase UI
+            document.getElementById('completionSection').classList.remove('show');
+            document.getElementById('sourcesLabel').style.display = 'none';
+
+            // Show selection phase UI
+            document.getElementById('phaseLabel').style.display = 'block';
+            document.getElementById('evidenceInstruction').style.display = 'block';
+
+            // Re-render with selection UI
+            renderSources();
+            updateEvidenceButton();
+        }
+
+        // Toggle source selection
+        function toggleSelection(sourceId) {
+            const index = selectedSources.indexOf(sourceId);
+            if (index > -1) {
+                selectedSources.splice(index, 1);
+            } else {
+                selectedSources.push(sourceId);
+            }
+            renderSources();
+            updateEvidenceButton();
+        }
+
+        // Update evidence button visibility and state
+        function updateEvidenceButton() {
+            const btn = document.getElementById('checkEvidenceBtn');
+            if (selectedSources.length > 0) {
+                btn.classList.add('show');
+                btn.disabled = false;
+            } else {
+                btn.classList.remove('show');
+            }
+        }
+
+        // Feedback messages for different selection combinations
+        const feedbackMessages = {
+            'source-a': {
+                title: '신라 시대의 기록만 선택한 경우',
+                message: '신라 시대 기록은 추석의 오래된 역사를 보여줍니다. 하지만 이것만으로는 지금의 추석과 얼마나 비슷한지 알기 어렵습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 추석',
+                        text: '음력 8월 15일에 길쌈의 결과를 살피고 노래와 춤을 즐겼다는 기록이 있습니다.'
+                    }
+                ]
+            },
+            'source-b': {
+                title: '박물관 자료만 선택한 경우',
+                message: '박물관 자료는 오늘날의 추석이 어떤 날인지 설명해줍니다. 하지만 이것이 옛날부터 이어진 것인지 알 수 없습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 오늘날의 추석',
+                        text: '음력 8월 15일로, 가을의 수확과 관련된 중요한 명절입니다.'
+                    }
+                ]
+            },
+            'source-c': {
+                title: '현대 자료만 선택한 경우',
+                message: '현대 자료는 지금 사람들이 어떻게 추석을 보내는지 보여줍니다. 하지만 이것이 옛날과 같은 모습인지는 알 수 없습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현재의 추석',
+                        text: '가족이 함께 명절을 보내고, 음식을 나누거나 성묘를 하는 모습으로 보냅니다.'
+                    }
+                ]
+            },
+            'source-a,source-b': {
+                title: '신라 시대 기록 + 박물관 자료',
+                message: '신라 시대부터 추석이 있었고, 오늘날도 음력 8월 15일에 명절을 보낸다는 것을 보여줍니다. 좋은 기초이지만, 정말 같은 모습인지 확인하기 위해서는 더 필요합니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 추석',
+                        text: '음력 8월 15일에 길쌈의 결과를 살피고 노래와 춤을 즐겼습니다.'
+                    },
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 오늘날의 추석',
+                        text: '여전히 음력 8월 15일이며, 가족과 함께 명절을 보냅니다.'
+                    }
+                ]
+            },
+            'source-a,source-c': {
+                title: '신라 시대 기록 + 현대 자료',
+                message: '신라 시대에는 음악과 춤을 즐겼고, 지금도 가족과 함께 명절을 보냅니다. 시간이 지나면서 어떻게 변했는지 보여줍니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 추석',
+                        text: '음력 8월 15일에 노래와 춤을 즐겼습니다.'
+                    },
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현재의 추석',
+                        text: '가족이 함께 시간을 보내며 명절을 즐깁니다.'
+                    }
+                ]
+            },
+            'source-b,source-c': {
+                title: '박물관 자료 + 현대 자료',
+                message: '박물관 자료와 현대 자료는 오늘날의 추석 모습을 설명합니다. 하지만 이것이 신라 시대부터 같은 모습이었는지는 알 수 없습니다.',
+                revelations: [
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 박물관의 설명',
+                        text: '추석은 음력 8월 15일로, 가을의 수확과 관련된 명절입니다.'
+                    },
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현대의 모습',
+                        text: '가족이 함께 명절을 보내고, 음식을 나누며 성묘를 합니다.'
+                    }
+                ]
+            },
+            'source-a,source-b,source-c': {
+                title: '모든 자료를 선택한 경우',
+                message: '신라 시대부터 음력 8월 15일에 가족과 함께 즐기는 명절이었고, 오늘날도 비슷한 모습으로 이어지고 있습니다. 이것은 주장을 뒷받침하는 완전한 근거입니다!',
+                revelations: [
+                    {
+                        sourceId: 'source-a',
+                        title: '📜 신라 시대의 기록',
+                        text: '음력 8월 15일에 길쌈의 결과를 살피고, 노래와 춤을 즐겼습니다.'
+                    },
+                    {
+                        sourceId: 'source-b',
+                        title: '🏛️ 박물관의 설명',
+                        text: '오늘날의 추석은 가을의 수확과 관련된 명절입니다.'
+                    },
+                    {
+                        sourceId: 'source-c',
+                        title: '📷 현대의 모습',
+                        text: '가족이 함께 명절을 보내고, 음식을 나누며 성묘를 합니다.'
+                    }
+                ]
+            }
+        };
+
+        // Show feedback
+        function showFeedback() {
+            if (selectedSources.length === 0) return;
+
+            const feedbackKey = selectedSources.sort().join(',');
+            const feedback = feedbackMessages[feedbackKey];
+
+            if (!feedback) return;
+
+            document.getElementById('feedbackMessage').textContent = feedback.message;
+
+            const revelationsContainer = document.getElementById('feedbackRevelations');
+            revelationsContainer.innerHTML = '';
+
+            feedback.revelations.forEach(revelation => {
+                const div = document.createElement('div');
+                div.className = 'feedback-revelation';
+                div.innerHTML = `
+                    <div class="revelation-title">${revelation.title}</div>
+                    <div class="revelation-text">${revelation.text}</div>
+                `;
+                revelationsContainer.appendChild(div);
+            });
+
+            document.getElementById('feedbackSection').classList.add('show');
+            document.getElementById('nextButton').classList.add('show');
+            document.getElementById('checkEvidenceBtn').classList.remove('show');
+
+            // Scroll to feedback
+            setTimeout(() => {
+                document.getElementById('feedbackSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Proceed to judgment phase
+        function proceedToJudgment() {
+            phase = 'judgment';
+            currentJudgmentIndex = 0;
+            judgmentResults = [];
+
+            // Hide evidence phase UI
+            document.getElementById('feedbackSection').classList.remove('show');
+            document.getElementById('nextButton').classList.remove('show');
+            document.getElementById('checkEvidenceBtn').classList.remove('show');
+            document.getElementById('phaseLabel').style.display = 'none';
+            document.getElementById('evidenceInstruction').style.display = 'none';
+            document.getElementById('sourcesLabel').style.display = 'none';
+            document.getElementById('sourcesGrid').style.display = 'none';
+
+            // Show judgment phase UI
+            document.getElementById('judgmentSection').classList.add('show');
+            document.getElementById('originalClaim').textContent = currentCase.claim;
+
+            // Display explanations for case 03
+            displayExplanations();
+
+            // Scroll to judgment section
+            setTimeout(() => {
+                document.getElementById('judgmentSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Display judgment question
+        function displayExplanations() {
+            // Case 03: Display explanation selection
+            if (!currentCase.explanations || currentCase.explanations.length < 2) {
+                showConclusion();
+                return;
+            }
+
+            document.getElementById('judgmentSection').classList.add('show');
+            document.getElementById('explanationsContainer').style.display = 'grid';
+
+            // Display explanations
+            if (currentCase.explanations[0]) {
+                document.getElementById('explanationAText').textContent = currentCase.explanations[0].text;
+            }
+            if (currentCase.explanations[1]) {
+                document.getElementById('explanationBText').textContent = currentCase.explanations[1].text;
+            }
+
+            document.getElementById('explanationFeedback').style.display = 'none';
+            document.getElementById('finalJudgmentPhase').style.display = 'none';
+
+            setTimeout(() => {
+                document.getElementById('judgmentSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        function displayJudgmentQuestion() {
+            if (currentJudgmentIndex >= currentCase.judgments.length) {
+                showConclusion();
+                return;
+            }
+
+            const judgment = currentCase.judgments[currentJudgmentIndex];
+
+            // Update progress
+            document.getElementById('judgmentProgress').textContent = `판단 ${currentJudgmentIndex + 1} / ${currentCase.judgments.length}`;
+
+            // Display statement
+            document.getElementById('judgmentStatement').textContent = judgment.statement;
+
+            // Hide feedback
+            document.getElementById('judgmentFeedback').classList.remove('show');
+            document.getElementById('judgmentCard').style.display = 'block';
+        }
+
+        // Answer judgment question
+        function answerJudgment(answer) {
+            const judgment = currentCase.judgments[currentJudgmentIndex];
+            const isCorrect = answer === judgment.correctAnswer;
+
+            // Store result
+            judgmentResults.push({
+                questionId: judgment.id,
+                selectedAnswer: answer,
+                correct: isCorrect
+            });
+
+            // Hide statement card
+            document.getElementById('judgmentCard').style.display = 'none';
+
+            // Show feedback
+            showJudgmentFeedback(judgment, answer, isCorrect);
+        }
+
+        // Show judgment feedback
+        function showJudgmentFeedback(judgment, answer, isCorrect) {
+            const feedbackSection = document.getElementById('judgmentFeedback');
+
+            if (isCorrect) {
+                // Correct answer
+                document.getElementById('feedbackIcon').textContent = '✓';
+                document.getElementById('feedbackTitle').textContent = '자료로 확인할 수 있어요';
+                document.getElementById('feedbackText').textContent = judgment.supportedExplanation || judgment.notSupportedExplanation;
+                document.getElementById('sourceReviewContainer').innerHTML = '';
+            } else {
+                // Incorrect answer
+                document.getElementById('feedbackIcon').textContent = '🤔';
+                document.getElementById('feedbackTitle').textContent = '다시 생각해 볼까요?';
+                document.getElementById('feedbackText').textContent = judgment.supportedFeedback || judgment.notSupportedFeedback;
+
+                // Add source review option
+                let sourceReview = '<div style="margin-top: 20px;">';
+                judgment.relatedSources.forEach(sourceId => {
+                    const source = currentCase.sources.find(s => s.id === sourceId);
+                    if (source) {
+                        sourceReview += `
+                            <div class="judgment-source-review">
+                                <div class="source-review-label">${source.icon} ${source.title}</div>
+                                <button class="source-review-button" onclick="openSourceModal('${sourceId}')">
+                                    📖 자료 다시 보기
+                                </button>
+                            </div>
+                        `;
+                    }
+                });
+                sourceReview += '</div>';
+                document.getElementById('sourceReviewContainer').innerHTML = sourceReview;
+            }
+
+            feedbackSection.classList.add('show');
+
+            // Scroll to feedback
+            setTimeout(() => {
+                feedbackSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Move to next judgment question
+        function nextJudgmentQuestion() {
+            currentJudgmentIndex++;
+            displayJudgmentQuestion();
+
+            // Scroll to question
+            setTimeout(() => {
+                document.getElementById('judgmentCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Case 03 specific: Handle explanation selection
+        function selectExplanation(explanationId) {
+            const explanation = currentCase.explanations.find(e => e.id === explanationId);
+            if (!explanation) return;
+
+            // Hide explanation cards
+            document.getElementById('explanationsContainer').style.display = 'none';
+            document.getElementById('explanationPhase').style.display = 'block';
+
+            // Show feedback
+            const feedbackSection = document.getElementById('explanationFeedback');
+            const isCorrect = explanation.supportedAnswer;
+
+            if (isCorrect) {
+                document.getElementById('explanationFeedbackIcon').textContent = '✓';
+                document.getElementById('explanationFeedbackTitle').textContent = '자료에 더 잘 맞아요';
+                document.getElementById('explanationFeedbackText').textContent = explanation.supportedExplanation;
+            } else {
+                document.getElementById('explanationFeedbackIcon').textContent = '🤔';
+                document.getElementById('explanationFeedbackTitle').textContent = '다시 비교해 볼까요?';
+                document.getElementById('explanationFeedbackText').textContent = explanation.supportedFeedback;
+            }
+
+            feedbackSection.style.display = 'block';
+            setTimeout(() => {
+                feedbackSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Proceed to final judgment
+        function proceedToFinalJudgment() {
+            document.getElementById('explanationPhase').style.display = 'none';
+            document.getElementById('finalJudgmentPhase').style.display = 'block';
+
+            const finalJudgment = currentCase.finalJudgment;
+            document.getElementById('finalJudgmentStatement').textContent = finalJudgment.statement;
+
+            setTimeout(() => {
+                document.getElementById('finalJudgmentPhase').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Answer final judgment
+        function answerFinalJudgment(answer) {
+            const finalJudgment = currentCase.finalJudgment;
+            const isCorrect = answer === finalJudgment.correctAnswer;
+
+            // Hide judgment card
+            document.getElementById('judgmentCard').style.display = 'none';
+
+            // Show feedback
+            const feedbackSection = document.getElementById('finalJudgmentFeedback');
+
+            if (isCorrect) {
+                document.getElementById('finalFeedbackIcon').textContent = '✓';
+                document.getElementById('finalFeedbackTitle').textContent = '정확해요';
+                document.getElementById('finalFeedbackText').textContent = finalJudgment.notSupportedExplanation;
+            } else {
+                document.getElementById('finalFeedbackIcon').textContent = '🤔';
+                document.getElementById('finalFeedbackTitle').textContent = '다시 생각해 볼까요?';
+                document.getElementById('finalFeedbackText').textContent = finalJudgment.supportedFeedback;
+            }
+
+            feedbackSection.style.display = 'block';
+            setTimeout(() => {
+                feedbackSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        // Complete case
+        function completeCase() {
+            showConclusion();
+        }
+
+        // Show conclusion
+        function showConclusion() {
+            document.getElementById('judgmentSection').classList.remove('show');
+            document.getElementById('conclusionSection').classList.add('show');
+
+            // Check if this is first completion
+            isFirstTimeCompletion = !caseCompletionState.case03;
+
+            // Mark case as completed
+            caseCompletionState.case03 = true;
+            saveCompletionState();
+
+            // Scroll to conclusion
+            setTimeout(() => {
+                document.getElementById('conclusionSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+
+            // Show record card after a delay
+            setTimeout(() => {
+                showRecordCard();
+            }, 2000);
+        }
+
+        // Show record card
+        function showRecordCard() {
+            document.getElementById('conclusionSection').classList.remove('show');
+            document.getElementById('recordCardSection').classList.add('show');
+
+            // Scroll to record card
+            setTimeout(() => {
+                const recordCardSection = document.getElementById('recordCardSection');
+                if (recordCardSection) {
+                    recordCardSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 200);
+        }
+
+        // Return to archive
+        function returnToArchive() {
+            window.location.href = '07-archive.html';
+        }
+
+        // Re-examine case
+        function reExamineCase() {
+            // Reset to reading phase but keep completion state
+            phase = 'reading';
+            viewedSources = [];
+            selectedSources = [];
+            currentJudgmentIndex = 0;
+            judgmentResults = [];
+
+            // Hide all sections
+            document.getElementById('recordCardSection').classList.remove('show');
+            document.getElementById('conclusionSection').classList.remove('show');
+            document.getElementById('judgmentSection').classList.remove('show');
+            document.getElementById('feedbackSection').classList.remove('show');
+            document.getElementById('nextButton').classList.remove('show');
+            document.getElementById('checkEvidenceBtn').classList.remove('show');
+
+            // Show main case UI
+            document.getElementById('sourcesLabel').style.display = 'block';
+            document.getElementById('sourcesGrid').style.display = 'grid';
+            document.getElementById('phaseLabel').style.display = 'none';
+            document.getElementById('evidenceInstruction').style.display = 'none';
+
+            // Render sources in reading mode
+            renderSources();
+            updateCompletion();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Go back to archive
+        function goBack() {
+            window.location.href = '07-archive.html';
+        }
+
+        // Override getCurrentCase for case 03
+        (function() {
+            const originalGetCurrentCase = window.getCurrentCase;
+            window.getCurrentCase = function() {
+                return ARCHIVE_CASES.case_03;
+            };
+        })();
+
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>
